@@ -26,11 +26,12 @@ export default function Nav() {
         left: 0,
         right: 0,
         zIndex: 50,
-        background: scrolled ? "rgba(26,14,8,0.95)" : "transparent",
-        backdropFilter: scrolled ? "blur(20px)" : "none",
-        WebkitBackdropFilter: scrolled ? "blur(20px)" : "none",
-        borderBottom: scrolled ? "1px solid rgba(255,83,0,0.12)" : "none",
-        transition: "background 0.35s, border-color 0.35s",
+        background: scrolled ? "rgba(26,14,8,0.75)" : "rgba(26,14,8,0.45)",
+        backdropFilter: "blur(20px) saturate(160%)",
+        WebkitBackdropFilter: "blur(20px) saturate(160%)",
+        borderBottom: scrolled ? "1px solid rgba(255,83,0,0.15)" : "1px solid rgba(255,255,255,0.06)",
+        boxShadow: scrolled ? "0 4px 32px rgba(0,0,0,0.35)" : "none",
+        transition: "background 0.35s, border-color 0.35s, box-shadow 0.35s",
       }}
     >
       <div
