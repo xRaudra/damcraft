@@ -3,27 +3,27 @@
 const services = [
   {
     num: "01",
-    title: "Logo & Brand Identity",
-    body: "A mark that means something. We design logos and visual identities that communicate who you are before you say a word.",
-    tags: ["Logo", "Brand Mark", "Guidelines"],
+    title: "Brand Identity",
+    body: "Logos, systems, and guidelines that hold their integrity across every surface and scale. A mark built to last.",
+    tags: ["Logo", "Brand Mark", "Guidelines", "Visual System"],
   },
   {
     num: "02",
-    title: "Website Design & Dev",
-    body: "Fast, conversion-focused websites built to perform. Every pixel is intentional. Every interaction earns its place.",
-    tags: ["UI Design", "Next.js", "Webflow"],
+    title: "UI / UX Design",
+    body: "Digital interfaces engineered for clarity and longevity. Clean architecture, intuitive flows — zero waste, zero guesswork.",
+    tags: ["Web App", "Mobile", "Interaction Design"],
   },
   {
     num: "03",
-    title: "App Design (UI / UX)",
-    body: "Mobile and web apps that users actually want to use. Clean architecture, intuitive flows, zero guesswork.",
-    tags: ["iOS", "Android", "Web App"],
+    title: "Product Design",
+    body: "End-to-end product design for digital platforms — from strategy and wireframes to high-fidelity, built to ship.",
+    tags: ["SaaS", "Dashboard", "Product Strategy"],
   },
   {
     num: "04",
-    title: "Brand Guidelines",
-    body: "Every rule your team needs to keep the brand consistent — across every medium, every screen, every touchpoint.",
-    tags: ["System Design", "Documentation"],
+    title: "Interior Design",
+    body: "Environments shaped by the same structural rigor — purposeful, lasting, unmistakable. Space as a brand statement.",
+    tags: ["Commercial", "Studio", "Spatial Branding"],
   },
 ];
 
@@ -37,7 +37,7 @@ export default function Services() {
             02 — Services
           </p>
           <h2 style={{ fontFamily: "Raleway, sans-serif", fontWeight: 800, fontSize: "clamp(32px, 4vw, 52px)", color: "#1A0E08", lineHeight: 1.1, maxWidth: "420px" }}>
-            What We<br />Build For You
+            What We<br />Construct
           </h2>
         </div>
 

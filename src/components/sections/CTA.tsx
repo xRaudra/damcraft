@@ -12,10 +12,10 @@ export default function CTA() {
           07 — Let&apos;s Build
         </p>
         <h2 style={{ fontFamily: "Raleway, sans-serif", fontWeight: 800, fontSize: "clamp(36px, 5vw, 68px)", color: "#FAFAF8", lineHeight: 1.05, marginBottom: "20px" }}>
-          Ready to Build Something<br />That Lasts?
+          Precision by Design.<br />Built to Last.
         </h2>
         <p style={{ fontFamily: "DM Sans, sans-serif", fontSize: "18px", color: "#FAFAF8", opacity: 0.7, lineHeight: 1.7, maxWidth: "460px", margin: "0 auto 52px" }}>
-          Let&apos;s talk about your project. No pitch, no fluff — just an honest conversation about what you need.
+          Let&apos;s talk about your project. No pitch, no fluff — just a precise conversation about what you need and how we build it.
         </p>
 
         <div style={{ display: "flex", flexWrap: "wrap", gap: "16px", justifyContent: "center" }}>

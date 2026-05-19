@@ -118,19 +118,19 @@ export default function Hero() {
         <div className="max-w-2xl">
           {/* Eyebrow */}
           <p className="mb-6" style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "12px", letterSpacing: "0.16em", color: "#FF5300", textTransform: "uppercase" }}>
-            Design Agency · Noida, India
+            Design Studio · Noida · Est. 2024
           </p>
 
           {/* Headline */}
           <h1 style={{ fontFamily: "Raleway, sans-serif", fontWeight: 800, fontSize: "clamp(48px, 7vw, 88px)", lineHeight: 1.05, color: "#FAFAF8", marginBottom: "24px" }}>
-            We Build<br />
-            <span style={{ color: "#FF5300" }}>Brands</span> That<br />
-            Last.
+            Built to<br />
+            <span style={{ color: "#FF5300" }}>Last.</span><br />
+            Crafted to Move.
           </h1>
 
           {/* Sub */}
           <p style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 400, fontSize: "clamp(16px, 2vw, 19px)", lineHeight: 1.7, color: "#F3EBE1", opacity: 0.75, maxWidth: "480px", marginBottom: "40px" }}>
-            Logo design, websites, and digital products — crafted with precision for businesses that want to be remembered.
+            We design UI, brand identities, and spaces that hold up — because good work isn&apos;t finished until it can&apos;t be improved.
           </p>
 
           {/* CTAs */}
@@ -141,15 +141,15 @@ export default function Hero() {
               onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#E04900"; (e.currentTarget as HTMLElement).style.transform = "scale(1.02)"; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "#FF5300"; (e.currentTarget as HTMLElement).style.transform = "scale(1)"; }}
             >
-              See Our Work
+              See Our Work →
             </a>
             <a
-              href="mailto:hello@damcraft.com"
+              href="#process"
               style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 500, fontSize: "15px", color: "#F3EBE1", opacity: 0.8, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "6px", transition: "opacity 0.2s" }}
               onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.opacity = "1")}
               onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.opacity = "0.8")}
             >
-              Let&apos;s Talk <span style={{ color: "#FF5300" }}>→</span>
+              Our Process <span style={{ color: "#FF5300" }}>↗</span>
             </a>
           </div>
         </div>

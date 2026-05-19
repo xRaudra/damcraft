@@ -1,6 +1,6 @@
 "use client";
 
-const items = ["Logo Design", "Website Design", "App Design", "Brand Identity", "UI / UX", "Digital Products", "Visual Systems", "Motion Design"];
+const items = ["Brand Identity", "UI / UX Design", "Product Design", "Interior Design", "Logo Systems", "Digital Interfaces", "Visual Language", "Built to Last"];
 
 export default function Marquee() {
   const repeated = [...items, ...items];

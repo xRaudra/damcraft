@@ -3,23 +3,23 @@
 const steps = [
   {
     num: "01",
-    title: "Discover",
-    body: "We start with your goals, your audience, and what makes you different. No assumptions — just sharp questions and sharper listening.",
+    title: "Understand",
+    body: "We start with your goals, constraints, and what you're actually solving for. No assumptions — just precise questions and sharper listening.",
   },
   {
     num: "02",
     title: "Design",
-    body: "Concepts built on strategy, not guesswork. We iterate fast, share early, and refine until every detail earns its place.",
+    body: "Concepts built on structural thinking, not aesthetic preference. We iterate fast, share early, and refine until every element earns its place.",
   },
   {
     num: "03",
     title: "Build",
-    body: "Design handed off to pixel-perfect execution. Development, QA, and performance tested before anything goes live.",
+    body: "Design executed to specification — pixel-perfect, performance-tested, and reviewed before anything goes live.",
   },
   {
     num: "04",
-    title: "Launch",
-    body: "Deploy, handoff, and you're live. We stay close post-launch — because a good agency doesn't disappear after delivery.",
+    title: "Endure",
+    body: "You launch with a system built to hold. Handoff is complete, documented, and we stay close — because good work doesn't disappear after delivery.",
   },
 ];
 
@@ -81,7 +81,7 @@ export default function Process() {
         {/* Bottom CTA row */}
         <div style={{ marginTop: "64px", paddingTop: "48px", borderTop: "1px solid rgba(74,53,48,0.12)", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "24px" }}>
           <p style={{ fontFamily: "DM Sans, sans-serif", fontSize: "16px", color: "#4A3530", opacity: 0.7, maxWidth: "400px", lineHeight: 1.7 }}>
-            Ready to start your project? Let&apos;s walk through the process together.
+            We design with purpose — building systems that hold up under the weight of real use, not just ideal conditions.
           </p>
           <a
             href="mailto:hello@damcraft.com"

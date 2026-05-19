@@ -11,14 +11,14 @@ export default function About() {
               05 — About
             </p>
             <h2 style={{ fontFamily: "Raleway, sans-serif", fontWeight: 800, fontSize: "clamp(32px, 4vw, 52px)", color: "#FAFAF8", lineHeight: 1.1, marginBottom: "24px" }}>
-              Built on One<br />Principle
+              Good Design<br />Is Structural
             </h2>
             <div style={{ width: "40px", height: "3px", background: "#FF5300", borderRadius: "2px", marginBottom: "32px" }} />
             <p style={{ fontFamily: "DM Sans, sans-serif", fontSize: "17px", color: "#F3EBE1", opacity: 0.8, lineHeight: 1.8, marginBottom: "20px" }}>
               A beaver doesn&apos;t just build a dam. It engineers an ecosystem — precision, natural intelligence, and purposeful construction that creates lasting systems. That&apos;s the thinking behind Damcraft.
             </p>
             <p style={{ fontFamily: "DM Sans, sans-serif", fontSize: "16px", color: "#F3EBE1", opacity: 0.55, lineHeight: 1.8, marginBottom: "44px" }}>
-              We are a design agency based in Noida, India. We help businesses build logos, websites, and digital products that work as hard as the people behind them.
+              We are Damcraft — a design studio built on the belief that good design is structural. Like a dam, it holds under pressure, serves a clear purpose, and doesn&apos;t waste a single element. We work across UI/UX, product design, brand identity, and interior design.
             </p>
             <a
               href="mailto:hello@damcraft.com"
@@ -85,7 +85,7 @@ export default function About() {
 
             {/* Services list */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
-              {["Logo Design", "Brand Identity", "Website Design", "App UI/UX"].map((item) => (
+              {["UI/UX Design", "Product Design", "Brand Identity", "Interior Design"].map((item) => (
                 <div key={item} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                   <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#FF5300", flexShrink: 0 }} />
                   <span style={{ fontFamily: "DM Sans, sans-serif", fontSize: "13px", color: "#F3EBE1", opacity: 0.65 }}>

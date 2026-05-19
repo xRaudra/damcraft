@@ -3,10 +3,10 @@
 const projects = [
   {
     num: "01",
-    year: "2026",
+    year: "2024",
     title: "Damcraft",
-    desc: "Full brand identity — logo mark, color system, typography, and a 13-section brand guidelines document.",
-    tags: ["Branding", "Identity", "Guidelines"],
+    desc: "Complete brand identity system — logo mark, color palette, typography scale, and a 9-section brand guidelines document engineered to hold at every scale.",
+    tags: ["Brand Identity", "Logo", "Guidelines"],
     bg: "#1A0E08",
     accent: "#FF5300",
     textColor: "#FAFAF8",
@@ -14,9 +14,9 @@ const projects = [
   {
     num: "02",
     year: "2025",
-    title: "Coming Soon",
-    desc: "Next project dropping soon. Building something precise and purposeful.",
-    tags: ["Web Design", "UI/UX"],
+    title: "In the Works",
+    desc: "A UI/UX and product design project currently in progress. Structural thinking applied to a digital platform.",
+    tags: ["UI/UX Design", "Product Design"],
     bg: "#F3EBE1",
     accent: "#4A3530",
     textColor: "#1A0E08",
@@ -24,9 +24,9 @@ const projects = [
   {
     num: "03",
     year: "2025",
-    title: "Coming Soon",
-    desc: "An app design project in the works. Clean architecture, intuitive flows.",
-    tags: ["App Design"],
+    title: "In the Works",
+    desc: "Interior and brand identity project — applying the same structural rigor to physical space.",
+    tags: ["Interior Design", "Brand Identity"],
     bg: "#FF5300",
     accent: "#FAFAF8",
     textColor: "#FAFAF8",
@@ -44,7 +44,7 @@ export default function Work() {
               03 — Work
             </p>
             <h2 style={{ fontFamily: "Raleway, sans-serif", fontWeight: 800, fontSize: "clamp(32px, 4vw, 52px)", color: "#FAFAF8", lineHeight: 1.1 }}>
-              Selected<br />Projects
+              Selected<br />Work
             </h2>
           </div>
           <a

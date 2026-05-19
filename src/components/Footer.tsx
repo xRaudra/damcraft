@@ -17,7 +17,7 @@ export default function Footer() {
               <span style={{ fontFamily: "Raleway, sans-serif", fontWeight: 800, fontSize: "17px", color: "#FF5300" }}>Dam Craft</span>
             </a>
             <p style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: "#F3EBE1", opacity: 0.5, lineHeight: 1.75, maxWidth: "240px" }}>
-              We don&apos;t decorate. We construct.<br />Based in Noida, India.
+              Like a dam — engineered for purpose,<br />built to last. Based in Noida, India.
             </p>
           </div>
 
