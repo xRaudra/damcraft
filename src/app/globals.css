@@ -1,30 +1,31 @@
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
-@theme inline {
-  /* Brand colors */
-  --color-chalk:  #FAFAF8;
-  --color-ivory:  #F3EBE1;
-  --color-forge:  #FF5300;
-  --color-ember:  #FF8D60;
-  --color-walnut: #4A3530;
-  --color-pitch:  #1A0E08;
+/* Tell Tailwind v4 where to scan for class names */
+@source "../**/*.{tsx,ts}";
 
-  /* Fonts */
-  --font-display: 'Raleway', sans-serif;
-  --font-body:    'DM Sans', sans-serif;
-  --font-mono:    'JetBrains Mono', monospace;
+@theme inline {
+  --color-chalk: #FAFAF8;
+  --color-ivory: #F3EBE1;
+  --color-forge: #FF5300;
+  --color-ember: #FF8D60;
+  --color-walnut: #4A3530;
+  --color-pitch: #1A0E08;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 :root {
-  --background: #FAFAF8;
-  --foreground: #1A0E08;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  --chalk: #FAFAF8;
+  --ivory: #F3EBE1;
+  --forge: #FF5300;
+  --ember: #FF8D60;
+  --walnut: #4A3530;
+  --pitch: #1A0E08;
 }
 
 html {
@@ -32,20 +33,98 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: 'DM Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: var(--chalk);
+  color: var(--pitch);
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
 ::selection {
-  background: #FF5300;
-  color: #FAFAF8;
+  background: var(--forge);
+  color: var(--chalk);
 }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #1A0E08; }
-::-webkit-scrollbar-thumb { background: #FF5300; border-radius: 3px; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--pitch); }
+::-webkit-scrollbar-thumb { background: var(--forge); border-radius: 3px; }
+
+/* ─── Layout helpers ─── */
+/* These guarantee correct layout regardless of Tailwind class generation */
+
+.wrap {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+@media (min-width: 640px) {
+  .wrap { padding-left: 32px; padding-right: 32px; }
+}
+@media (min-width: 768px) {
+  .wrap { padding-left: 48px; padding-right: 48px; }
+}
+
+/* Responsive grid helpers */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+@media (min-width: 768px) {
+  .grid-2 { grid-template-columns: 1fr 1fr; gap: 24px; }
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+@media (min-width: 1024px) {
+  .grid-4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+}
+@media (min-width: 768px) {
+  .grid-3 { grid-template-columns: repeat(3, 1fr); gap: 48px; }
+}
+
+.col-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+  align-items: center;
+}
+@media (min-width: 1024px) {
+  .col-2 { grid-template-columns: 1fr 1fr; gap: 64px; }
+}
+
+/* Nav responsive */
+.nav-desktop {
+  display: none;
+}
+.nav-mobile-btn {
+  display: flex;
+}
+@media (min-width: 768px) {
+  .nav-desktop { display: flex; }
+  .nav-mobile-btn { display: none; }
+}
+
+/* Stats grid responsive */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+@media (min-width: 768px) {
+  .stats-grid { grid-template-columns: repeat(4, 1fr); }
+}

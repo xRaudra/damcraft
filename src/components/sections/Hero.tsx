@@ -114,7 +114,7 @@ export default function Hero() {
       <div className="absolute inset-0 z-10 pointer-events-none" style={{ background: "linear-gradient(135deg, rgba(26,14,8,0.82) 0%, rgba(26,14,8,0.45) 50%, rgba(26,14,8,0.75) 100%)" }} />
 
       {/* Content */}
-      <div className="relative z-20 max-w-7xl mx-auto px-6 md:px-12 pt-28 pb-20 w-full">
+      <div className="wrap relative z-20 w-full" style={{ paddingTop: "128px", paddingBottom: "80px" }}>
         <div className="max-w-2xl">
           {/* Eyebrow */}
           <p className="mb-6" style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "12px", letterSpacing: "0.16em", color: "#FF5300", textTransform: "uppercase" }}>
