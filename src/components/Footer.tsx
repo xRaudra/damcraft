@@ -52,14 +52,6 @@ export default function Footer() {
             >
               hello@damcraft.com
             </a>
-            <a
-              href="tel:+919335355931"
-              style={{ fontFamily: "DM Sans, sans-serif", fontSize: "15px", color: "#F3EBE1", opacity: 0.5, textDecoration: "none", padding: "6px 0", transition: "opacity 0.2s" }}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.opacity = "1")}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.opacity = "0.5")}
-            >
-              +91 93353 55931
-            </a>
             <p style={{ fontFamily: "DM Sans, sans-serif", fontSize: "15px", color: "#F3EBE1", opacity: 0.35, padding: "6px 0" }}>
               Noida, UP, India
             </p>

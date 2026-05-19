@@ -45,33 +45,6 @@ export default function CTA() {
           >
             Start a Project →
           </a>
-          <a
-            href="tel:+919335355931"
-            style={{
-              fontFamily: "DM Sans, sans-serif",
-              fontWeight: 500,
-              fontSize: "16px",
-              color: "#FAFAF8",
-              opacity: 0.8,
-              textDecoration: "none",
-              display: "inline-flex",
-              alignItems: "center",
-              padding: "16px 28px",
-              border: "1.5px solid rgba(250,250,248,0.3)",
-              borderRadius: "8px",
-              transition: "opacity 0.2s, border-color 0.2s",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.opacity = "1";
-              (e.currentTarget as HTMLElement).style.borderColor = "rgba(250,250,248,0.65)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.opacity = "0.8";
-              (e.currentTarget as HTMLElement).style.borderColor = "rgba(250,250,248,0.3)";
-            }}
-          >
-            +91 93353 55931
-          </a>
         </div>
       </div>
     </section>
