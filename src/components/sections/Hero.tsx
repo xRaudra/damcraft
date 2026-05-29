@@ -1,23 +1,29 @@
 "use client";
 import { useRef, Suspense, useMemo, useEffect } from "react";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { Environment, Float } from "@react-three/drei";
+import { Environment } from "@react-three/drei";
 import * as THREE from "three";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
 
-// Shared mouse ref — updated from window events so it works regardless of canvas pointer events
-const globalMouse = { x: 0, y: 0 };
-
 function LogoMark() {
   const groupRef = useRef<THREE.Group>(null);
+  const mouseRef = useRef({ x: 0, y: 0 });
   const data = useLoader(SVGLoader, "/logo.svg");
+
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      mouseRef.current.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouseRef.current.y = -((e.clientY / window.innerHeight) * 2 - 1);
+    };
+    window.addEventListener("mousemove", onMove);
+    return () => window.removeEventListener("mousemove", onMove);
+  }, []);
 
   const geometry = useMemo(() => {
     const shapes: THREE.Shape[] = [];
     data.paths.forEach((path) => {
       SVGLoader.createShapes(path).forEach((s) => shapes.push(s));
     });
-
     const geo = new THREE.ExtrudeGeometry(shapes, {
       depth: 24,
       bevelEnabled: true,
@@ -25,39 +31,40 @@ function LogoMark() {
       bevelSize: 8,
       bevelSegments: 14,
     });
-
     geo.computeBoundingBox();
     if (geo.boundingBox) {
-      const center = new THREE.Vector3();
-      geo.boundingBox.getCenter(center);
-      geo.translate(-center.x, -center.y, -center.z);
+      const c = new THREE.Vector3();
+      geo.boundingBox.getCenter(c);
+      geo.translate(-c.x, -c.y, -c.z);
     }
     return geo;
   }, [data]);
 
-  useFrame((_, delta) => {
+  useFrame((state, delta) => {
     if (!groupRef.current) return;
+    // Auto-rotate
     groupRef.current.rotation.y += delta * 0.06;
-    groupRef.current.rotation.x += (globalMouse.y * 0.3 - groupRef.current.rotation.x) * 0.08;
-    groupRef.current.rotation.z += (-globalMouse.x * 0.2 - groupRef.current.rotation.z) * 0.08;
+    // Mouse tracking
+    groupRef.current.rotation.x += (mouseRef.current.y * 0.3 - groupRef.current.rotation.x) * 0.1;
+    groupRef.current.rotation.z += (-mouseRef.current.x * 0.2 - groupRef.current.rotation.z) * 0.1;
+    // Gentle float
+    groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.8) * 0.08;
   });
 
   return (
-    <Float speed={0.8} rotationIntensity={0.05} floatIntensity={0.18}>
-      <group ref={groupRef} scale={[0.005, -0.005, 0.005]}>
-        <mesh geometry={geometry} castShadow>
-          <meshPhysicalMaterial
-            color="#FF5300"
-            metalness={0.92}
-            roughness={0.04}
-            clearcoat={1}
-            clearcoatRoughness={0.06}
-            envMapIntensity={4}
-            reflectivity={1}
-          />
-        </mesh>
-      </group>
-    </Float>
+    <group ref={groupRef} scale={[0.006, -0.006, 0.006]}>
+      <mesh geometry={geometry} castShadow>
+        <meshPhysicalMaterial
+          color="#FF5300"
+          metalness={0.92}
+          roughness={0.04}
+          clearcoat={1}
+          clearcoatRoughness={0.06}
+          envMapIntensity={4}
+          reflectivity={1}
+        />
+      </mesh>
+    </group>
   );
 }
 
@@ -76,15 +83,6 @@ function Scene() {
 }
 
 export default function Hero() {
-  useEffect(() => {
-    const onMouseMove = (e: MouseEvent) => {
-      globalMouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-      globalMouse.y = -((e.clientY / window.innerHeight) * 2 - 1);
-    };
-    window.addEventListener("mousemove", onMouseMove);
-    return () => window.removeEventListener("mousemove", onMouseMove);
-  }, []);
-
   return (
     <section style={{ background: "#000000", minHeight: "100vh", position: "relative", overflow: "hidden" }}>
 
@@ -98,17 +96,9 @@ export default function Hero() {
       </div>
 
       {/* Bottom gradient for text readability */}
-      <div
-        style={{
-          position: "absolute", bottom: 0, left: 0, right: 0,
-          height: "60%",
-          background: "linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 55%, transparent 100%)",
-          zIndex: 1,
-          pointerEvents: "none",
-        }}
-      />
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "60%", background: "linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 55%, transparent 100%)", zIndex: 1, pointerEvents: "none" }} />
 
-      {/* Text — bottom left, Lesse-style */}
+      {/* Text — bottom left */}
       <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, zIndex: 2, paddingBottom: "80px" }}>
         <div className="wrap">
           <p style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "11px", letterSpacing: "0.16em", color: "rgba(255,83,0,0.75)", textTransform: "uppercase", marginBottom: "18px" }}>
