@@ -10,21 +10,36 @@ function LogoModel() {
   const { scene } = useGLTF("/models/logo.gltf");
 
   const model = scene.clone();
+
+  // Center the model
   const box = new THREE.Box3().setFromObject(model);
   const center = new THREE.Vector3();
   box.getCenter(center);
   model.position.sub(center);
 
+  // Fix materials — boost brightness on metallic surfaces
+  model.traverse((child) => {
+    if ((child as THREE.Mesh).isMesh) {
+      const mesh = child as THREE.Mesh;
+      const mat = (mesh.material as THREE.MeshStandardMaterial).clone();
+      mat.color = new THREE.Color("#FF5300");
+      mat.metalness = 0.4;
+      mat.roughness = 0.3;
+      mat.envMapIntensity = 2.5;
+      mesh.material = mat;
+    }
+  });
+
   useFrame((_, delta) => {
     if (!groupRef.current) return;
-    groupRef.current.rotation.y += delta * 0.12;
-    groupRef.current.rotation.x += (mouse.y * 0.15 - groupRef.current.rotation.x) * 0.05;
-    groupRef.current.rotation.z += (-mouse.x * 0.08 - groupRef.current.rotation.z) * 0.05;
+    groupRef.current.rotation.y += delta * 0.08;
+    groupRef.current.rotation.x += (mouse.y * 0.1 - groupRef.current.rotation.x) * 0.05;
+    groupRef.current.rotation.z += (-mouse.x * 0.06 - groupRef.current.rotation.z) * 0.05;
   });
 
   return (
-    <Float speed={1.4} rotationIntensity={0.15} floatIntensity={0.4}>
-      <group ref={groupRef} scale={0.018}>
+    <Float speed={1.2} rotationIntensity={0.1} floatIntensity={0.3}>
+      <group ref={groupRef} scale={0.012}>
         <primitive object={model} castShadow />
       </group>
     </Float>
@@ -59,9 +74,11 @@ function Particles() {
 function Scene() {
   return (
     <>
-      <ambientLight intensity={0.4} />
-      <pointLight position={[4, 6, 4]} intensity={3} color="#FF5300" />
-      <pointLight position={[-4, -2, 2]} intensity={1.2} color="#FF8D60" />
+      <ambientLight intensity={2} />
+      <directionalLight position={[5, 5, 5]} intensity={4} color="#FFFFFF" />
+      <pointLight position={[4, 6, 4]} intensity={6} color="#FF5300" />
+      <pointLight position={[-4, -2, 2]} intensity={3} color="#FF8D60" />
+      <pointLight position={[0, 0, 6]} intensity={4} color="#FFFFFF" />
       <Environment preset="city" />
       <LogoModel />
       <Particles />
