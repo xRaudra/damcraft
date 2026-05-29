@@ -15,12 +15,11 @@ function LogoMark() {
       if (!groupRef.current) return;
       const x = (e.clientX / window.innerWidth) * 2 - 1;
       const y = -((e.clientY / window.innerHeight) * 2 - 1);
-      // GSAP smoothly animates the rotation toward mouse position
       gsap.to(groupRef.current.rotation, {
-        x: -y * 0.35,   // negative: top tilts toward mouse when mouse is up
-        z: x * 0.25,    // positive: right side tilts toward mouse when mouse is right
-        duration: 0.8,
-        ease: "power2.out",
+        x: -y * 0.4,  // mouse up → top tilts toward viewer
+        y: x * 0.6,   // mouse right → right side comes forward
+        duration: 1.0,
+        ease: "power3.out",
         overwrite: "auto",
       });
     };
@@ -49,9 +48,8 @@ function LogoMark() {
     return geo;
   }, [data]);
 
-  useFrame((state, delta) => {
+  useFrame((state) => {
     if (!groupRef.current) return;
-    groupRef.current.rotation.y += delta * 0.06;
     groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.8) * 0.08;
   });
 
