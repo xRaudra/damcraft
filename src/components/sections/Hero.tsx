@@ -9,6 +9,12 @@ function LogoModel() {
   const { mouse } = useThree();
   const { scene } = useGLTF("/models/logo.gltf");
 
+  const model = scene.clone();
+  const box = new THREE.Box3().setFromObject(model);
+  const center = new THREE.Vector3();
+  box.getCenter(center);
+  model.position.sub(center);
+
   useFrame((_, delta) => {
     if (!groupRef.current) return;
     groupRef.current.rotation.y += delta * 0.12;
@@ -18,12 +24,9 @@ function LogoModel() {
 
   return (
     <Float speed={1.4} rotationIntensity={0.15} floatIntensity={0.4}>
-      <primitive
-        ref={groupRef}
-        object={scene.clone()}
-        scale={0.018}
-        castShadow
-      />
+      <group ref={groupRef} scale={0.018}>
+        <primitive object={model} castShadow />
+      </group>
     </Float>
   );
 }
