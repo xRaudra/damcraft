@@ -1,34 +1,37 @@
 "use client";
-import { useRef, useEffect, Suspense } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Environment, Float, useGLTF } from "@react-three/drei";
+import { useRef, useEffect, Suspense, useMemo } from "react";
+import { Canvas, useFrame, useThree, useLoader } from "@react-three/fiber";
+import { Environment, Float } from "@react-three/drei";
 import * as THREE from "three";
+import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
 
-function LogoModel() {
+function LogoMark() {
   const groupRef = useRef<THREE.Group>(null);
   const { mouse } = useThree();
-  const { scene } = useGLTF("/models/logo.gltf");
+  const data = useLoader(SVGLoader, "/logo.svg");
 
-  const model = scene.clone();
+  const geometry = useMemo(() => {
+    const shapes: THREE.Shape[] = [];
+    data.paths.forEach((path) => {
+      SVGLoader.createShapes(path).forEach((s) => shapes.push(s));
+    });
 
-  // Center the model
-  const box = new THREE.Box3().setFromObject(model);
-  const center = new THREE.Vector3();
-  box.getCenter(center);
-  model.position.sub(center);
+    const geo = new THREE.ExtrudeGeometry(shapes, {
+      depth: 36,
+      bevelEnabled: true,
+      bevelThickness: 4,
+      bevelSize: 2,
+      bevelSegments: 4,
+    });
 
-  // Fix materials — boost brightness on metallic surfaces
-  model.traverse((child) => {
-    if ((child as THREE.Mesh).isMesh) {
-      const mesh = child as THREE.Mesh;
-      const mat = (mesh.material as THREE.MeshStandardMaterial).clone();
-      mat.color = new THREE.Color("#FF5300");
-      mat.metalness = 0.4;
-      mat.roughness = 0.3;
-      mat.envMapIntensity = 2.5;
-      mesh.material = mat;
+    geo.computeBoundingBox();
+    if (geo.boundingBox) {
+      const center = new THREE.Vector3();
+      geo.boundingBox.getCenter(center);
+      geo.translate(-center.x, -center.y, -center.z);
     }
-  });
+    return geo;
+  }, [data]);
 
   useFrame((_, delta) => {
     if (!groupRef.current) return;
@@ -39,8 +42,15 @@ function LogoModel() {
 
   return (
     <Float speed={1.2} rotationIntensity={0.1} floatIntensity={0.3}>
-      <group ref={groupRef} scale={0.012}>
-        <primitive object={model} castShadow />
+      <group ref={groupRef} scale={[0.009, -0.009, 0.009]}>
+        <mesh geometry={geometry} castShadow>
+          <meshStandardMaterial
+            color="#FF5300"
+            metalness={0.35}
+            roughness={0.3}
+            envMapIntensity={2.5}
+          />
+        </mesh>
       </group>
     </Float>
   );
@@ -80,7 +90,7 @@ function Scene() {
       <pointLight position={[-4, -2, 2]} intensity={3} color="#FF8D60" />
       <pointLight position={[0, 0, 6]} intensity={4} color="#FFFFFF" />
       <Environment preset="city" />
-      <LogoModel />
+      <LogoMark />
       <Particles />
     </>
   );
