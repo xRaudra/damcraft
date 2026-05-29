@@ -48,8 +48,9 @@ function LogoMark() {
     return geo;
   }, [data]);
 
-  useFrame((state) => {
+  useFrame((state, delta) => {
     if (!groupRef.current) return;
+    groupRef.current.rotation.y += delta * 0.4;
     groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.8) * 0.08;
   });
 
