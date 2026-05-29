@@ -4,16 +4,25 @@ import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import { Environment } from "@react-three/drei";
 import * as THREE from "three";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
+import gsap from "gsap";
 
 function LogoMark() {
   const groupRef = useRef<THREE.Group>(null);
-  const mouseRef = useRef({ x: 0, y: 0 });
   const data = useLoader(SVGLoader, "/logo.svg");
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
-      mouseRef.current.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouseRef.current.y = -((e.clientY / window.innerHeight) * 2 - 1);
+      if (!groupRef.current) return;
+      const x = (e.clientX / window.innerWidth) * 2 - 1;
+      const y = -((e.clientY / window.innerHeight) * 2 - 1);
+      // GSAP smoothly animates the rotation toward mouse position
+      gsap.to(groupRef.current.rotation, {
+        x: -y * 0.35,   // negative: top tilts toward mouse when mouse is up
+        z: x * 0.25,    // positive: right side tilts toward mouse when mouse is right
+        duration: 0.8,
+        ease: "power2.out",
+        overwrite: "auto",
+      });
     };
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
@@ -42,17 +51,12 @@ function LogoMark() {
 
   useFrame((state, delta) => {
     if (!groupRef.current) return;
-    // Auto-rotate
     groupRef.current.rotation.y += delta * 0.06;
-    // Mouse tracking
-    groupRef.current.rotation.x += (mouseRef.current.y * 0.3 - groupRef.current.rotation.x) * 0.1;
-    groupRef.current.rotation.z += (-mouseRef.current.x * 0.2 - groupRef.current.rotation.z) * 0.1;
-    // Gentle float
     groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.8) * 0.08;
   });
 
   return (
-    <group ref={groupRef} scale={[0.0075, -0.0075, 0.0075]}>
+    <group ref={groupRef} scale={[0.01, -0.01, 0.01]}>
       <mesh geometry={geometry} castShadow>
         <meshPhysicalMaterial
           color="#FF5300"
