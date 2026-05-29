@@ -42,7 +42,7 @@ function LogoMark() {
 
   return (
     <Float speed={0.8} rotationIntensity={0.05} floatIntensity={0.18}>
-      <group ref={groupRef} scale={[0.024, -0.024, 0.024]}>
+      <group ref={groupRef} scale={[0.015, -0.015, 0.015]}>
         <mesh geometry={geometry} castShadow>
           <meshPhysicalMaterial
             color="#FF5300"
