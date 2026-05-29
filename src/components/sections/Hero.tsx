@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useEffect, Suspense, useMemo } from "react";
+import { useRef, Suspense, useMemo } from "react";
 import { Canvas, useFrame, useThree, useLoader } from "@react-three/fiber";
 import { Environment, Float } from "@react-three/drei";
 import * as THREE from "three";
@@ -17,11 +17,11 @@ function LogoMark() {
     });
 
     const geo = new THREE.ExtrudeGeometry(shapes, {
-      depth: 36,
+      depth: 24,
       bevelEnabled: true,
-      bevelThickness: 4,
-      bevelSize: 2,
-      bevelSegments: 4,
+      bevelThickness: 10,
+      bevelSize: 8,
+      bevelSegments: 14,
     });
 
     geo.computeBoundingBox();
@@ -35,20 +35,23 @@ function LogoMark() {
 
   useFrame((_, delta) => {
     if (!groupRef.current) return;
-    groupRef.current.rotation.y += delta * 0.08;
-    groupRef.current.rotation.x += (mouse.y * 0.1 - groupRef.current.rotation.x) * 0.05;
-    groupRef.current.rotation.z += (-mouse.x * 0.06 - groupRef.current.rotation.z) * 0.05;
+    groupRef.current.rotation.y += delta * 0.06;
+    groupRef.current.rotation.x += (mouse.y * 0.12 - groupRef.current.rotation.x) * 0.04;
+    groupRef.current.rotation.z += (-mouse.x * 0.08 - groupRef.current.rotation.z) * 0.04;
   });
 
   return (
-    <Float speed={1.2} rotationIntensity={0.1} floatIntensity={0.3}>
-      <group ref={groupRef} scale={[0.009, -0.009, 0.009]}>
+    <Float speed={0.8} rotationIntensity={0.05} floatIntensity={0.18}>
+      <group ref={groupRef} scale={[0.024, -0.024, 0.024]}>
         <mesh geometry={geometry} castShadow>
-          <meshStandardMaterial
+          <meshPhysicalMaterial
             color="#FF5300"
-            metalness={0.35}
-            roughness={0.3}
-            envMapIntensity={2.5}
+            metalness={0.92}
+            roughness={0.04}
+            clearcoat={1}
+            clearcoatRoughness={0.06}
+            envMapIntensity={4}
+            reflectivity={1}
           />
         </mesh>
       </group>
@@ -56,63 +59,26 @@ function LogoMark() {
   );
 }
 
-function Particles() {
-  const pointsRef = useRef<THREE.Points>(null);
-
-  const positions = new Float32Array(300 * 3);
-  for (let i = 0; i < 300; i++) {
-    positions[i * 3] = (Math.random() - 0.5) * 18;
-    positions[i * 3 + 1] = (Math.random() - 0.5) * 18;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 12;
-  }
-
-  useFrame((state) => {
-    if (!pointsRef.current) return;
-    pointsRef.current.rotation.y = state.clock.elapsedTime * 0.03;
-  });
-
-  return (
-    <points ref={pointsRef}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-      </bufferGeometry>
-      <pointsMaterial color="#FF8D60" size={0.045} transparent opacity={0.5} sizeAttenuation />
-    </points>
-  );
-}
-
 function Scene() {
   return (
     <>
-      <ambientLight intensity={2} />
-      <directionalLight position={[5, 5, 5]} intensity={4} color="#FFFFFF" />
-      <pointLight position={[4, 6, 4]} intensity={6} color="#FF5300" />
-      <pointLight position={[-4, -2, 2]} intensity={3} color="#FF8D60" />
-      <pointLight position={[0, 0, 6]} intensity={4} color="#FFFFFF" />
-      <Environment preset="city" />
+      <ambientLight intensity={0.18} />
+      <directionalLight position={[5, 9, 4]} intensity={10} color="#FFFFFF" />
+      <directionalLight position={[-3, 2, 3]} intensity={2} color="#FF8D60" />
+      <pointLight position={[0, -6, 3]} intensity={4} color="#FF5300" />
+      <pointLight position={[3, 4, -2]} intensity={3} color="#FFFFFF" />
+      <Environment preset="studio" />
       <LogoMark />
-      <Particles />
     </>
   );
 }
 
 export default function Hero() {
-  const canvasRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (canvasRef.current) {
-        canvasRef.current.style.transform = `translateY(${window.scrollY * 0.3}px)`;
-      }
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden" style={{ background: "#1A0E08" }}>
-      {/* Three.js canvas */}
-      <div ref={canvasRef} className="absolute inset-0 z-0">
+    <section style={{ background: "#000000", minHeight: "100vh", position: "relative", overflow: "hidden" }}>
+
+      {/* Full-screen 3D canvas */}
+      <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
         <Canvas camera={{ position: [0, 0, 7], fov: 45 }} dpr={[1, 2]}>
           <Suspense fallback={null}>
             <Scene />
@@ -120,31 +86,31 @@ export default function Hero() {
         </Canvas>
       </div>
 
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 z-10 pointer-events-none" style={{ background: "linear-gradient(135deg, rgba(26,14,8,0.82) 0%, rgba(26,14,8,0.45) 50%, rgba(26,14,8,0.75) 100%)" }} />
+      {/* Bottom gradient for text readability */}
+      <div
+        style={{
+          position: "absolute", bottom: 0, left: 0, right: 0,
+          height: "60%",
+          background: "linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 55%, transparent 100%)",
+          zIndex: 1,
+          pointerEvents: "none",
+        }}
+      />
 
-      {/* Content */}
-      <div className="wrap relative z-20 w-full" style={{ paddingTop: "128px", paddingBottom: "80px" }}>
-        <div className="max-w-2xl">
-          {/* Eyebrow */}
-          <p className="mb-6" style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "12px", letterSpacing: "0.16em", color: "#FF5300", textTransform: "uppercase" }}>
+      {/* Text — bottom left, Lesse-style */}
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, zIndex: 2, paddingBottom: "80px" }}>
+        <div className="wrap">
+          <p style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "11px", letterSpacing: "0.16em", color: "rgba(255,83,0,0.75)", textTransform: "uppercase", marginBottom: "18px" }}>
             Design Studio · Noida · Est. 2024
           </p>
-
-          {/* Headline */}
-          <h1 style={{ fontFamily: "Raleway, sans-serif", fontWeight: 800, fontSize: "clamp(48px, 7vw, 88px)", lineHeight: 1.05, color: "#FAFAF8", marginBottom: "24px" }}>
-            Built to<br />
-            <span style={{ color: "#FF5300" }}>Last.</span><br />
-            Crafted to Move.
+          <h1 style={{ fontFamily: "Raleway, sans-serif", fontWeight: 800, fontSize: "clamp(40px, 5.5vw, 78px)", color: "#FAFAF8", lineHeight: 1.05, marginBottom: "20px", maxWidth: "660px" }}>
+            Built to Last.<br />
+            <span style={{ color: "#FF5300" }}>Crafted to Move.</span>
           </h1>
-
-          {/* Sub */}
-          <p style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 400, fontSize: "clamp(16px, 2vw, 19px)", lineHeight: 1.7, color: "#F3EBE1", opacity: 0.75, maxWidth: "480px", marginBottom: "40px" }}>
+          <p style={{ fontFamily: "DM Sans, sans-serif", fontSize: "clamp(15px, 1.8vw, 18px)", color: "#F3EBE1", opacity: 0.6, lineHeight: 1.75, maxWidth: "440px", marginBottom: "36px" }}>
             We design UI, brand identities, and spaces that hold up — because good work isn&apos;t finished until it can&apos;t be improved.
           </p>
-
-          {/* CTAs */}
-          <div className="flex flex-wrap items-center gap-4">
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "16px", alignItems: "center" }}>
             <a
               href="#work"
               style={{ fontFamily: "Raleway, sans-serif", fontWeight: 700, fontSize: "15px", letterSpacing: "0.02em", background: "#FF5300", color: "#FAFAF8", padding: "14px 32px", borderRadius: "8px", textDecoration: "none", display: "inline-block", transition: "background 0.2s, transform 0.2s" }}
@@ -155,9 +121,9 @@ export default function Hero() {
             </a>
             <a
               href="#process"
-              style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 500, fontSize: "15px", color: "#F3EBE1", opacity: 0.8, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "6px", transition: "opacity 0.2s" }}
+              style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 500, fontSize: "15px", color: "#F3EBE1", opacity: 0.75, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "6px", transition: "opacity 0.2s" }}
               onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.opacity = "1")}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.opacity = "0.8")}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.opacity = "0.75")}
             >
               Our Process <span style={{ color: "#FF5300" }}>↗</span>
             </a>
@@ -166,9 +132,9 @@ export default function Hero() {
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2">
-        <span style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "10px", letterSpacing: "0.14em", color: "#FF5300", opacity: 0.6, textTransform: "uppercase" }}>Scroll</span>
-        <div style={{ width: "1px", height: "40px", background: "linear-gradient(to bottom, #FF5300, transparent)" }} />
+      <div style={{ position: "absolute", bottom: "28px", left: "50%", transform: "translateX(-50%)", zIndex: 3, display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+        <span style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "10px", letterSpacing: "0.14em", color: "#FF5300", opacity: 0.45, textTransform: "uppercase" }}>Scroll</span>
+        <div style={{ width: "1px", height: "36px", background: "linear-gradient(to bottom, #FF5300, transparent)" }} />
       </div>
     </section>
   );
