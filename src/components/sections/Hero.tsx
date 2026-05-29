@@ -52,16 +52,16 @@ function LogoMark() {
   });
 
   return (
-    <group ref={groupRef} scale={[0.006, -0.006, 0.006]}>
+    <group ref={groupRef} scale={[0.0075, -0.0075, 0.0075]}>
       <mesh geometry={geometry} castShadow>
         <meshPhysicalMaterial
           color="#FF5300"
-          metalness={0.92}
-          roughness={0.04}
-          clearcoat={1}
-          clearcoatRoughness={0.06}
-          envMapIntensity={4}
-          reflectivity={1}
+          metalness={0.85}
+          roughness={0.18}
+          clearcoat={0.6}
+          clearcoatRoughness={0.2}
+          envMapIntensity={1.5}
+          reflectivity={0.8}
         />
       </mesh>
     </group>
@@ -71,12 +71,12 @@ function LogoMark() {
 function Scene() {
   return (
     <>
-      <ambientLight intensity={0.18} />
-      <directionalLight position={[5, 9, 4]} intensity={10} color="#FFFFFF" />
-      <directionalLight position={[-3, 2, 3]} intensity={2} color="#FF8D60" />
-      <pointLight position={[0, -6, 3]} intensity={4} color="#FF5300" />
-      <pointLight position={[3, 4, -2]} intensity={3} color="#FFFFFF" />
-      <Environment preset="studio" />
+      <ambientLight intensity={0.3} />
+      <directionalLight position={[5, 9, 4]} intensity={3} color="#FFFFFF" />
+      <directionalLight position={[-3, 2, 3]} intensity={1} color="#FF8D60" />
+      <pointLight position={[0, -6, 3]} intensity={2} color="#FF5300" />
+      <pointLight position={[3, 4, -2]} intensity={1.5} color="#FFFFFF" />
+      <Environment preset="studio" backgroundBlurriness={1} />
       <LogoMark />
     </>
   );
