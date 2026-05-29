@@ -1,13 +1,15 @@
 "use client";
-import { useRef, Suspense, useMemo } from "react";
-import { Canvas, useFrame, useThree, useLoader } from "@react-three/fiber";
+import { useRef, Suspense, useMemo, useEffect } from "react";
+import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import { Environment, Float } from "@react-three/drei";
 import * as THREE from "three";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
 
+// Shared mouse ref — updated from window events so it works regardless of canvas pointer events
+const globalMouse = { x: 0, y: 0 };
+
 function LogoMark() {
   const groupRef = useRef<THREE.Group>(null);
-  const { mouse } = useThree();
   const data = useLoader(SVGLoader, "/logo.svg");
 
   const geometry = useMemo(() => {
@@ -36,13 +38,13 @@ function LogoMark() {
   useFrame((_, delta) => {
     if (!groupRef.current) return;
     groupRef.current.rotation.y += delta * 0.06;
-    groupRef.current.rotation.x += (mouse.y * 0.12 - groupRef.current.rotation.x) * 0.04;
-    groupRef.current.rotation.z += (-mouse.x * 0.08 - groupRef.current.rotation.z) * 0.04;
+    groupRef.current.rotation.x += (globalMouse.y * 0.3 - groupRef.current.rotation.x) * 0.08;
+    groupRef.current.rotation.z += (-globalMouse.x * 0.2 - groupRef.current.rotation.z) * 0.08;
   });
 
   return (
     <Float speed={0.8} rotationIntensity={0.05} floatIntensity={0.18}>
-      <group ref={groupRef} scale={[0.008, -0.008, 0.008]}>
+      <group ref={groupRef} scale={[0.005, -0.005, 0.005]}>
         <mesh geometry={geometry} castShadow>
           <meshPhysicalMaterial
             color="#FF5300"
@@ -74,6 +76,15 @@ function Scene() {
 }
 
 export default function Hero() {
+  useEffect(() => {
+    const onMouseMove = (e: MouseEvent) => {
+      globalMouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+      globalMouse.y = -((e.clientY / window.innerHeight) * 2 - 1);
+    };
+    window.addEventListener("mousemove", onMouseMove);
+    return () => window.removeEventListener("mousemove", onMouseMove);
+  }, []);
+
   return (
     <section style={{ background: "#000000", minHeight: "100vh", position: "relative", overflow: "hidden" }}>
 
