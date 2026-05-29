@@ -1,49 +1,29 @@
 "use client";
 import { useRef, useEffect, Suspense } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Environment, Float } from "@react-three/drei";
+import { Environment, Float, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
-function ArchMark() {
-  const meshRef = useRef<THREE.Mesh>(null);
+function LogoModel() {
+  const groupRef = useRef<THREE.Group>(null);
   const { mouse } = useThree();
+  const { scene } = useGLTF("/models/logo.gltf");
 
   useFrame((_, delta) => {
-    if (!meshRef.current) return;
-    meshRef.current.rotation.y += delta * 0.12;
-    meshRef.current.rotation.x += (mouse.y * 0.15 - meshRef.current.rotation.x) * 0.05;
-    meshRef.current.rotation.z += (-mouse.x * 0.08 - meshRef.current.rotation.z) * 0.05;
+    if (!groupRef.current) return;
+    groupRef.current.rotation.y += delta * 0.12;
+    groupRef.current.rotation.x += (mouse.y * 0.15 - groupRef.current.rotation.x) * 0.05;
+    groupRef.current.rotation.z += (-mouse.x * 0.08 - groupRef.current.rotation.z) * 0.05;
   });
-
-  const shape = new THREE.Shape();
-  shape.moveTo(-1.8, -2.2);
-  shape.lineTo(-1.8, 0);
-  shape.absarc(0, 0, 1.8, Math.PI, 0, false);
-  shape.lineTo(1.8, -2.2);
-  shape.lineTo(-1.8, -2.2);
-
-  const hole = new THREE.Path();
-  hole.moveTo(-1.2, -2.2);
-  hole.lineTo(-1.2, 0);
-  hole.absarc(0, 0, 1.2, Math.PI, 0, false);
-  hole.lineTo(1.2, -2.2);
-  hole.lineTo(-1.2, -2.2);
-  shape.holes.push(hole);
-
-  const extrudeSettings = { depth: 0.35, bevelEnabled: true, bevelThickness: 0.05, bevelSize: 0.04, bevelSegments: 4 };
-  const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-  geometry.center();
 
   return (
     <Float speed={1.4} rotationIntensity={0.15} floatIntensity={0.4}>
-      <mesh ref={meshRef} geometry={geometry} castShadow>
-        <meshStandardMaterial
-          color="#FF5300"
-          metalness={0.3}
-          roughness={0.35}
-          envMapIntensity={1.2}
-        />
-      </mesh>
+      <primitive
+        ref={groupRef}
+        object={scene.clone()}
+        scale={0.018}
+        castShadow
+      />
     </Float>
   );
 }
@@ -80,7 +60,7 @@ function Scene() {
       <pointLight position={[4, 6, 4]} intensity={3} color="#FF5300" />
       <pointLight position={[-4, -2, 2]} intensity={1.2} color="#FF8D60" />
       <Environment preset="city" />
-      <ArchMark />
+      <LogoModel />
       <Particles />
     </>
   );
