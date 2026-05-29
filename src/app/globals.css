@@ -112,11 +112,15 @@ body {
 .nav-desktop {
   display: none;
 }
+.nav-desktop-cta {
+  display: none;
+}
 .nav-mobile-btn {
   display: flex;
 }
 @media (min-width: 768px) {
   .nav-desktop { display: flex; }
+  .nav-desktop-cta { display: inline-block; }
   .nav-mobile-btn { display: none; }
 }
 

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const links = [
   { label: "Work", href: "#work" },
@@ -9,50 +9,64 @@ const links = [
 ];
 
 export default function Nav() {
-  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   return (
-    <header
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 50,
-        background: scrolled ? "rgba(255,255,255,0.18)" : "transparent",
-        backdropFilter: scrolled ? "blur(20px) saturate(160%)" : "none",
-        WebkitBackdropFilter: scrolled ? "blur(20px) saturate(160%)" : "none",
-        borderBottom: scrolled ? "1px solid rgba(255,255,255,0.2)" : "none",
-        boxShadow: scrolled ? "0 4px 32px rgba(0,0,0,0.15)" : "none",
-        transition: "background 0.35s, border-color 0.35s, box-shadow 0.35s, backdrop-filter 0.35s",
-      }}
-    >
-      <div
-        className="wrap"
-        style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "72px" }}
+    <>
+      {/* Desktop nav */}
+      <header
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 50,
+          padding: "16px 24px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
       >
-        {/* Logo */}
-        <a href="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
-          <svg width="30" height="27" viewBox="0 0 504 450" fill="none">
-            <path
-              fill="#FF5300"
-              d="M123.28,370.98l27.33,79.02h-54.66l27.33-79.02ZM269.39,450h22.87l-22.87-55.24v55.24ZM408.88,450v-55.24l-22.75,55.24h22.75ZM260.7,0h-17.4C108.93,0,0,108.93,0,243.3v206.7h54.55l45.24-126h47.27l45.24,126h36.49v-126h46.11l53.9,126h20.97l53.9-126h45.82v126h54.52v-206.7C504,108.93,395.07,0,260.7,0Z"
-            />
+        {/* Logo mark — rounded square */}
+        <a
+          href="/"
+          style={{
+            width: "44px",
+            height: "44px",
+            background: "rgba(255,255,255,0.08)",
+            border: "1px solid rgba(255,255,255,0.1)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+            borderRadius: "12px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            textDecoration: "none",
+            flexShrink: 0,
+          }}
+        >
+          <svg width="22" height="20" viewBox="0 0 220 180.71" fill="none">
+            <path fill="#FF5300" d="M113.8,0h-7.6C47.55,0,0,47.55,0,106.2v74.51h23.36l20.18-55.33h18.7l20.18,55.33h22.71v-55.35h22.49l23.25,46.88,23.38-46.88h22.37v55.35h23.37v-74.51C220,47.55,172.45,0,113.8,0Z" />
+            <polygon fill="#FF5300" points="42.16 180.71 60.6 180.71 63.38 180.71 52.9 149.01 42.16 180.71" />
+            <polygon fill="#FF5300" points="125.86 161.38 125.86 180.71 128.48 180.71 135.5 180.71 125.86 161.38" />
+            <polygon fill="#FF5300" points="175.9 180.71 175.9 161.38 166.26 180.71 175.9 180.71" />
           </svg>
-          <span style={{ fontFamily: "Raleway, sans-serif", fontWeight: 800, fontSize: "18px", color: "#FF5300", letterSpacing: "0.01em" }}>
-            Dam Craft
-          </span>
         </a>
 
-        {/* Desktop nav */}
-        <nav className="nav-desktop" style={{ alignItems: "center", gap: "36px" }}>
+        {/* Center pill nav — desktop only */}
+        <nav
+          className="nav-desktop"
+          style={{
+            background: "rgba(255,255,255,0.07)",
+            border: "1px solid rgba(255,255,255,0.1)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            borderRadius: "100px",
+            padding: "12px 36px",
+            gap: "40px",
+            alignItems: "center",
+          }}
+        >
           {links.map((l) => (
             <a
               key={l.label}
@@ -60,68 +74,106 @@ export default function Nav() {
               style={{
                 fontFamily: "DM Sans, sans-serif",
                 fontWeight: 500,
-                fontSize: "15px",
-                color: "#F3EBE1",
-                opacity: 0.7,
+                fontSize: "14px",
+                color: "rgba(255,255,255,0.65)",
                 textDecoration: "none",
-                transition: "opacity 0.2s",
+                transition: "color 0.2s",
+                whiteSpace: "nowrap",
               }}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.opacity = "1")}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.opacity = "0.7")}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#FAFAF8")}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.65)")}
             >
               {l.label}
             </a>
           ))}
-          <a
-            href="mailto:hello@damcraft.com"
-            style={{
-              fontFamily: "Raleway, sans-serif",
-              fontWeight: 700,
-              fontSize: "14px",
-              letterSpacing: "0.02em",
-              background: "#FF5300",
-              color: "#FAFAF8",
-              padding: "10px 24px",
-              borderRadius: "8px",
-              textDecoration: "none",
-              transition: "background 0.2s, transform 0.15s",
-              display: "inline-block",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.background = "#E04900";
-              (e.currentTarget as HTMLElement).style.transform = "scale(1.02)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.background = "#FF5300";
-              (e.currentTarget as HTMLElement).style.transform = "scale(1)";
-            }}
-          >
-            Let&apos;s Talk
-          </a>
         </nav>
+
+        {/* Right CTA — desktop only */}
+        <a
+          href="mailto:hello@damcraft.com"
+          className="nav-desktop-cta"
+          style={{
+            fontFamily: "Raleway, sans-serif",
+            fontWeight: 700,
+            fontSize: "13px",
+            letterSpacing: "0.02em",
+            background: "#FF5300",
+            color: "#FAFAF8",
+            padding: "11px 22px",
+            borderRadius: "100px",
+            textDecoration: "none",
+            display: "inline-block",
+            transition: "background 0.2s, transform 0.15s",
+            whiteSpace: "nowrap",
+            flexShrink: 0,
+          }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLElement).style.background = "#E04900";
+            (e.currentTarget as HTMLElement).style.transform = "scale(1.03)";
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLElement).style.background = "#FF5300";
+            (e.currentTarget as HTMLElement).style.transform = "scale(1)";
+          }}
+        >
+          Let&apos;s Talk
+        </a>
 
         {/* Mobile hamburger */}
         <button
           className="nav-mobile-btn"
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"
-          style={{ background: "none", border: "none", cursor: "pointer", padding: "8px", flexDirection: "column", gap: "5px" }}
+          style={{
+            background: "rgba(255,255,255,0.08)",
+            border: "1px solid rgba(255,255,255,0.1)",
+            borderRadius: "10px",
+            cursor: "pointer",
+            padding: "0",
+            flexDirection: "column",
+            gap: "5px",
+            width: "44px",
+            height: "44px",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
-          <span style={{ display: "block", width: "24px", height: "2px", background: "#FF5300", borderRadius: "1px", transition: "transform 0.25s", transform: open ? "rotate(45deg) translate(0px, 7px)" : "" }} />
-          <span style={{ display: "block", width: "24px", height: "2px", background: "#FF5300", borderRadius: "1px", transition: "opacity 0.25s", opacity: open ? 0 : 1 }} />
-          <span style={{ display: "block", width: "24px", height: "2px", background: "#FF5300", borderRadius: "1px", transition: "transform 0.25s", transform: open ? "rotate(-45deg) translate(0px, -7px)" : "" }} />
+          <span style={{ display: "block", width: "20px", height: "2px", background: "#FF5300", borderRadius: "1px", transition: "transform 0.25s", transform: open ? "rotate(45deg) translate(0px, 7px)" : "" }} />
+          <span style={{ display: "block", width: "20px", height: "2px", background: "#FF5300", borderRadius: "1px", transition: "opacity 0.25s", opacity: open ? 0 : 1 }} />
+          <span style={{ display: "block", width: "20px", height: "2px", background: "#FF5300", borderRadius: "1px", transition: "transform 0.25s", transform: open ? "rotate(-45deg) translate(0px, -7px)" : "" }} />
         </button>
-      </div>
+      </header>
 
-      {/* Mobile menu overlay */}
+      {/* Mobile fullscreen menu */}
       {open && (
-        <div style={{ background: "#1A0E08", padding: "24px 24px 40px", display: "flex", flexDirection: "column", gap: "24px", borderTop: "1px solid rgba(255,83,0,0.12)" }}>
+        <div
+          style={{
+            position: "fixed",
+            top: 0, left: 0, right: 0, bottom: 0,
+            background: "#000000",
+            zIndex: 49,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "32px",
+          }}
+        >
           {links.map((l) => (
             <a
               key={l.label}
               href={l.href}
               onClick={() => setOpen(false)}
-              style={{ fontFamily: "Raleway, sans-serif", fontWeight: 700, fontSize: "22px", color: "#FAFAF8", textDecoration: "none", letterSpacing: "0.01em" }}
+              style={{
+                fontFamily: "Raleway, sans-serif",
+                fontWeight: 800,
+                fontSize: "clamp(28px, 8vw, 48px)",
+                color: "#FAFAF8",
+                textDecoration: "none",
+                transition: "color 0.2s",
+              }}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#FF5300")}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "#FAFAF8")}
             >
               {l.label}
             </a>
@@ -134,17 +186,16 @@ export default function Nav() {
               fontSize: "16px",
               background: "#FF5300",
               color: "#FAFAF8",
-              padding: "15px 24px",
-              borderRadius: "8px",
+              padding: "16px 40px",
+              borderRadius: "100px",
               textDecoration: "none",
-              textAlign: "center",
-              marginTop: "8px",
+              marginTop: "16px",
             }}
           >
             Let&apos;s Talk
           </a>
         </div>
       )}
-    </header>
+    </>
   );
 }
