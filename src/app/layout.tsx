@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import SchemaMarkup from "./schema";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: "Damcraft — Built to Last. Crafted to Move.",
@@ -42,6 +43,7 @@ export default function RootLayout({
       <body className="min-h-full antialiased">
         <SchemaMarkup />
         {children}
+        <Analytics />
       </body>
     </html>
   );
