@@ -116,7 +116,7 @@ export default function Hero() {
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "16px", alignItems: "center" }}>
             <a
-              href="#work"
+              href="/work"
               style={{ fontFamily: "Raleway, sans-serif", fontWeight: 700, fontSize: "15px", letterSpacing: "0.02em", background: "#FF5300", color: "#FAFAF8", padding: "14px 32px", borderRadius: "8px", textDecoration: "none", display: "inline-block", transition: "background 0.2s, transform 0.2s" }}
               onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#E04900"; (e.currentTarget as HTMLElement).style.transform = "scale(1.02)"; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "#FF5300"; (e.currentTarget as HTMLElement).style.transform = "scale(1)"; }}
@@ -124,7 +124,7 @@ export default function Hero() {
               See Our Work →
             </a>
             <a
-              href="#process"
+              href="/process"
               style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 500, fontSize: "15px", color: "#F3EBE1", opacity: 0.75, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "6px", transition: "opacity 0.2s" }}
               onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.opacity = "1")}
               onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.opacity = "0.75")}
