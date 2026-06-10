@@ -1,34 +1,16 @@
 "use client";
-import { useState, useRef } from "react";
-import Link from "next/link";
-
-const megaServices = [
-  { label: "Brand Identity", sub: "Logo, visual systems & guidelines", count: "/4 deliverables", href: "/services/brand-identity" },
-  { label: "UI / UX Design", sub: "Web, mobile & design systems", count: "/3 deliverables", href: "/services/ui-ux" },
-  { label: "Product Design", sub: "Strategy, wireframes, high-fidelity", count: "/3 deliverables", href: "/services/product-design" },
-  { label: "Interior Design", sub: "Commercial spaces, spatial branding", count: "/3 deliverables", href: "/services/interior-design" },
-];
+import { useState } from "react";
 
 const links = [
-  { label: "Work", href: "/work" },
-  { label: "Services", href: "/services", hasMega: true },
-  { label: "About", href: "/about" },
-  { label: "Process", href: "/process" },
-  { label: "Contact", href: "/contact" },
+  { label: "Work", href: "#work" },
+  { label: "Services", href: "#services" },
+  { label: "About", href: "#about" },
+  { label: "Process", href: "#process" },
+  { label: "Contact", href: "#contact" },
 ];
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
-  const [megaOpen, setMegaOpen] = useState(false);
-  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const openMega = () => {
-    if (closeTimer.current) clearTimeout(closeTimer.current);
-    setMegaOpen(true);
-  };
-  const closeMega = () => {
-    closeTimer.current = setTimeout(() => setMegaOpen(false), 120);
-  };
 
   return (
     <>
@@ -46,8 +28,8 @@ export default function Nav() {
         }}
       >
         {/* Logo mark */}
-        <Link
-          href="/"
+        <a
+          href="#"
           style={{
             width: "44px",
             height: "44px",
@@ -69,7 +51,7 @@ export default function Nav() {
             <polygon fill="#FF5300" points="125.86 161.38 125.86 180.71 128.48 180.71 135.5 180.71 125.86 161.38" />
             <polygon fill="#FF5300" points="175.9 180.71 175.9 161.38 166.26 180.71 175.9 180.71" />
           </svg>
-        </Link>
+        </a>
 
         {/* Center pill nav — desktop only */}
         <nav
@@ -85,63 +67,30 @@ export default function Nav() {
             alignItems: "center",
           }}
         >
-          {links.map((l) =>
-            l.hasMega ? (
-              <div key={l.label} onMouseEnter={openMega} onMouseLeave={closeMega}>
-                <Link
-                  href={l.href}
-                  style={{
-                    fontFamily: "DM Sans, sans-serif",
-                    fontWeight: 500,
-                    fontSize: "14px",
-                    color: megaOpen ? "#FAFAF8" : "rgba(255,255,255,0.65)",
-                    textDecoration: "none",
-                    whiteSpace: "nowrap",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "4px",
-                    transition: "color 0.2s",
-                  }}
-                >
-                  {l.label}
-                  <span
-                    style={{
-                      fontSize: "9px",
-                      opacity: 0.55,
-                      display: "inline-block",
-                      transition: "transform 0.2s",
-                      transform: megaOpen ? "rotate(180deg)" : "rotate(0deg)",
-                    }}
-                  >
-                    ▾
-                  </span>
-                </Link>
-              </div>
-            ) : (
-              <Link
-                key={l.label}
-                href={l.href}
-                style={{
-                  fontFamily: "DM Sans, sans-serif",
-                  fontWeight: 500,
-                  fontSize: "14px",
-                  color: "rgba(255,255,255,0.65)",
-                  textDecoration: "none",
-                  whiteSpace: "nowrap",
-                  transition: "color 0.2s",
-                }}
-                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#FAFAF8")}
-                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.65)")}
-              >
-                {l.label}
-              </Link>
-            )
-          )}
+          {links.map((l) => (
+            <a
+              key={l.label}
+              href={l.href}
+              style={{
+                fontFamily: "DM Sans, sans-serif",
+                fontWeight: 500,
+                fontSize: "14px",
+                color: "rgba(255,255,255,0.65)",
+                textDecoration: "none",
+                whiteSpace: "nowrap",
+                transition: "color 0.2s",
+              }}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#FAFAF8")}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.65)")}
+            >
+              {l.label}
+            </a>
+          ))}
         </nav>
 
         {/* Right CTA — desktop only */}
-        <Link
-          href="/contact"
+        <a
+          href="#contact"
           className="nav-desktop-cta"
           style={{
             fontFamily: "Raleway, sans-serif",
@@ -168,10 +117,11 @@ export default function Nav() {
           }}
         >
           Let&apos;s Talk
-        </Link>
+        </a>
 
         {/* Mobile hamburger */}
         <button
+          type="button"
           className="nav-mobile-btn"
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"
@@ -195,72 +145,6 @@ export default function Nav() {
         </button>
       </header>
 
-      {/* Mega menu panel */}
-      {megaOpen && (
-        <div
-          onMouseEnter={openMega}
-          onMouseLeave={closeMega}
-          style={{
-            position: "fixed",
-            top: "80px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            zIndex: 49,
-            width: "min(640px, calc(100vw - 48px))",
-            background: "rgba(8,4,2,0.97)",
-            backdropFilter: "blur(24px)",
-            WebkitBackdropFilter: "blur(24px)",
-            border: "1px solid rgba(255,83,0,0.16)",
-            borderRadius: "20px",
-            padding: "8px",
-            boxShadow: "0 32px 80px rgba(0,0,0,0.55)",
-          }}
-        >
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
-            {megaServices.map((s) => (
-              <Link
-                key={s.href}
-                href={s.href}
-                onClick={() => setMegaOpen(false)}
-                style={{
-                  display: "block",
-                  padding: "24px 28px",
-                  borderRadius: "14px",
-                  textDecoration: "none",
-                  border: "1px solid transparent",
-                  transition: "background 0.2s, border-color 0.2s",
-                }}
-                onMouseEnter={(e) => {
-                  const el = e.currentTarget as HTMLElement;
-                  el.style.background = "rgba(255,83,0,0.08)";
-                  el.style.borderColor = "rgba(255,83,0,0.16)";
-                }}
-                onMouseLeave={(e) => {
-                  const el = e.currentTarget as HTMLElement;
-                  el.style.background = "transparent";
-                  el.style.borderColor = "transparent";
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
-                  <span style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "10px", color: "rgba(255,83,0,0.5)", letterSpacing: "0.14em", textTransform: "uppercase" }}>
-                    Service
-                  </span>
-                  <span style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "11px", color: "rgba(255,83,0,0.4)", letterSpacing: "0.06em" }}>
-                    {s.count}
-                  </span>
-                </div>
-                <p style={{ fontFamily: "Raleway, sans-serif", fontWeight: 700, fontSize: "17px", color: "#FAFAF8", marginBottom: "6px", letterSpacing: "0.01em", margin: "0 0 6px 0" }}>
-                  {s.label}
-                </p>
-                <p style={{ fontFamily: "DM Sans, sans-serif", fontSize: "13px", color: "#F3EBE1", opacity: 0.4, lineHeight: 1.55, margin: 0 }}>
-                  {s.sub}
-                </p>
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* Mobile fullscreen menu */}
       {open && (
         <div
@@ -280,7 +164,7 @@ export default function Nav() {
           }}
         >
           {links.map((l) => (
-            <Link
+            <a
               key={l.label}
               href={l.href}
               onClick={() => setOpen(false)}
@@ -296,10 +180,10 @@ export default function Nav() {
               onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "#FAFAF8")}
             >
               {l.label}
-            </Link>
+            </a>
           ))}
-          <Link
-            href="/contact"
+          <a
+            href="#contact"
             onClick={() => setOpen(false)}
             style={{
               fontFamily: "Raleway, sans-serif",
@@ -314,7 +198,7 @@ export default function Nav() {
             }}
           >
             Let&apos;s Talk
-          </Link>
+          </a>
         </div>
       )}
     </>
