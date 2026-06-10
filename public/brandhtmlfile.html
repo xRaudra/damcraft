@@ -1,0 +1,2626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Damcraft — Brand Identity Guidelines</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --chalk:#FAFAF8;--ivory:#F3EBE1;--forge:#FF5300;
+  --ember:#FF8D60;--walnut:#4A3530;--pitch:#1A0E08;
+  --sw:228px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--chalk);color:var(--pitch);}
+
+/* LAYOUT */
+.layout{display:flex;}
+.sidebar{
+  width:var(--sw);min-height:100vh;position:fixed;top:0;left:0;
+  background:var(--pitch);display:flex;flex-direction:column;
+  padding:36px 24px 28px;z-index:100;
+}
+.sb-logo{
+  display:flex;flex-direction:column;align-items:flex-start;gap:8px;
+  margin-bottom:40px;padding-bottom:28px;border-bottom:1px solid rgba(255,255,255,.08);
+}
+.sb-logo svg{width:46px;height:auto;}
+.sb-logo-word{
+  font-family:'Raleway',sans-serif;font-weight:800;font-size:10.5px;
+  letter-spacing:.45em;color:rgba(255,255,255,.5);text-transform:uppercase;padding-left:.45em;
+}
+.sb-section-label{
+  font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:rgba(255,255,255,.22);margin-bottom:10px;
+}
+.sb-nav{display:flex;flex-direction:column;gap:2px;flex:1;}
+.sb-nav a{
+  display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:7px;
+  font-size:13px;font-weight:500;color:rgba(255,255,255,.4);text-decoration:none;
+}
+.sb-nav a:hover,.sb-nav a.active{background:rgba(255,255,255,.06);color:rgba(255,255,255,.9);}
+.sb-nav a .n{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.2);width:16px;}
+.sb-nav a.active .n{color:var(--forge);}
+.sb-foot{
+  font-family:'JetBrains Mono',monospace;font-size:9.5px;color:rgba(255,255,255,.18);
+  letter-spacing:.06em;padding-top:24px;border-top:1px solid rgba(255,255,255,.05);line-height:1.6;
+}
+.content{margin-left:var(--sw);flex:1;}
+
+/* SECTIONS */
+.sec{padding:80px 72px;border-bottom:1px solid #EAE3D8;}
+.sec:last-child{border-bottom:none;}
+.sec-dark{background:var(--pitch);border-bottom:1px solid rgba(255,255,255,.05);}
+.sec-ivory{background:var(--ivory);}
+.sec-hd{display:flex;align-items:flex-start;gap:20px;margin-bottom:52px;}
+.sec-num{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--forge);margin-top:7px;flex-shrink:0;}
+.sec-title{font-family:'Raleway',sans-serif;font-weight:800;font-size:36px;color:var(--pitch);line-height:1.05;}
+.sec-dark .sec-title{color:var(--chalk);}
+.sec-sub{font-size:15px;color:var(--walnut);line-height:1.65;max-width:560px;margin-top:10px;}
+.sec-dark .sec-sub{color:rgba(250,250,248,.42);}
+
+/* MONO LABEL */
+.mono-label{
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--walnut);margin-bottom:16px;
+  padding-bottom:12px;border-bottom:1px solid #E4DDD2;
+}
+.sec-dark .mono-label{color:rgba(255,255,255,.28);border-bottom-color:rgba(255,255,255,.07);}
+
+/* ── COVER ── */
+.cover{
+  background:var(--pitch);min-height:520px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:80px 72px;
+  position:relative;overflow:hidden;border-bottom:none;
+}
+.cover::before{
+  content:'';position:absolute;top:-180px;right:-180px;width:560px;height:560px;
+  border-radius:50%;background:radial-gradient(circle,rgba(255,83,0,.13) 0%,transparent 70%);
+}
+.cover::after{
+  content:'';position:absolute;bottom:-200px;left:-100px;width:400px;height:400px;
+  border-radius:50%;background:radial-gradient(circle,rgba(255,83,0,.06) 0%,transparent 70%);
+}
+.cover-logo{display:flex;flex-direction:column;align-items:center;margin-bottom:48px;position:relative;}
+.cover-logo svg{width:150px;height:auto;}
+.cover-div{width:1px;height:44px;background:rgba(255,255,255,.1);margin-bottom:28px;position:relative;}
+.cover-tagline{
+  font-family:'Raleway',sans-serif;font-weight:800;font-size:26px;
+  color:rgba(250,250,248,.9);text-align:center;margin-bottom:14px;max-width:480px;position:relative;
+}
+.cover-version{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.25);letter-spacing:.1em;position:relative;}
+
+/* ── BRAND STORY ── */
+.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
+.story-text h3{font-family:'Raleway',sans-serif;font-weight:800;font-size:21px;color:var(--pitch);margin-bottom:14px;}
+.story-text p{font-size:15px;line-height:1.72;color:var(--walnut);}
+.story-text p+p{margin-top:12px;}
+.services{display:flex;flex-direction:column;gap:10px;}
+.svc-row{
+  display:flex;align-items:center;gap:14px;padding:15px 20px;
+  border-radius:10px;background:var(--chalk);border:1px solid #E8E0D4;
+}
+.svc-dot{width:8px;height:8px;border-radius:50%;background:var(--forge);flex-shrink:0;}
+.svc-name{font-family:'Raleway',sans-serif;font-weight:700;font-size:13.5px;color:var(--pitch);flex:1;}
+.svc-tag{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:var(--walnut);text-transform:uppercase;}
+
+/* ── LOGO APPS ── */
+.logo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:52px;}
+.logo-cell{
+  border-radius:14px;padding:48px 24px 32px;
+  display:flex;flex-direction:column;align-items:center;gap:20px;
+}
+.logo-lk{display:flex;flex-direction:column;align-items:center;}
+.logo-lk svg{width:110px;height:auto;display:block;}
+.lk-craft{
+  font-family:'Raleway',sans-serif;font-weight:700;font-size:8.5px;
+  letter-spacing:.62em;padding-left:.62em;text-transform:uppercase;
+  line-height:1;text-align:center;margin-top:5px;
+}
+.logo-app-label{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;}
+
+/* LOGO DON'TS */
+.donts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.dont{
+  border-radius:12px;padding:28px 20px 20px;display:flex;flex-direction:column;
+  align-items:center;gap:14px;background:var(--chalk);border:1px solid #E8E0D4;position:relative;
+}
+.dont::after{content:'✕';position:absolute;top:10px;right:12px;font-size:13px;color:#CC2222;font-weight:700;}
+.dont-preview{height:80px;display:flex;align-items:center;justify-content:center;width:100%;}
+.dont-label{font-size:11.5px;font-weight:600;color:var(--pitch);text-align:center;}
+.dont-desc{font-size:11px;color:var(--walnut);text-align:center;line-height:1.45;margin-top:2px;}
+
+/* ── COLOR ── */
+.color-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:48px;}
+.swatch{border-radius:12px;overflow:hidden;border:1px solid rgba(0,0,0,.07);}
+.swatch-fill{height:120px;}
+.swatch-info{background:#FAF8F5;padding:12px 13px 15px;}
+.swatch-role{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:#8A7060;margin-bottom:4px;}
+.swatch-name{font-family:'Raleway',sans-serif;font-weight:700;font-size:13px;color:#1A0E08;margin-bottom:3px;}
+.swatch-hex{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#6A5040;}
+.combos{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.combo{border-radius:12px;overflow:hidden;border:1px solid rgba(0,0,0,.07);}
+.combo-prev{height:96px;padding:18px;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;}
+.combo-bar{height:8px;border-radius:4px;}
+.combo-dots{display:flex;gap:6px;}
+.combo-dot{width:8px;height:8px;border-radius:50%;}
+.combo-info{background:#FAF8F5;padding:14px 16px;}
+.combo-name{font-family:'Raleway',sans-serif;font-weight:700;font-size:13px;color:#1A0E08;margin-bottom:3px;}
+.combo-desc{font-size:11.5px;color:var(--walnut);}
+
+/* ── TYPOGRAPHY ── */
+.font-pair{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:52px;}
+.font-card{border-radius:14px;padding:32px;border:1px solid #E8E0D4;background:var(--chalk);}
+.font-role{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--forge);margin-bottom:8px;}
+.font-name{font-family:'Raleway',sans-serif;font-weight:800;font-size:18px;color:var(--pitch);margin-bottom:5px;}
+.font-meta{font-size:12px;color:var(--walnut);margin-bottom:20px;}
+.font-samp{padding-top:20px;border-top:1px solid #E8E0D4;}
+.font-abc{font-size:18px;line-height:1.45;color:var(--pitch);letter-spacing:.02em;}
+.font-wts{display:flex;gap:16px;margin-top:10px;}
+.wt{font-size:13px;color:var(--walnut);}
+.type-scale{display:flex;flex-direction:column;}
+.ts-row{display:flex;align-items:baseline;gap:28px;padding:20px 0;border-bottom:1px solid #EAE3D8;}
+.ts-row:last-child{border-bottom:none;}
+.ts-meta{width:160px;flex-shrink:0;}
+.ts-label{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--walnut);margin-bottom:3px;}
+.ts-spec{font-family:'JetBrains Mono',monospace;font-size:9px;color:#B4A490;}
+.ts-samp{flex:1;}
+
+/* ── COMPONENTS ── */
+.comp-group{margin-bottom:48px;}
+.comp-group:last-child{margin-bottom:0;}
+.comp-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--walnut);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid #EAE3D8;}
+.btn-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:32px;background:var(--chalk);border-radius:12px;border:1px solid #E8E0D4;margin-bottom:8px;}
+.btn-row-dark{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:32px;background:var(--pitch);border-radius:12px;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:13.5px;cursor:default;white-space:nowrap;}
+.btn-p{background:var(--forge);color:#fff;}
+.btn-o{background:transparent;color:var(--forge);border:1.5px solid var(--forge);}
+.btn-g{background:transparent;color:var(--walnut);border:1.5px solid #DDD5C4;}
+.btn-sm{padding:8px 16px;font-size:12px;}
+.btn-lg{padding:15px 30px;font-size:15px;}
+.badge-row{display:flex;flex-wrap:wrap;gap:10px;padding:28px 32px;background:var(--chalk);border-radius:12px;border:1px solid #E8E0D4;}
+.bdg{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;}
+.bdg-f{background:#FFE4D0;color:#C43000;}
+.bdg-p{background:var(--pitch);color:rgba(255,255,255,.8);}
+.bdg-i{background:var(--ivory);color:var(--walnut);border:1px solid #DDD5C4;}
+.bdg-e{background:#FFF0E8;color:#B85000;}
+.bdg-dot{width:6px;height:6px;border-radius:50%;}
+.card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.ui-card{background:var(--chalk);border-radius:12px;overflow:hidden;border:1px solid #E8E0D4;}
+.card-cover{height:132px;display:flex;align-items:flex-end;padding:14px;}
+.card-tag-chip{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:4px 8px;border-radius:4px;background:rgba(0,0,0,.25);color:rgba(255,255,255,.85);}
+.card-body{padding:18px;}
+.card-type{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--forge);margin-bottom:7px;}
+.card-title{font-family:'Raleway',sans-serif;font-weight:700;font-size:15px;color:var(--pitch);margin-bottom:6px;}
+.card-desc{font-size:12.5px;color:var(--walnut);line-height:1.55;margin-bottom:14px;}
+.card-cta{font-size:12px;font-weight:600;color:var(--forge);}
+
+/* ── BRAND IN USE ── */
+.site-frame{border-radius:16px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.07);margin-bottom:52px;}
+.s-nav{background:var(--chalk);padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #EAE3D8;}
+.s-nav-logo{display:flex;align-items:center;gap:9px;}
+.s-nav-logo svg{width:26px;height:auto;}
+.s-nav-craft{font-family:'Raleway',sans-serif;font-weight:800;font-size:10px;letter-spacing:.42em;color:var(--pitch);text-transform:uppercase;}
+.s-nav-links{display:flex;align-items:center;gap:28px;}
+.s-nav-links span{font-size:13px;font-weight:500;color:var(--walnut);}
+.s-nav-cta{background:var(--forge);color:#fff;padding:8px 18px;border-radius:7px;font-weight:600;font-size:13px;}
+.s-hero{background:var(--chalk);padding:64px 40px;}
+.s-pill{display:inline-flex;align-items:center;gap:7px;background:#FFE8D8;color:#C43000;font-size:11px;font-weight:600;padding:5px 12px;border-radius:20px;margin-bottom:22px;}
+.s-pill-dot{width:5px;height:5px;border-radius:50%;background:var(--forge);}
+.s-hero h2{font-family:'Raleway',sans-serif;font-weight:800;font-size:44px;line-height:1.07;color:var(--pitch);margin-bottom:18px;}
+.s-hero h2 em{font-style:normal;color:var(--forge);}
+.s-hero p{font-size:15px;line-height:1.68;color:var(--walnut);max-width:440px;margin-bottom:32px;}
+.s-btns{display:flex;align-items:center;gap:16px;}
+.s-work{background:var(--ivory);padding:48px 40px;}
+.s-work h3{font-family:'Raleway',sans-serif;font-weight:800;font-size:22px;color:var(--pitch);margin-bottom:20px;}
+.s-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.s-card{background:var(--chalk);border-radius:10px;overflow:hidden;border:1px solid rgba(0,0,0,.05);}
+.s-card-img{height:100px;display:flex;align-items:flex-end;padding:10px;}
+.s-card-body{padding:14px;}
+.s-card-type{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--forge);margin-bottom:5px;}
+.s-card-title{font-family:'Raleway',sans-serif;font-weight:700;font-size:13px;color:var(--pitch);}
+.s-footer{background:var(--pitch);padding:20px 40px;display:flex;align-items:center;justify-content:space-between;}
+.s-footer span{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:rgba(255,255,255,.22);letter-spacing:.07em;}
+/* ── EMAIL SIGNATURE ── */
+.sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.sig-vl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;}
+.sig-shell{border-radius:12px;padding:36px 40px;}
+.sig-inner{display:inline-flex;align-items:center;gap:16px;}
+.sig-logo-col{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;}
+.sig-cw{font-family:'Raleway',sans-serif;font-weight:800;font-size:6.5px;letter-spacing:.52em;padding-left:.52em;text-transform:uppercase;text-align:center;}
+.sig-div{width:1px;height:42px;flex-shrink:0;}
+.sig-name{font-family:'Raleway',sans-serif;font-weight:700;font-size:14.5px;line-height:1;margin-bottom:3px;}
+.sig-role{font-family:'DM Sans',sans-serif;font-weight:500;font-size:11px;margin-bottom:9px;}
+.sig-rule{height:1px;margin-bottom:8px;}
+.sig-ln{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.01em;line-height:1.75;}
+.sig-specs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px;}
+.sig-spec{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:20px 22px;}
+.sig-spec-lbl{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:8px;}
+.sig-spec-val{font-size:12.5px;font-weight:600;color:var(--chalk);margin-bottom:2px;}
+.sig-spec-sub{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:rgba(255,255,255,.3);}
+/* Biz cards */
+.biz-wrap{display:flex;gap:24px;align-items:flex-start;}
+.biz-card{width:380px;height:220px;border-radius:14px;flex-shrink:0;position:relative;overflow:hidden;}
+.biz-front{background:var(--pitch);display:flex;align-items:center;justify-content:center;}
+.biz-front::before{content:'';position:absolute;bottom:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(255,83,0,.18) 0%,transparent 70%);}
+.biz-front-lk{display:flex;flex-direction:column;align-items:center;position:relative;}
+.biz-front-lk svg{width:76px;height:auto;}
+.biz-front-craft{font-family:'Raleway',sans-serif;font-weight:700;font-size:5.5px;letter-spacing:.62em;padding-left:.62em;color:var(--forge);text-transform:uppercase;text-align:center;margin-top:4px;}
+.biz-back{background:var(--forge);display:flex;flex-direction:column;justify-content:space-between;padding:28px 30px;}
+.biz-back-name{font-family:'Raleway',sans-serif;font-weight:800;font-size:19px;color:#fff;}
+.biz-back-role{font-size:12px;color:rgba(255,255,255,.65);margin-top:3px;}
+.biz-contact p{font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,.8);letter-spacing:.03em;margin-bottom:4px;}
+.biz-note{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.07em;text-transform:uppercase;margin-top:4px;}
+
+/* GRADIENTS */
+.grad-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+.grad-card{border-radius:16px;overflow:hidden;border:1px solid #EAE3D8;background:#fff;}
+.grad-preview{height:220px;}
+.grad-info{padding:28px 28px 24px;}
+.grad-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.grad-name{font-family:'Raleway',sans-serif;font-weight:800;font-size:22px;color:var(--pitch);}
+.grad-swatches{display:flex;align-items:center;gap:7px;}
+.grad-dot{width:18px;height:18px;border-radius:50%;border:2px solid rgba(0,0,0,.07);}
+.grad-arr{font-size:11px;color:var(--walnut);line-height:1;}
+.grad-css{
+  font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--forge);
+  background:var(--ivory);padding:10px 14px;border-radius:8px;
+  margin-bottom:18px;word-break:break-all;line-height:1.65;letter-spacing:.01em;
+}
+.grad-use-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--walnut);opacity:.55;margin-bottom:7px;}
+.grad-use{font-size:13px;color:var(--walnut);line-height:1.65;margin-bottom:10px;}
+.grad-note{font-size:11.5px;color:rgba(74,53,48,.45);font-style:italic;}
+
+.grad-dir-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:48px;}
+.grad-dir-block{}
+.grad-dir-title{font-family:'Raleway',sans-serif;font-weight:700;font-size:14px;color:var(--pitch);margin-bottom:16px;}
+.grad-dir-row{display:flex;gap:14px;}
+.grad-dir-item{display:flex;flex-direction:column;align-items:center;gap:7px;}
+.grad-dir-swatch{width:72px;height:44px;border-radius:9px;}
+.grad-dir-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--walnut);opacity:.6;}
+
+.grad-rule{
+  margin-top:48px;background:rgba(255,83,0,.07);border:1px solid rgba(255,83,0,.15);
+  border-radius:12px;padding:20px 24px;display:flex;align-items:flex-start;gap:14px;
+}
+.grad-rule-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.grad-rule-text{font-size:13px;color:var(--walnut);line-height:1.65;}
+.grad-rule-text strong{color:var(--pitch);}
+
+/* ── SHADOWS ── */
+.sh-elev-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:20px;}
+.sh-elev-card{display:flex;flex-direction:column;align-items:center;gap:24px;}
+.sh-tile{width:100%;height:92px;background:#FAFAF8;border-radius:12px;}
+.sh-e0{box-shadow:none;border:1px solid rgba(0,0,0,.09);}
+.sh-e1{box-shadow:0 1px 3px rgba(26,14,8,.07),0 1px 2px rgba(26,14,8,.05);}
+.sh-e2{box-shadow:0 4px 12px rgba(26,14,8,.10),0 2px 4px rgba(26,14,8,.06);}
+.sh-e3{box-shadow:0 10px 28px rgba(26,14,8,.13),0 4px 8px rgba(26,14,8,.07);}
+.sh-e4{box-shadow:0 20px 48px rgba(26,14,8,.18),0 8px 16px rgba(26,14,8,.09);}
+.sh-e5{box-shadow:0 40px 80px rgba(26,14,8,.22),0 16px 32px rgba(26,14,8,.11);}
+.sh-level{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;color:var(--forge);display:block;margin-bottom:2px;}
+.sh-name{font-family:'Raleway',sans-serif;font-weight:700;font-size:12px;color:var(--pitch);display:block;margin-bottom:7px;}
+.sh-val{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--walnut);opacity:.5;display:block;line-height:1.8;margin-bottom:7px;word-break:break-all;}
+.sh-use{font-family:'DM Sans',sans-serif;font-size:11px;color:var(--walnut);opacity:.6;display:block;line-height:1.55;}
+.sh-token-table{width:100%;border-collapse:collapse;}
+.sh-token-table th{text-align:left;font-family:'DM Sans',sans-serif;font-weight:600;font-size:11px;color:var(--walnut);opacity:.5;text-transform:uppercase;letter-spacing:.08em;padding:0 16px 10px 0;border-bottom:1px solid rgba(0,0,0,.08);}
+.sh-token-table td{font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:10px 16px 10px 0;border-bottom:1px solid rgba(0,0,0,.04);vertical-align:top;color:var(--walnut);}
+.sh-token-table td:first-child{color:var(--forge);white-space:nowrap;width:160px;}
+.sh-token-table td:last-child{opacity:.55;line-height:1.65;}
+.sh-special-grid{display:flex;gap:16px;}
+.sh-special-card{flex:1;background:var(--chalk);border:1px solid rgba(0,0,0,.07);border-radius:16px;padding:28px 24px 22px;display:flex;flex-direction:column;align-items:center;gap:18px;}
+.sh-forge-tile{box-shadow:0 8px 24px rgba(255,83,0,.32),0 3px 8px rgba(255,83,0,.18);background:#FF5300;}
+.sh-inset-tile{box-shadow:inset 0 2px 8px rgba(26,14,8,.20);background:#EDE5DA;}
+.sh-highlight-tile{box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 4px 12px rgba(26,14,8,.10);background:linear-gradient(to bottom,#FDFCFB,#F5EDE3);}
+.sh-special-title{font-family:'Raleway',sans-serif;font-weight:700;font-size:13px;color:var(--pitch);text-align:center;margin-bottom:4px;}
+.sh-special-val{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--walnut);opacity:.5;text-align:center;line-height:1.75;margin-bottom:6px;}
+.sh-special-desc{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--walnut);opacity:.65;text-align:center;line-height:1.65;}
+.sh-usage-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.sh-usage-card{background:var(--chalk);border:1px solid rgba(0,0,0,.07);border-radius:12px;padding:18px 16px;}
+.sh-usage-badge{display:flex;align-items:center;gap:7px;margin-bottom:9px;}
+.sh-usage-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.sh-usage-lvl{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;}
+.sh-usage-title{font-family:'Raleway',sans-serif;font-weight:700;font-size:12px;color:var(--pitch);margin-bottom:5px;}
+.sh-usage-items{font-family:'DM Sans',sans-serif;font-size:11.5px;color:var(--walnut);opacity:.65;line-height:1.6;}
+.sh-dd-grid{display:flex;gap:14px;}
+.sh-dd-card{flex:1;border-radius:14px;overflow:hidden;border:1px solid rgba(0,0,0,.07);}
+.sh-dd-prev{height:140px;background:var(--ivory);display:flex;align-items:center;justify-content:center;}
+.sh-dd-info{background:var(--chalk);padding:14px 16px;}
+.sh-dd-label{font-family:'Raleway',sans-serif;font-weight:700;font-size:12px;margin-bottom:4px;}
+.sh-dd-desc{font-family:'DM Sans',sans-serif;font-size:11.5px;color:var(--walnut);opacity:.65;line-height:1.55;}
+
+/* ── LOGO TREATMENTS ── */
+.treat-wrap{margin-top:4px;}
+.treat-block{margin-bottom:52px;}
+.treat-title{font-family:'Raleway',sans-serif;font-weight:800;font-size:15px;color:var(--pitch);letter-spacing:.01em;margin-bottom:5px;}
+.treat-desc{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--walnut);line-height:1.7;margin-bottom:22px;max-width:560px;}
+/* Foot Mask */
+.ftm-grid{display:flex;gap:14px;}
+.ftm-card{flex:1;border-radius:16px;overflow:hidden;height:230px;display:flex;align-items:flex-end;justify-content:center;}
+.ftm-logo{-webkit-mask-image:linear-gradient(to bottom,black 5%,transparent 85%);mask-image:linear-gradient(to bottom,black 5%,transparent 85%);display:flex;justify-content:center;padding:0 28px;}
+/* Morphs */
+.morph-grid{display:flex;gap:12px;}
+.morph-card{flex:1;min-width:0;background:var(--chalk);border:1px solid rgba(0,0,0,.07);border-radius:14px;padding:28px 16px 16px;display:flex;flex-direction:column;align-items:center;gap:16px;}
+.morph-lbl{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--walnut);opacity:.45;text-align:center;}
+/* Spacing */
+.spacing-stage{background:var(--chalk);border:1px solid rgba(0,0,0,.07);border-radius:16px;padding:64px;display:flex;flex-direction:column;align-items:center;gap:32px;}
+.spacing-rig{position:relative;display:inline-flex;align-items:center;justify-content:center;}
+.spacing-rig::before{content:'';position:absolute;inset:-40px;border:1.5px dashed rgba(255,83,0,.45);border-radius:6px;pointer-events:none;}
+.sp-tag{position:absolute;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;color:var(--forge);background:var(--chalk);padding:2px 6px;border-radius:3px;line-height:1;white-space:nowrap;}
+.sp-top{top:-54px;left:50%;transform:translateX(-50%);}
+.sp-bot{bottom:-54px;left:50%;transform:translateX(-50%);}
+.sp-left{left:-70px;top:50%;transform:translateY(-50%);}
+.sp-right{right:-70px;top:50%;transform:translateY(-50%);}
+.spacing-rule{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--walnut);opacity:.6;text-align:center;margin-top:8px;}
+/* Photo Contrast */
+.photo-grid{display:flex;gap:12px;}
+.photo-card{flex:1;border-radius:14px;height:210px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;overflow:hidden;}
+.photo-lbl{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;opacity:.6;text-align:center;}
+/* Digital Effects */
+.effect-grid{display:flex;gap:12px;}
+.effect-card{flex:1;border-radius:14px;height:210px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;}
+.effect-lbl{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;opacity:.5;text-align:center;}
+/* Shaping */
+.shaping-row{display:flex;gap:40px;justify-content:center;align-items:flex-start;flex-wrap:wrap;}
+.shape-item{display:flex;flex-direction:column;align-items:center;gap:14px;}
+.shape-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--walnut);opacity:.45;}
+
+/* ── TINTS & SHADES ── */
+.scales-section{margin-top:64px;}
+.scales-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--forge);margin-bottom:10px;}
+.scales-desc{font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--walnut);line-height:1.65;margin-bottom:36px;max-width:540px;}
+.scale-group{display:grid;grid-template-columns:72px 1fr;gap:14px;align-items:center;margin-bottom:9px;}
+.scale-lbl{text-align:right;}
+.scale-lbl-name{font-family:'DM Sans',sans-serif;font-weight:600;font-size:12px;color:var(--pitch);display:block;}
+.scale-lbl-role{font-family:'DM Sans',sans-serif;font-size:10px;color:var(--walnut);opacity:.55;display:block;margin-top:2px;}
+.scale-strip{display:flex;border-radius:10px;overflow:hidden;border:1px solid rgba(0,0,0,.07);}
+.sc-sw{flex:1;height:70px;display:flex;flex-direction:column;justify-content:space-between;padding:8px 6px;cursor:pointer;transition:flex .2s ease;position:relative;}
+.sc-sw:hover{flex:2.2;}
+.sc-sw-step{font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:600;line-height:1;white-space:nowrap;opacity:.45;transition:opacity .15s;}
+.sc-sw-hex{font-family:'JetBrains Mono',monospace;font-size:7.5px;line-height:1;white-space:nowrap;opacity:0;transition:opacity .2s;overflow:hidden;max-width:100%;}
+.sc-sw:hover .sc-sw-step{opacity:.9;}
+.sc-sw:hover .sc-sw-hex{opacity:.8;}
+.sc-sw[data-light] .sc-sw-step,.sc-sw[data-light] .sc-sw-hex{color:#1A0E08;}
+.sc-sw:not([data-light]) .sc-sw-step,.sc-sw:not([data-light]) .sc-sw-hex{color:#FAFAF8;}
+.sc-sw.sc-base .sc-sw-step{opacity:.8;font-size:9px;}
+.sc-copied{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--pitch);color:#FAFAF8;font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 18px;border-radius:8px;pointer-events:none;opacity:0;transition:opacity .2s;z-index:9999;}
+.sc-copied.show{opacity:1;}
+
+/* ── CHARACTER COLOR CARDS ── */
+.char-cards{display:flex;gap:24px;margin-bottom:52px;}
+.char-card{flex:1;min-width:0;cursor:default;}
+.char-card svg{width:100%;height:auto;display:block;filter:drop-shadow(0 8px 40px rgba(26,14,8,.14));}
+.mouth-line{opacity:1;transition:opacity .15s;}
+.mouth-smile{opacity:0;transition:opacity .15s;}
+.char-card:hover .mouth-line{opacity:0;}
+.char-card:hover .mouth-smile{opacity:1;}
+
+/* ── FOUNDATION ── */
+.brand-statement{
+  margin-bottom:52px;padding:52px 56px;border-radius:20px;
+  background:var(--pitch);position:relative;overflow:hidden;
+}
+.brand-statement::before{
+  content:'';position:absolute;top:-120px;right:-120px;width:440px;height:440px;
+  border-radius:50%;background:radial-gradient(circle,rgba(255,83,0,.11) 0%,transparent 68%);
+}
+.bs-quote{
+  font-family:'Raleway',sans-serif;font-weight:800;font-size:30px;
+  color:var(--chalk);line-height:1.22;margin-bottom:20px;position:relative;max-width:640px;
+}
+.bs-quote em{font-style:normal;color:var(--forge);}
+.bs-source{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.22);position:relative;}
+.keywords{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:52px;}
+.kw{
+  font-family:'Raleway',sans-serif;font-weight:700;font-size:12.5px;
+  padding:8px 20px;border-radius:20px;border:1.5px solid #DDD5C4;
+  color:var(--walnut);letter-spacing:.03em;background:var(--chalk);
+}
+.kw-primary{background:var(--forge);color:#fff;border-color:var(--forge);}
+.pillar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.pillar{padding:28px 26px;border-radius:16px;background:var(--ivory);border:1px solid #E4DDD2;}
+.pillar-tag{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--forge);margin-bottom:10px;}
+.pillar-name{font-family:'Raleway',sans-serif;font-weight:800;font-size:21px;color:var(--pitch);margin-bottom:8px;}
+.pillar-desc{font-size:13px;color:var(--walnut);line-height:1.6;}
+
+/* ── VOICE ── */
+.tagline-primary{
+  font-family:'Raleway',sans-serif;font-weight:800;font-size:56px;
+  color:var(--chalk);line-height:.95;margin-bottom:8px;letter-spacing:-.01em;
+}
+.tagline-label{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--forge);margin-bottom:36px;display:block;}
+.tagline-alts{display:flex;flex-direction:column;gap:2px;margin-bottom:56px;}
+.tagline-alt{
+  font-family:'Raleway',sans-serif;font-weight:700;font-size:22px;
+  color:rgba(250,250,248,.3);padding:14px 20px;border-radius:10px;
+  border:1px solid rgba(255,255,255,.04);
+}
+.voice-traits{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.trait-card{
+  padding:26px 30px;border-radius:14px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+}
+.trait-yes{font-family:'Raleway',sans-serif;font-weight:800;font-size:18px;color:var(--chalk);margin-bottom:3px;}
+.trait-not{font-family:'DM Sans',sans-serif;font-size:13px;color:rgba(255,255,255,.3);}
+
+/* ── PATTERNS ── */
+.pattern-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.pattern-card{border-radius:16px;overflow:hidden;border:1px solid #EAE3D8;background:#fff;}
+.pattern-prev{height:210px;display:flex;align-items:center;justify-content:center;background:var(--pitch);}
+.pattern-info{padding:22px 24px 24px;}
+.pattern-name{font-family:'Raleway',sans-serif;font-weight:800;font-size:15px;color:var(--pitch);margin-bottom:5px;}
+.pattern-use{font-size:12.5px;color:var(--walnut);line-height:1.6;}
+
+/* Letterhead */
+.lh-mock{display:flex;gap:36px;align-items:flex-start;}
+.lh-sheet{
+  width:480px;min-height:620px;background:#fff;border-radius:3px;flex-shrink:0;
+  box-shadow:0 20px 72px rgba(0,0,0,.55);overflow:hidden;position:relative;
+}
+.lh-stripe{height:8px;background:var(--forge);}
+.lh-header{padding:32px 40px 24px;display:flex;align-items:flex-start;justify-content:space-between;border-bottom:1px solid #F0EAE2;}
+.lh-addr{font-family:'JetBrains Mono',monospace;font-size:9px;color:#A09080;letter-spacing:.04em;line-height:1.8;text-align:right;}
+.lh-body{padding:40px 40px 32px;}
+.lh-to{margin-bottom:24px;}
+.lh-to-lbl{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:#C4B4A0;margin-bottom:6px;}
+.lh-to-name{font-family:'Raleway',sans-serif;font-weight:700;font-size:13px;color:#1A0E08;}
+.lh-to-co{font-size:11px;color:#8A7060;}
+.lh-subject{font-family:'Raleway',sans-serif;font-weight:800;font-size:17px;color:#1A0E08;margin-bottom:20px;}
+.lh-lines{display:flex;flex-direction:column;gap:7px;}
+.lh-line{height:2px;border-radius:1px;background:#F0EBE3;}
+.lh-line.s{width:72%;}
+.lh-line.m{width:88%;}
+.lh-line.f{width:100%;}
+.lh-line.xs{width:45%;height:1.5px;background:#F5F1EC;}
+.lh-foot{position:absolute;bottom:0;left:0;right:0;height:6px;background:linear-gradient(90deg,var(--forge) 0%,var(--ember) 100%);opacity:.7;}
+
+/* ── APP ICONS ── */
+.icon-vars{display:flex;gap:16px;margin-bottom:52px;}
+.icon-var{flex:1;border-radius:16px;border:1px solid #E4DDD2;padding:26px 14px 20px;display:flex;flex-direction:column;align-items:center;gap:14px;background:var(--chalk);}
+.icon-var-previews{display:flex;gap:10px;align-items:flex-end;}
+.icon-pv{display:flex;flex-direction:column;align-items:center;gap:5px;}
+.icon-pv-lbl{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.09em;text-transform:uppercase;color:rgba(26,14,8,.3);}
+.icon-var-name{font-family:'Raleway',sans-serif;font-weight:800;font-size:13px;color:var(--pitch);text-align:center;}
+.icon-var-use{font-size:11px;color:var(--walnut);text-align:center;line-height:1.55;}
+.platform-block{margin-bottom:48px;}
+.platform-block-hd{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:14px;border-bottom:1.5px solid #DDD5C4;}
+.pb-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pb-name{font-family:'Raleway',sans-serif;font-weight:800;font-size:15px;color:var(--pitch);}
+.pb-sub{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.09em;text-transform:uppercase;color:var(--walnut);}
+.pb-note{font-size:12.5px;color:var(--walnut);line-height:1.65;padding:12px 16px 12px 20px;margin-bottom:18px;border-radius:10px;background:var(--chalk);border-left:3px solid var(--forge);border:1px solid #E4DDD2;border-left:3px solid var(--forge);}
+.sizes-vis{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;background:var(--ivory);border-radius:12px;border:1px solid #E4DDD2;padding:20px 22px;margin-bottom:14px;}
+.sz-item{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.sz-lbl{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.05em;text-align:center;color:var(--walnut);line-height:1.4;}
+.sz-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:36px;}
+.sz-tbl thead th{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--walnut);padding:7px 14px;border-bottom:1.5px solid #DDD5C4;text-align:left;}
+.sz-tbl td{padding:8px 14px;border-bottom:1px solid #EAE4DA;color:var(--walnut);}
+.sz-tbl .mc{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--pitch);}
+.sz-tbl .hi{background:rgba(255,83,0,.04);}
+.adaptive-blk{display:flex;gap:24px;align-items:flex-start;background:var(--ivory);border-radius:12px;border:1px solid #E4DDD2;padding:24px;margin-bottom:16px;}
+.adp-info{flex:1;}
+.adp-title{font-family:'Raleway',sans-serif;font-weight:800;font-size:14px;color:var(--pitch);margin-bottom:7px;}
+.adp-body{font-size:12.5px;color:var(--walnut);line-height:1.65;margin-bottom:14px;}
+.adp-spec{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;border-radius:7px;background:var(--chalk);border:1px solid #E0D9CF;margin-bottom:5px;}
+.adp-k{font-size:11.5px;color:var(--walnut);}
+.adp-v{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--forge);}
+.icon-rules{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.icon-rule{border-radius:12px;overflow:hidden;border:1px solid #E4DDD2;}
+.icon-rule-vis{height:90px;display:flex;align-items:center;justify-content:center;}
+.icon-rule-info{padding:10px 13px;background:var(--chalk);}
+.icon-rule-verdict{font-family:'Raleway',sans-serif;font-weight:800;font-size:10.5px;margin-bottom:2px;}
+.rule-do .icon-rule-verdict{color:#2D8A4E;}
+.rule-dont .icon-rule-verdict{color:#C0392B;}
+.rule-do .icon-rule-vis{background:rgba(45,138,78,.05);}
+.rule-dont .icon-rule-vis{background:rgba(192,57,43,.05);}
+.icon-rule-desc{font-size:10.5px;color:var(--walnut);line-height:1.5;}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <svg viewBox="0 0 504 450" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#FF5300" d="M123.28,370.98l27.33,79.02h-54.66l27.33-79.02ZM269.39,450h22.87l-22.87-55.24v55.24ZM408.88,450v-55.24l-22.75,55.24h22.75ZM260.7,0h-17.4C108.93,0,0,108.93,0,243.3v206.7h54.55l45.24-126h47.27l45.24,126h36.49v-126h46.11l53.9,126h20.97l53.9-126h45.82v126h54.52v-206.7C504,108.93,395.07,0,260.7,0Z"/>
+    </svg>
+    <span class="sb-logo-word">CRAFT</span>
+  </div>
+  <p class="sb-section-label">Brand Guidelines</p>
+  <nav class="sb-nav">
+    <a href="#brand"><span class="n">01</span>Brand</a>
+    <a href="#foundation"><span class="n">02</span>Foundation</a>
+    <a href="#logo"><span class="n">03</span>Logo</a>
+    <a href="#color"><span class="n">04</span>Color</a>
+    <a href="#typography"><span class="n">05</span>Typography</a>
+    <a href="#components"><span class="n">06</span>Components</a>
+    <a href="#voice"><span class="n">07</span>Voice</a>
+    <a href="#patterns"><span class="n">08</span>Patterns</a>
+    <a href="#brand-use"><span class="n">09</span>Brand in Use</a>
+    <a href="#email-sig"><span class="n">10</span>Email Sig</a>
+    <a href="#gradients"><span class="n">11</span>Gradients</a>
+    <a href="#app-icons"><span class="n">12</span>App Icons</a>
+    <a href="#shadows"><span class="n">13</span>Shadows</a>
+  </nav>
+  <div class="sb-foot">© 2024 Damcraft Studio<br>Brand Guidelines v1.0</div>
+</aside>
+
+<main class="content">
+
+<!-- ══════════════════════════════════════
+     01 BRAND
+══════════════════════════════════════ -->
+<section id="brand">
+
+  <!-- Cover -->
+  <div class="cover">
+    <div class="cover-logo">
+      <svg viewBox="1087 261 510 558" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#FF5300" d="M1116.52,815.18c-3.84,0-7.41-.7-10.69-2.09-3.29-1.39-6.16-3.34-8.6-5.83-2.45-2.5-4.36-5.42-5.72-8.78-1.37-3.36-2.05-7.03-2.05-11.02s.67-7.67,2.02-11.05,3.24-6.31,5.69-8.78c2.45-2.47,5.32-4.39,8.6-5.76,3.29-1.37,6.88-2.05,10.76-2.05s7.38.65,10.48,1.94c3.1,1.3,5.72,3.02,7.88,5.18s3.7,4.56,4.61,7.2l-9.86,4.75c-.91-2.59-2.51-4.74-4.79-6.44-2.28-1.7-5.05-2.56-8.32-2.56s-5.95.74-8.35,2.23c-2.4,1.49-4.26,3.54-5.58,6.16-1.32,2.62-1.98,5.68-1.98,9.18s.66,6.58,1.98,9.22c1.32,2.64,3.18,4.7,5.58,6.19,2.4,1.49,5.18,2.23,8.35,2.23s6.04-.85,8.32-2.56c2.28-1.7,3.88-3.85,4.79-6.44l9.86,4.75c-.91,2.64-2.45,5.04-4.61,7.2s-4.79,3.89-7.88,5.18-6.59,1.94-10.48,1.94Z"/>
+        <path fill="#FF5300" d="M1210.86,813.46v-53.64h20.52c3.7,0,6.97.65,9.83,1.94,2.86,1.3,5.1,3.22,6.73,5.76,1.63,2.54,2.45,5.69,2.45,9.43s-.84,6.76-2.52,9.32c-1.68,2.57-3.94,4.5-6.77,5.8l12.24,21.38h-12.53l-13.25-23.69,7.2,4.25h-12.74v19.44h-11.16ZM1222.02,784.3h9.43c1.58,0,2.95-.31,4.1-.94,1.15-.62,2.05-1.49,2.7-2.59.65-1.1.97-2.38.97-3.82s-.32-2.78-.97-3.89c-.65-1.1-1.55-1.97-2.7-2.59-1.15-.62-2.52-.94-4.1-.94h-9.43v14.76Z"/>
+        <path fill="#FF5300" d="M1324.71,813.46l18.14-53.64h14.83l18.14,53.64h-12.17l-3.6-10.94h-19.66l-3.6,10.94h-12.1ZM1343.5,792.79h13.46l-8.21-25.34h3.02l-8.28,25.34Z"/>
+        <path fill="#FF5300" d="M1447.2,813.46v-53.64h36.72v9.72h-25.56v13.61h21.96v9.72h-21.96v20.59h-11.16Z"/>
+        <path fill="#FF5300" d="M1568.9,813.46v-43.92h-13.61v-9.72h38.16v9.72h-13.39v43.92h-11.16Z"/>
+        <polygon fill="#FF5300" points="1173.34 714.82 1228.27 714.82 1201.36 638.19 1173.34 714.82"/>
+        <polygon fill="#FF5300" points="1357.37 714.82 1383.79 714.82 1357.37 664.29 1357.37 714.82"/>
+        <polygon fill="#FF5300" points="1496.05 714.82 1496.05 664.29 1469.63 714.82 1496.05 714.82"/>
+        <path fill="#FF5300" d="M1350.15,264.82h-17.4c-134.37,0-243.3,108.93-243.3,243.3v206.7h44.63l48.09-126h38.37l47.92,126h45.52v-126h46.54l65.5,126h1.09l66.12-126h46.23v126h54v-206.7c0-134.37-108.93-243.3-243.3-243.3Z"/>
+      </svg>
+    </div>
+    <div class="cover-div"></div>
+    <p class="cover-tagline">Like a dam — engineered<br>for purpose, built to last.</p>
+    <p class="cover-version">Brand Identity Guidelines · v1.0 · 2024</p>
+  </div>
+
+  <!-- Brand story -->
+  <div class="sec sec-ivory">
+    <div class="sec-hd">
+      <span class="sec-num">01</span>
+      <div>
+        <h2 class="sec-title">The Brand</h2>
+        <p class="sec-sub">Damcraft is a multi-disciplinary design studio that approaches every project the way engineers approach a structure — with rigor, clarity, and intent to last.</p>
+      </div>
+    </div>
+    <div class="story-grid">
+      <div class="story-text">
+        <h3>Who We Are</h3>
+        <p>We are Damcraft — a design studio built on the belief that good design is structural. Like a dam, it holds under pressure, serves a clear purpose, and doesn't waste a single element.</p>
+        <p>We work across UI/UX, product design, brand identity, and interior design — disciplines that share one common demand: that form follows function, and beauty follows precision.</p>
+      </div>
+      <div class="services">
+        <div class="svc-row"><span class="svc-dot"></span><span class="svc-name">UI / UX Design</span><span class="svc-tag">Digital</span></div>
+        <div class="svc-row"><span class="svc-dot"></span><span class="svc-name">Product Design</span><span class="svc-tag">Digital</span></div>
+        <div class="svc-row"><span class="svc-dot"></span><span class="svc-name">Brand Identity</span><span class="svc-tag">Visual</span></div>
+        <div class="svc-row"><span class="svc-dot"></span><span class="svc-name">Interior Design</span><span class="svc-tag">Space</span></div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════
+     02 FOUNDATION
+══════════════════════════════════════ -->
+<section id="foundation" class="sec">
+  <div class="sec-hd">
+    <span class="sec-num">02</span>
+    <div>
+      <h2 class="sec-title">Foundation</h2>
+      <p class="sec-sub">The idea at the root of everything we build — an organism that doesn't just construct, it engineers ecosystems.</p>
+    </div>
+  </div>
+
+  <!-- Brand Statement -->
+  <div class="brand-statement">
+    <p class="bs-quote">A beaver doesn't just build a dam.<br><em>It engineers an ecosystem.</em></p>
+    <p class="bs-source">— The Damcraft founding idea</p>
+  </div>
+
+  <!-- Keywords -->
+  <p class="mono-label">Brand Keywords</p>
+  <div class="keywords">
+    <span class="kw kw-primary">Built to Last</span>
+    <span class="kw">Precise</span>
+    <span class="kw">Purposeful</span>
+    <span class="kw">Creative</span>
+    <span class="kw">Bold</span>
+    <span class="kw">Natural Intelligence</span>
+  </div>
+
+  <!-- Service Pillars -->
+  <p class="mono-label">Service Pillars</p>
+  <div class="pillar-grid">
+    <div class="pillar">
+      <p class="pillar-tag">Digital</p>
+      <p class="pillar-name">Digital Design</p>
+      <p class="pillar-desc">UI/UX, product design, and digital interfaces engineered for clarity and longevity.</p>
+    </div>
+    <div class="pillar">
+      <p class="pillar-tag">Visual</p>
+      <p class="pillar-name">Brand Identity</p>
+      <p class="pillar-desc">Logos, systems, and guidelines that hold their integrity across every surface and scale.</p>
+    </div>
+    <div class="pillar">
+      <p class="pillar-tag">Space</p>
+      <p class="pillar-name">Interior Design</p>
+      <p class="pillar-desc">Environments shaped by the same structural rigor — purposeful, lasting, unmistakable.</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════
+     03 LOGO
+══════════════════════════════════════ -->
+<section id="logo" class="sec">
+  <div class="sec-hd">
+    <span class="sec-num">03</span>
+    <div>
+      <h2 class="sec-title">The Logo</h2>
+      <p class="sec-sub">The arch mark encodes D, A, M as negative-space structural cutouts. CRAFT sits below as a vectorized wordmark. Always use the combined lockup as the primary brand mark.</p>
+    </div>
+  </div>
+
+  <p class="mono-label">Logo Applications</p>
+  <div class="logo-grid">
+
+    <!-- Chalk -->
+    <div class="logo-cell" style="background:#FAFAF8;border:1px solid #E8E0D4;border-radius:14px;">
+      <div class="logo-lk">
+        <svg viewBox="1087 261 510 558" width="110" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#1A0E08" d="M1116.52,815.18c-3.84,0-7.41-.7-10.69-2.09-3.29-1.39-6.16-3.34-8.6-5.83-2.45-2.5-4.36-5.42-5.72-8.78-1.37-3.36-2.05-7.03-2.05-11.02s.67-7.67,2.02-11.05,3.24-6.31,5.69-8.78c2.45-2.47,5.32-4.39,8.6-5.76,3.29-1.37,6.88-2.05,10.76-2.05s7.38.65,10.48,1.94c3.1,1.3,5.72,3.02,7.88,5.18s3.7,4.56,4.61,7.2l-9.86,4.75c-.91-2.59-2.51-4.74-4.79-6.44-2.28-1.7-5.05-2.56-8.32-2.56s-5.95.74-8.35,2.23c-2.4,1.49-4.26,3.54-5.58,6.16-1.32,2.62-1.98,5.68-1.98,9.18s.66,6.58,1.98,9.22c1.32,2.64,3.18,4.7,5.58,6.19,2.4,1.49,5.18,2.23,8.35,2.23s6.04-.85,8.32-2.56c2.28-1.7,3.88-3.85,4.79-6.44l9.86,4.75c-.91,2.64-2.45,5.04-4.61,7.2s-4.79,3.89-7.88,5.18-6.59,1.94-10.48,1.94Z"/>
+          <path fill="#1A0E08" d="M1210.86,813.46v-53.64h20.52c3.7,0,6.97.65,9.83,1.94,2.86,1.3,5.1,3.22,6.73,5.76,1.63,2.54,2.45,5.69,2.45,9.43s-.84,6.76-2.52,9.32c-1.68,2.57-3.94,4.5-6.77,5.8l12.24,21.38h-12.53l-13.25-23.69,7.2,4.25h-12.74v19.44h-11.16ZM1222.02,784.3h9.43c1.58,0,2.95-.31,4.1-.94,1.15-.62,2.05-1.49,2.7-2.59.65-1.1.97-2.38.97-3.82s-.32-2.78-.97-3.89c-.65-1.1-1.55-1.97-2.7-2.59-1.15-.62-2.52-.94-4.1-.94h-9.43v14.76Z"/>
+          <path fill="#1A0E08" d="M1324.71,813.46l18.14-53.64h14.83l18.14,53.64h-12.17l-3.6-10.94h-19.66l-3.6,10.94h-12.1ZM1343.5,792.79h13.46l-8.21-25.34h3.02l-8.28,25.34Z"/>
+          <path fill="#1A0E08" d="M1447.2,813.46v-53.64h36.72v9.72h-25.56v13.61h21.96v9.72h-21.96v20.59h-11.16Z"/>
+          <path fill="#1A0E08" d="M1568.9,813.46v-43.92h-13.61v-9.72h38.16v9.72h-13.39v43.92h-11.16Z"/>
+          <polygon fill="#1A0E08" points="1173.34 714.82 1228.27 714.82 1201.36 638.19 1173.34 714.82"/>
+          <polygon fill="#1A0E08" points="1357.37 714.82 1383.79 714.82 1357.37 664.29 1357.37 714.82"/>
+          <polygon fill="#1A0E08" points="1496.05 714.82 1496.05 664.29 1469.63 714.82 1496.05 714.82"/>
+          <path fill="#1A0E08" d="M1350.15,264.82h-17.4c-134.37,0-243.3,108.93-243.3,243.3v206.7h44.63l48.09-126h38.37l47.92,126h45.52v-126h46.54l65.5,126h1.09l66.12-126h46.23v126h54v-206.7c0-134.37-108.93-243.3-243.3-243.3Z"/>
+        </svg>
+      </div>
+      <p class="logo-app-label" style="color:#8A7060;">On Chalk · Default</p>
+    </div>
+
+    <!-- Forge -->
+    <div class="logo-cell" style="background:#FF5300;border-radius:14px;">
+      <div class="logo-lk">
+        <svg viewBox="1087 261 510 558" width="110" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#FAFAF8" d="M1116.52,815.18c-3.84,0-7.41-.7-10.69-2.09-3.29-1.39-6.16-3.34-8.6-5.83-2.45-2.5-4.36-5.42-5.72-8.78-1.37-3.36-2.05-7.03-2.05-11.02s.67-7.67,2.02-11.05,3.24-6.31,5.69-8.78c2.45-2.47,5.32-4.39,8.6-5.76,3.29-1.37,6.88-2.05,10.76-2.05s7.38.65,10.48,1.94c3.1,1.3,5.72,3.02,7.88,5.18s3.7,4.56,4.61,7.2l-9.86,4.75c-.91-2.59-2.51-4.74-4.79-6.44-2.28-1.7-5.05-2.56-8.32-2.56s-5.95.74-8.35,2.23c-2.4,1.49-4.26,3.54-5.58,6.16-1.32,2.62-1.98,5.68-1.98,9.18s.66,6.58,1.98,9.22c1.32,2.64,3.18,4.7,5.58,6.19,2.4,1.49,5.18,2.23,8.35,2.23s6.04-.85,8.32-2.56c2.28-1.7,3.88-3.85,4.79-6.44l9.86,4.75c-.91,2.64-2.45,5.04-4.61,7.2s-4.79,3.89-7.88,5.18-6.59,1.94-10.48,1.94Z"/>
+          <path fill="#FAFAF8" d="M1210.86,813.46v-53.64h20.52c3.7,0,6.97.65,9.83,1.94,2.86,1.3,5.1,3.22,6.73,5.76,1.63,2.54,2.45,5.69,2.45,9.43s-.84,6.76-2.52,9.32c-1.68,2.57-3.94,4.5-6.77,5.8l12.24,21.38h-12.53l-13.25-23.69,7.2,4.25h-12.74v19.44h-11.16ZM1222.02,784.3h9.43c1.58,0,2.95-.31,4.1-.94,1.15-.62,2.05-1.49,2.7-2.59.65-1.1.97-2.38.97-3.82s-.32-2.78-.97-3.89c-.65-1.1-1.55-1.97-2.7-2.59-1.15-.62-2.52-.94-4.1-.94h-9.43v14.76Z"/>
+          <path fill="#FAFAF8" d="M1324.71,813.46l18.14-53.64h14.83l18.14,53.64h-12.17l-3.6-10.94h-19.66l-3.6,10.94h-12.1ZM1343.5,792.79h13.46l-8.21-25.34h3.02l-8.28,25.34Z"/>
+          <path fill="#FAFAF8" d="M1447.2,813.46v-53.64h36.72v9.72h-25.56v13.61h21.96v9.72h-21.96v20.59h-11.16Z"/>
+          <path fill="#FAFAF8" d="M1568.9,813.46v-43.92h-13.61v-9.72h38.16v9.72h-13.39v43.92h-11.16Z"/>
+          <polygon fill="#FAFAF8" points="1173.34 714.82 1228.27 714.82 1201.36 638.19 1173.34 714.82"/>
+          <polygon fill="#FAFAF8" points="1357.37 714.82 1383.79 714.82 1357.37 664.29 1357.37 714.82"/>
+          <polygon fill="#FAFAF8" points="1496.05 714.82 1496.05 664.29 1469.63 714.82 1496.05 714.82"/>
+          <path fill="#FAFAF8" d="M1350.15,264.82h-17.4c-134.37,0-243.3,108.93-243.3,243.3v206.7h44.63l48.09-126h38.37l47.92,126h45.52v-126h46.54l65.5,126h1.09l66.12-126h46.23v126h54v-206.7c0-134.37-108.93-243.3-243.3-243.3Z"/>
+        </svg>
+      </div>
+      <p class="logo-app-label" style="color:rgba(255,255,255,.6);">On Forge · Brand hero</p>
+    </div>
+
+    <!-- Pitch -->
+    <div class="logo-cell" style="background:#1A0E08;border-radius:14px;">
+      <div class="logo-lk">
+        <svg viewBox="1087 261 510 558" width="110" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#FF5300" d="M1116.52,815.18c-3.84,0-7.41-.7-10.69-2.09-3.29-1.39-6.16-3.34-8.6-5.83-2.45-2.5-4.36-5.42-5.72-8.78-1.37-3.36-2.05-7.03-2.05-11.02s.67-7.67,2.02-11.05,3.24-6.31,5.69-8.78c2.45-2.47,5.32-4.39,8.6-5.76,3.29-1.37,6.88-2.05,10.76-2.05s7.38.65,10.48,1.94c3.1,1.3,5.72,3.02,7.88,5.18s3.7,4.56,4.61,7.2l-9.86,4.75c-.91-2.59-2.51-4.74-4.79-6.44-2.28-1.7-5.05-2.56-8.32-2.56s-5.95.74-8.35,2.23c-2.4,1.49-4.26,3.54-5.58,6.16-1.32,2.62-1.98,5.68-1.98,9.18s.66,6.58,1.98,9.22c1.32,2.64,3.18,4.7,5.58,6.19,2.4,1.49,5.18,2.23,8.35,2.23s6.04-.85,8.32-2.56c2.28-1.7,3.88-3.85,4.79-6.44l9.86,4.75c-.91,2.64-2.45,5.04-4.61,7.2s-4.79,3.89-7.88,5.18-6.59,1.94-10.48,1.94Z"/>
+          <path fill="#FF5300" d="M1210.86,813.46v-53.64h20.52c3.7,0,6.97.65,9.83,1.94,2.86,1.3,5.1,3.22,6.73,5.76,1.63,2.54,2.45,5.69,2.45,9.43s-.84,6.76-2.52,9.32c-1.68,2.57-3.94,4.5-6.77,5.8l12.24,21.38h-12.53l-13.25-23.69,7.2,4.25h-12.74v19.44h-11.16ZM1222.02,784.3h9.43c1.58,0,2.95-.31,4.1-.94,1.15-.62,2.05-1.49,2.7-2.59.65-1.1.97-2.38.97-3.82s-.32-2.78-.97-3.89c-.65-1.1-1.55-1.97-2.7-2.59-1.15-.62-2.52-.94-4.1-.94h-9.43v14.76Z"/>
+          <path fill="#FF5300" d="M1324.71,813.46l18.14-53.64h14.83l18.14,53.64h-12.17l-3.6-10.94h-19.66l-3.6,10.94h-12.1ZM1343.5,792.79h13.46l-8.21-25.34h3.02l-8.28,25.34Z"/>
+          <path fill="#FF5300" d="M1447.2,813.46v-53.64h36.72v9.72h-25.56v13.61h21.96v9.72h-21.96v20.59h-11.16Z"/>
+          <path fill="#FF5300" d="M1568.9,813.46v-43.92h-13.61v-9.72h38.16v9.72h-13.39v43.92h-11.16Z"/>
+          <polygon fill="#FF5300" points="1173.34 714.82 1228.27 714.82 1201.36 638.19 1173.34 714.82"/>
+          <polygon fill="#FF5300" points="1357.37 714.82 1383.79 714.82 1357.37 664.29 1357.37 714.82"/>
+          <polygon fill="#FF5300" points="1496.05 714.82 1496.05 664.29 1469.63 714.82 1496.05 714.82"/>
+          <path fill="#FF5300" d="M1350.15,264.82h-17.4c-134.37,0-243.3,108.93-243.3,243.3v206.7h44.63l48.09-126h38.37l47.92,126h45.52v-126h46.54l65.5,126h1.09l66.12-126h46.23v126h54v-206.7c0-134.37-108.93-243.3-243.3-243.3Z"/>
+        </svg>
+      </div>
+      <p class="logo-app-label" style="color:rgba(255,255,255,.3);">On Pitch · Orange mark</p>
+    </div>
+
+  </div>
+
+  <!-- Horizontal Lockup Specification -->
+  <p class="mono-label" style="margin-top:48px;">Horizontal Lockup — Spacing &amp; Size</p>
+  <div style="background:var(--chalk);border:1px solid rgba(0,0,0,.07);border-radius:20px;padding:48px 40px 36px;">
+
+    <!-- Live proportioned lockup with annotation lines -->
+    <div style="position:relative;display:flex;align-items:center;margin-bottom:48px;padding:32px 0;">
+
+      <!-- Arch mark — 120px tall, the base unit H -->
+      <div style="position:relative;flex-shrink:0;">
+        <svg width="134" height="120" viewBox="0 0 504 450" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#FF5300" d="M123.28,370.98l27.33,79.02h-54.66l27.33-79.02ZM269.39,450h22.87l-22.87-55.24v55.24ZM408.88,450v-55.24l-22.75,55.24h22.75ZM260.7,0h-17.4C108.93,0,0,108.93,0,243.3v206.7h54.55l45.24-126h47.27l45.24,126h36.49v-126h46.11l53.9,126h20.97l53.9-126h45.82v126h54.52v-206.7C504,108.93,395.07,0,260.7,0Z"/>
+        </svg>
+        <!-- H label — left side -->
+        <div style="position:absolute;left:-36px;top:0;height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;">
+          <div style="width:1px;flex:1;background:rgba(255,83,0,.3);"></div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;color:var(--forge);writing-mode:vertical-lr;transform:rotate(180deg);padding:4px 0;background:var(--chalk);">H = base unit</span>
+          <div style="width:1px;flex:1;background:rgba(255,83,0,.3);"></div>
+        </div>
+      </div>
+
+      <!-- Gap annotation — 26px (H × 0.22) -->
+      <div style="width:26px;flex-shrink:0;position:relative;display:flex;align-items:center;justify-content:center;">
+        <div style="position:absolute;top:50%;transform:translateY(-50%);width:100%;display:flex;flex-direction:column;align-items:center;gap:2px;">
+          <div style="height:1px;width:100%;background:rgba(255,83,0,.25);"></div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--forge);white-space:nowrap;background:var(--chalk);padding:0 2px;">H×0.22</span>
+          <div style="height:1px;width:100%;background:rgba(255,83,0,.25);"></div>
+        </div>
+      </div>
+
+      <!-- Wordmark — font-size 96px, cap-height ≈ 69px = H×0.58 -->
+      <div style="position:relative;">
+        <span style="font-family:'Raleway',sans-serif;font-weight:800;font-size:96px;color:#FF5300;line-height:1;letter-spacing:1px;display:block;">Dam Craft</span>
+        <!-- Cap-height bracket — top of capital D -->
+        <div style="position:absolute;top:14px;right:-44px;height:69px;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+          <div style="width:1px;flex:1;background:rgba(74,53,48,.25);"></div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--walnut);opacity:.7;writing-mode:vertical-lr;transform:rotate(180deg);padding:4px 0;background:var(--chalk);white-space:nowrap;">cap-ht H×0.58</span>
+          <div style="width:1px;flex:1;background:rgba(74,53,48,.25);"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ratio table -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+      <div style="background:var(--ivory);border-radius:12px;padding:16px 14px;">
+        <p style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--forge);font-weight:600;margin-bottom:4px;">Mark height</p>
+        <p style="font-family:'Raleway',sans-serif;font-weight:800;font-size:22px;color:var(--pitch);margin-bottom:3px;">H</p>
+        <p style="font-family:'DM Sans',sans-serif;font-size:11px;color:var(--walnut);opacity:.65;">Base unit — scale everything from here</p>
+      </div>
+      <div style="background:var(--ivory);border-radius:12px;padding:16px 14px;">
+        <p style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--forge);font-weight:600;margin-bottom:4px;">Gap</p>
+        <p style="font-family:'Raleway',sans-serif;font-weight:800;font-size:22px;color:var(--pitch);margin-bottom:3px;">H × 0.22</p>
+        <p style="font-family:'DM Sans',sans-serif;font-size:11px;color:var(--walnut);opacity:.65;">At 80px mark → 18px gap</p>
+      </div>
+      <div style="background:var(--ivory);border-radius:12px;padding:16px 14px;">
+        <p style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--forge);font-weight:600;margin-bottom:4px;">Wordmark cap-ht</p>
+        <p style="font-family:'Raleway',sans-serif;font-weight:800;font-size:22px;color:var(--pitch);margin-bottom:3px;">H × 0.58</p>
+        <p style="font-family:'DM Sans',sans-serif;font-size:11px;color:var(--walnut);opacity:.65;">Mark leads — wordmark follows</p>
+      </div>
+      <div style="background:var(--ivory);border-radius:12px;padding:16px 14px;">
+        <p style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--forge);font-weight:600;margin-bottom:4px;">Font-size (Raleway 800)</p>
+        <p style="font-family:'Raleway',sans-serif;font-weight:800;font-size:22px;color:var(--pitch);margin-bottom:3px;">H × 0.80</p>
+        <p style="font-family:'DM Sans',sans-serif;font-size:11px;color:var(--walnut);opacity:.65;">Cap-height ≈ 72% of font-size</p>
+      </div>
+    </div>
+
+    <!-- Common sizes reference -->
+    <div style="margin-top:20px;border-top:1px solid rgba(0,0,0,.06);padding-top:20px;">
+      <p style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--walnut);opacity:.5;margin-bottom:12px;">Common sizes</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <div style="background:var(--ivory);border-radius:8px;padding:10px 14px;display:flex;gap:16px;align-items:center;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--forge);">Nav / UI</span>
+          <span style="font-family:'DM Sans',sans-serif;font-size:11px;color:var(--walnut);">Mark 32px · Gap 7px · Font 26px</span>
+        </div>
+        <div style="background:var(--ivory);border-radius:8px;padding:10px 14px;display:flex;gap:16px;align-items:center;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--forge);">Business card</span>
+          <span style="font-family:'DM Sans',sans-serif;font-size:11px;color:var(--walnut);">Mark 48px · Gap 11px · Font 38px</span>
+        </div>
+        <div style="background:var(--ivory);border-radius:8px;padding:10px 14px;display:flex;gap:16px;align-items:center;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--forge);">Letterhead</span>
+          <span style="font-family:'DM Sans',sans-serif;font-size:11px;color:var(--walnut);">Mark 64px · Gap 14px · Font 51px</span>
+        </div>
+        <div style="background:var(--ivory);border-radius:8px;padding:10px 14px;display:flex;gap:16px;align-items:center;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--forge);">Social banner</span>
+          <span style="font-family:'DM Sans',sans-serif;font-size:11px;color:var(--walnut);">Mark 120px · Gap 26px · Font 96px</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vertical alignment note -->
+    <div style="margin-top:16px;background:#FFF4EF;border-radius:10px;padding:12px 16px;display:flex;gap:10px;align-items:flex-start;">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--forge);flex-shrink:0;margin-top:1px;">↕</span>
+      <p style="font-family:'DM Sans',sans-serif;font-size:12px;color:var(--pitch);line-height:1.6;"><strong>Vertical alignment:</strong> Align the wordmark's optical centre to 45% from the top of the mark — not the geometric midpoint. The dome is visually heavy at the top; centering on 50% makes the wordmark appear dropped.</p>
+    </div>
+
+  </div>
+
+  <!-- Don'ts -->
+  <p class="mono-label" style="margin-top:48px;">Logo Don'ts</p>
+  <div class="donts">
+    <div class="dont">
+      <div class="dont-preview">
+        <svg viewBox="0 0 504 450" width="60" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#888" d="M123.28,370.98l27.33,79.02h-54.66l27.33-79.02ZM269.39,450h22.87l-22.87-55.24v55.24ZM408.88,450v-55.24l-22.75,55.24h22.75ZM260.7,0h-17.4C108.93,0,0,108.93,0,243.3v206.7h54.55l45.24-126h47.27l45.24,126h36.49v-126h46.11l53.9,126h20.97l53.9-126h45.82v126h54.52v-206.7C504,108.93,395.07,0,260.7,0Z"/>
+        </svg>
+      </div>
+      <p class="dont-label">Don't recolor</p>
+      <p class="dont-desc">Only Pitch, Chalk, or Forge — no greys, gradients, or custom tints</p>
+    </div>
+    <div class="dont">
+      <div class="dont-preview">
+        <div style="transform:rotate(25deg)">
+          <svg viewBox="0 0 504 450" width="54" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#FF5300" d="M123.28,370.98l27.33,79.02h-54.66l27.33-79.02ZM269.39,450h22.87l-22.87-55.24v55.24ZM408.88,450v-55.24l-22.75,55.24h22.75ZM260.7,0h-17.4C108.93,0,0,108.93,0,243.3v206.7h54.55l45.24-126h47.27l45.24,126h36.49v-126h46.11l53.9,126h20.97l53.9-126h45.82v126h54.52v-206.7C504,108.93,395.07,0,260.7,0Z"/>
+          </svg>
+        </div>
+      </div>
+      <p class="dont-label">Don't rotate</p>
+      <p class="dont-desc">Arch always upright — base at the bottom, never angled</p>
+    </div>
+    <div class="dont">
+      <div class="dont-preview">
+        <div style="transform:scaleX(1.55)">
+          <svg viewBox="0 0 504 450" width="50" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#FF5300" d="M123.28,370.98l27.33,79.02h-54.66l27.33-79.02ZM269.39,450h22.87l-22.87-55.24v55.24ZM408.88,450v-55.24l-22.75,55.24h22.75ZM260.7,0h-17.4C108.93,0,0,108.93,0,243.3v206.7h54.55l45.24-126h47.27l45.24,126h36.49v-126h46.11l53.9,126h20.97l53.9-126h45.82v126h54.52v-206.7C504,108.93,395.07,0,260.7,0Z"/>
+          </svg>
+        </div>
+      </div>
+      <p class="dont-label">Don't distort</p>
+      <p class="dont-desc">Scale proportionally — stretching destroys the arch geometry</p>
+    </div>
+    <div class="dont">
+      <div class="dont-preview" style="background:#CC2200;border-radius:8px;padding:10px;width:80px;">
+        <svg viewBox="0 0 504 450" width="52" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#FF5300" d="M123.28,370.98l27.33,79.02h-54.66l27.33-79.02ZM269.39,450h22.87l-22.87-55.24v55.24ZM408.88,450v-55.24l-22.75,55.24h22.75ZM260.7,0h-17.4C108.93,0,0,108.93,0,243.3v206.7h54.55l45.24-126h47.27l45.24,126h36.49v-126h46.11l53.9,126h20.97l53.9-126h45.82v126h54.52v-206.7C504,108.93,395.07,0,260.7,0Z"/>
+        </svg>
+      </div>
+      <p class="dont-label">Don't clash</p>
+      <p class="dont-desc">Never place Forge mark on competing saturated colors</p>
+    </div>
+  </div>
+
+  <!-- ── LOGO TREATMENTS ── -->
+  <p class="mono-label" style="margin-top:56px;">Logo Treatments</p>
+
+  <!-- Hidden defs: reusable arch symbol + foil gradient -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden">
+    <defs>
+      <symbol id="tr-arch" viewBox="0 0 504 450">
+        <path d="M123.28,370.98l27.33,79.02h-54.66l27.33-79.02ZM269.39,450h22.87l-22.87-55.24v55.24ZM408.88,450v-55.24l-22.75,55.24h22.75ZM260.7,0h-17.4C108.93,0,0,108.93,0,243.3v206.7h54.55l45.24-126h47.27l45.24,126h36.49v-126h46.11l53.9,126h20.97l53.9-126h45.82v126h54.52v-206.7C504,108.93,395.07,0,260.7,0Z"/>
+      </symbol>
+      <linearGradient id="tr-foil" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%"   stop-color="#BF953F"/>
+        <stop offset="28%"  stop-color="#F5E17A"/>
+        <stop offset="55%"  stop-color="#C9952C"/>
+        <stop offset="78%"  stop-color="#F0CE6A"/>
+        <stop offset="100%" stop-color="#9B7825"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <div class="treat-wrap">
+
+    <!-- 1. FOOT MASK -->
+    <div class="treat-block">
+      <p class="treat-title">Foot Mask</p>
+      <p class="treat-desc">The mark fades into the surface at its base — as if cast into the material rather than placed on top of it. Used on large-format print, environmental signage, and full-bleed hero sections where the logo anchors into the background.</p>
+      <div class="ftm-grid">
+        <div class="ftm-card" style="background:#F3EBE1;">
+          <div class="ftm-logo">
+            <svg width="148" viewBox="0 0 504 450" xmlns="http://www.w3.org/2000/svg">
+              <use href="#tr-arch" fill="#FF5300"/>
+            </svg>
+          </div>
+        </div>
+        <div class="ftm-card" style="background:#1A0E08;">
+          <div class="ftm-logo">
+            <svg width="148" viewBox="0 0 504 450" xmlns="http://www.w3.org/2000/svg">
+              <use href="#tr-arch" fill="#FF5300"/>
+            </svg>
+          </div>
+        </div>
+        <div class="ftm-card" style="background:#FF5300;">
+          <div class="ftm-logo">
+            <svg width="148" viewBox="0 0 504 450" xmlns="http://www.w3.org/2000/svg">
+              <use href="#tr-arch" fill="#FAFAF8"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. MORPHS -->
+    <div class="treat-block">
+      <p class="treat-title">Morphs</p>
+      <p class="treat-desc">Lockup variations for different contexts — the same mark adapts its arrangement without changing its form. Use the primary stacked lockup by default; reach for the horizontal or mark-only variants when space or context demands it.</p>
+      <div class="morph-grid">
+        <!-- Primary stacked -->
+        <div class="morph-card">
+          <svg viewBox="0 0 300 310" width="160" xmlns="http://www.w3.org/2000/svg">
+            <defs><style>@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@800&amp;display=swap');</style></defs>
+            <svg x="0" y="0" width="300" height="267" viewBox="0 0 504 450">
+              <use href="#tr-arch" fill="#FF5300"/>
+            </svg>
+            <text x="150" y="278" text-anchor="middle" dominant-baseline="hanging" font-family="Raleway,sans-serif" font-weight="800" font-size="46" fill="#FF5300" letter-spacing="2">Dam Craft</text>
+          </svg>
+          <span class="morph-lbl">Primary Lockup</span>
+        </div>
+        <!-- With tagline -->
+        <div class="morph-card">
+          <svg viewBox="0 0 300 360" width="160" xmlns="http://www.w3.org/2000/svg">
+            <defs><style>@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@800&amp;family=DM+Sans:wght@400&amp;display=swap');</style></defs>
+            <svg x="0" y="0" width="300" height="267" viewBox="0 0 504 450">
+              <use href="#tr-arch" fill="#FF5300"/>
+            </svg>
+            <text x="150" y="276" text-anchor="middle" dominant-baseline="hanging" font-family="Raleway,sans-serif" font-weight="800" font-size="44" fill="#FF5300" letter-spacing="2">Dam Craft</text>
+            <line x1="40" y1="334" x2="260" y2="334" stroke="#4A3530" stroke-width="0.75" opacity=".3"/>
+            <text x="150" y="344" text-anchor="middle" dominant-baseline="hanging" font-family="DM Sans,sans-serif" font-size="13" fill="#1A0E08" letter-spacing="1.5">We don&#x27;t decorate. We construct.</text>
+          </svg>
+          <span class="morph-lbl">Extended + Tagline</span>
+        </div>
+        <!-- Horizontal -->
+        <div class="morph-card">
+          <svg viewBox="0 0 360 150" width="200" xmlns="http://www.w3.org/2000/svg">
+            <defs><style>@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@800&amp;display=swap');</style></defs>
+            <svg x="0" y="5" width="134" height="120" viewBox="0 0 504 450">
+              <use href="#tr-arch" fill="#FF5300"/>
+            </svg>
+            <line x1="152" y1="24" x2="152" y2="126" stroke="#FF5300" stroke-width="1" opacity=".22"/>
+            <text x="168" y="22" dominant-baseline="hanging" font-family="Raleway,sans-serif" font-weight="800" font-size="46" fill="#FF5300">DAM</text>
+            <text x="168" y="78" dominant-baseline="hanging" font-family="Raleway,sans-serif" font-weight="800" font-size="46" fill="#FF5300">CRAFT</text>
+          </svg>
+          <span class="morph-lbl">Horizontal Lockup</span>
+        </div>
+        <!-- Mark only -->
+        <div class="morph-card">
+          <svg width="110" viewBox="0 0 504 450" xmlns="http://www.w3.org/2000/svg">
+            <use href="#tr-arch" fill="#FF5300"/>
+          </svg>
+          <span class="morph-lbl">Mark Only</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. SPACING -->
+    <div class="treat-block">
+      <p class="treat-title">Spacing</p>
+      <p class="treat-desc">The exclusion zone defines the minimum clear space that must surround the logo at all times. Nothing — text, imagery, or other marks — may enter this protected area. The unit (1×) equals the height of one DAM letter cutout.</p>
+      <div class="spacing-stage">
+        <div class="spacing-rig">
+          <svg width="180" viewBox="0 0 504 450" xmlns="http://www.w3.org/2000/svg">
+            <use href="#tr-arch" fill="#FF5300"/>
+          </svg>
+          <span class="sp-tag sp-top">1× clear space</span>
+          <span class="sp-tag sp-bot">1× clear space</span>
+          <span class="sp-tag sp-left">1×</span>
+          <span class="sp-tag sp-right">1×</span>
+        </div>
+        <p class="spacing-rule">The dashed boundary marks the minimum exclusion zone — no other elements inside.</p>
+      </div>
+    </div>
+
+    <!-- 4. PHOTO CONTRAST -->
+    <div class="treat-block">
+      <p class="treat-title">Photo Contrast</p>
+      <p class="treat-desc">The logo must remain legible across all photographic contexts. On light imagery use the Pitch version; on dark or mid-tone imagery use Forge orange or Chalk white. Never use a tint or drop shadow to compensate for poor contrast — choose the correct logo variant.</p>
+      <div class="photo-grid">
+        <div class="photo-card" style="background:linear-gradient(135deg,#D8CDBF 0%,#B8A898 100%);">
+          <svg width="110" viewBox="0 0 504 450" xmlns="http://www.w3.org/2000/svg">
+            <use href="#tr-arch" fill="#1A0E08"/>
+          </svg>
+          <span class="photo-lbl" style="color:#1A0E08;">Light imagery · Pitch</span>
+        </div>
+        <div class="photo-card" style="background:linear-gradient(135deg,#2E1F17 0%,#0D0705 100%);">
+          <svg width="110" viewBox="0 0 504 450" xmlns="http://www.w3.org/2000/svg">
+            <use href="#tr-arch" fill="#FF5300"/>
+          </svg>
+          <span class="photo-lbl" style="color:#FF8D60;">Dark imagery · Forge</span>
+        </div>
+        <div class="photo-card" style="background:linear-gradient(135deg,#5C3D2E 0%,#3A2419 100%);">
+          <svg width="110" viewBox="0 0 504 450" xmlns="http://www.w3.org/2000/svg">
+            <use href="#tr-arch" fill="#FAFAF8"/>
+          </svg>
+          <span class="photo-lbl" style="color:rgba(250,250,248,.55);">Mid-tone imagery · Chalk</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. DIGITAL EFFECT -->
+    <div class="treat-block">
+      <p class="treat-title">Digital Effect</p>
+      <p class="treat-desc">Approved digital treatments for screen-native contexts — motion graphics, UI hero moments, and editorial digital work. Each effect preserves the mark's legibility and structural integrity. Do not combine effects.</p>
+      <div class="effect-grid">
+        <!-- Glow -->
+        <div class="effect-card" style="background:#1A0E08;">
+          <svg width="100" viewBox="0 0 504 450" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 18px rgba(255,83,0,.9)) drop-shadow(0 0 6px rgba(255,83,0,.6));">
+            <use href="#tr-arch" fill="#FF5300"/>
+          </svg>
+          <span class="effect-lbl" style="color:#FF8D60;">Glow</span>
+        </div>
+        <!-- Outline -->
+        <div class="effect-card" style="background:#FAFAF8;border:1px solid rgba(0,0,0,.07);">
+          <svg width="100" viewBox="0 0 504 450" xmlns="http://www.w3.org/2000/svg">
+            <use href="#tr-arch" fill="#FAFAF8" stroke="#FF5300" stroke-width="14" paint-order="stroke"/>
+          </svg>
+          <span class="effect-lbl" style="color:#4A3530;">Outline</span>
+        </div>
+        <!-- Foil -->
+        <div class="effect-card" style="background:#1A0E08;">
+          <svg width="100" viewBox="0 0 504 450" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="foil-local" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%"   stop-color="#BF953F"/>
+                <stop offset="28%"  stop-color="#F5E17A"/>
+                <stop offset="55%"  stop-color="#C9952C"/>
+                <stop offset="78%"  stop-color="#F0CE6A"/>
+                <stop offset="100%" stop-color="#9B7825"/>
+              </linearGradient>
+            </defs>
+            <use href="#tr-arch" fill="url(#foil-local)"/>
+          </svg>
+          <span class="effect-lbl" style="color:#C9952C;">Foil</span>
+        </div>
+        <!-- Knockout -->
+        <div class="effect-card" style="background:#FF5300;">
+          <svg width="100" viewBox="0 0 504 450" xmlns="http://www.w3.org/2000/svg">
+            <use href="#tr-arch" fill="#FAFAF8"/>
+          </svg>
+          <span class="effect-lbl" style="color:rgba(250,250,248,.7);">Knockout</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. SHAPING -->
+    <div class="treat-block">
+      <p class="treat-title">Shaping</p>
+      <p class="treat-desc">The arch mark contained within standardised geometric frames — for social avatars, app icons, stamps, and branded containers. The mark is always centred with equal optical padding on all sides. Use Forge fill unless the platform requires otherwise.</p>
+      <div class="shaping-row">
+        <!-- Circle -->
+        <div class="shape-item">
+          <div style="width:160px;height:160px;border-radius:50%;background:#FF5300;display:flex;align-items:center;justify-content:center;">
+            <svg width="96" viewBox="0 0 504 450" xmlns="http://www.w3.org/2000/svg">
+              <use href="#tr-arch" fill="#FAFAF8"/>
+            </svg>
+          </div>
+          <span class="shape-lbl">Circle</span>
+        </div>
+        <!-- Squircle -->
+        <div class="shape-item">
+          <div style="width:160px;height:160px;border-radius:38px;background:#FF5300;display:flex;align-items:center;justify-content:center;">
+            <svg width="96" viewBox="0 0 504 450" xmlns="http://www.w3.org/2000/svg">
+              <use href="#tr-arch" fill="#FAFAF8"/>
+            </svg>
+          </div>
+          <span class="shape-lbl">Squircle</span>
+        </div>
+        <!-- Square -->
+        <div class="shape-item">
+          <div style="width:160px;height:160px;border-radius:16px;background:#FF5300;display:flex;align-items:center;justify-content:center;">
+            <svg width="96" viewBox="0 0 504 450" xmlns="http://www.w3.org/2000/svg">
+              <use href="#tr-arch" fill="#FAFAF8"/>
+            </svg>
+          </div>
+          <span class="shape-lbl">Rounded Square</span>
+        </div>
+        <!-- Pill / Badge -->
+        <div class="shape-item">
+          <div style="height:160px;padding:0 32px;border-radius:80px;background:#FF5300;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;">
+            <svg width="72" viewBox="0 0 504 450" xmlns="http://www.w3.org/2000/svg">
+              <use href="#tr-arch" fill="#FAFAF8"/>
+            </svg>
+            <span style="font-family:'Raleway',sans-serif;font-weight:800;font-size:13px;color:#FAFAF8;letter-spacing:3px;">Dam Craft</span>
+          </div>
+          <span class="shape-lbl">Badge / Pill</span>
+        </div>
+        <!-- Pitch dark variant -->
+        <div class="shape-item">
+          <div style="width:160px;height:160px;border-radius:50%;background:#1A0E08;display:flex;align-items:center;justify-content:center;">
+            <svg width="96" viewBox="0 0 504 450" xmlns="http://www.w3.org/2000/svg">
+              <use href="#tr-arch" fill="#FF5300"/>
+            </svg>
+          </div>
+          <span class="shape-lbl">Dark Circle</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════
+     04 COLOR
+══════════════════════════════════════ -->
+<section id="color" class="sec sec-ivory">
+  <div class="sec-hd">
+    <span class="sec-num">04</span>
+    <div>
+      <h2 class="sec-title">Color</h2>
+      <p class="sec-sub">The Forge palette — one vivid anchor, five supporting tones. The orange carries the brand; everything else gives it room to breathe.</p>
+    </div>
+  </div>
+
+  <!-- Figma character colour cards — 3 brand primaries -->
+  <div class="char-cards">
+
+    <!-- Forge -->
+    <div class="char-card" id="char-forge">
+      <svg id="char-svg-forge" viewBox="0 0 680 1008" xmlns="http://www.w3.org/2000/svg">
+        <defs><clipPath id="cc-forge"><rect width="680" height="1008" rx="24"/></clipPath></defs>
+        <g clip-path="url(#cc-forge)">
+          <rect width="680" height="1008" fill="#F3EBE1"/>
+          <path transform="translate(50,50)" fill="#FF5300" d="M 299.9556583991287 0 C 454.6528042234988 0 579.9998481991383 125.13344569235858 580 279.56809855395966 L 580 555 L 0 555 L 0 279.56809855395966 C 0.00015183801215687949 125.13349829253204 125.34614198517812 0.00007577188450753434 280.0432175567933 0 L 299.9556583991287 0 Z"/>
+          <circle cx="224" cy="270" r="75" fill="#FFFFFF"/>
+          <circle id="cp-forge-l" cx="224" cy="270" r="29" fill="#1A0E08"/>
+          <circle cx="474" cy="270" r="75" fill="#FFFFFF"/>
+          <circle id="cp-forge-r" cx="474" cy="270" r="29" fill="#1A0E08"/>
+          <line class="mouth-line" x1="178" y1="490" x2="502" y2="490" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+          <path class="mouth-smile" transform="translate(178,409)" fill="#FFFFFF" d="M324 0C324 21.2742 319.81 42.34 311.668 61.9947C303.527 81.6495 291.594 99.5082 276.551 114.551C261.508 129.594 243.649 141.527 223.995 149.669C204.34 157.81 183.274 162 162 162C140.726 162 119.66 157.81 100.005 149.668C80.3505 141.527 62.4918 129.594 47.4487 114.551C32.4056 99.5082 20.4728 81.6495 12.3315 61.9947C4.19025 42.34 0 21.2741 0 0L324 0Z"/>
+          <text x="50" y="656" font-family="Raleway,sans-serif" font-weight="800" font-size="100" fill="#1A0E08" dominant-baseline="hanging">#FF5300</text>
+          <text x="50" y="783" font-family="DM Sans,sans-serif" font-weight="400" font-size="50" fill="#1A0E08" dominant-baseline="hanging">Forge</text>
+          <text x="50" y="936" font-family="DM Sans,sans-serif" font-weight="400" font-size="32" fill="#4A3530" dominant-baseline="hanging">Primary Brand</text>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Ember -->
+    <div class="char-card" id="char-ember">
+      <svg id="char-svg-ember" viewBox="0 0 680 1008" xmlns="http://www.w3.org/2000/svg">
+        <defs><clipPath id="cc-ember"><rect width="680" height="1008" rx="24"/></clipPath></defs>
+        <g clip-path="url(#cc-ember)">
+          <rect width="680" height="1008" fill="#F3EBE1"/>
+          <path transform="translate(50,50)" fill="#FF8D60" d="M 299.9556583991287 0 C 454.6528042234988 0 579.9998481991383 125.13344569235858 580 279.56809855395966 L 580 555 L 0 555 L 0 279.56809855395966 C 0.00015183801215687949 125.13349829253204 125.34614198517812 0.00007577188450753434 280.0432175567933 0 L 299.9556583991287 0 Z"/>
+          <circle cx="224" cy="270" r="75" fill="#FFFFFF"/>
+          <circle id="cp-ember-l" cx="224" cy="270" r="29" fill="#1A0E08"/>
+          <circle cx="474" cy="270" r="75" fill="#FFFFFF"/>
+          <circle id="cp-ember-r" cx="474" cy="270" r="29" fill="#1A0E08"/>
+          <line class="mouth-line" x1="178" y1="490" x2="502" y2="490" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+          <path class="mouth-smile" transform="translate(178,409)" fill="#FFFFFF" d="M324 0C324 21.2742 319.81 42.34 311.668 61.9947C303.527 81.6495 291.594 99.5082 276.551 114.551C261.508 129.594 243.649 141.527 223.995 149.669C204.34 157.81 183.274 162 162 162C140.726 162 119.66 157.81 100.005 149.668C80.3505 141.527 62.4918 129.594 47.4487 114.551C32.4056 99.5082 20.4728 81.6495 12.3315 61.9947C4.19025 42.34 0 21.2741 0 0L324 0Z"/>
+          <text x="50" y="656" font-family="Raleway,sans-serif" font-weight="800" font-size="100" fill="#1A0E08" dominant-baseline="hanging">#FF8D60</text>
+          <text x="50" y="783" font-family="DM Sans,sans-serif" font-weight="400" font-size="50" fill="#1A0E08" dominant-baseline="hanging">Ember</text>
+          <text x="50" y="936" font-family="DM Sans,sans-serif" font-weight="400" font-size="32" fill="#4A3530" dominant-baseline="hanging">Secondary Warm</text>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Pitch -->
+    <div class="char-card" id="char-pitch">
+      <svg id="char-svg-pitch" viewBox="0 0 680 1008" xmlns="http://www.w3.org/2000/svg">
+        <defs><clipPath id="cc-pitch"><rect width="680" height="1008" rx="24"/></clipPath></defs>
+        <g clip-path="url(#cc-pitch)">
+          <rect width="680" height="1008" fill="#F3EBE1"/>
+          <path transform="translate(50,50)" fill="#1A0E08" d="M 299.9556583991287 0 C 454.6528042234988 0 579.9998481991383 125.13344569235858 580 279.56809855395966 L 580 555 L 0 555 L 0 279.56809855395966 C 0.00015183801215687949 125.13349829253204 125.34614198517812 0.00007577188450753434 280.0432175567933 0 L 299.9556583991287 0 Z"/>
+          <circle cx="224" cy="270" r="75" fill="#FFFFFF"/>
+          <circle id="cp-pitch-l" cx="224" cy="270" r="29" fill="#1A0E08"/>
+          <circle cx="474" cy="270" r="75" fill="#FFFFFF"/>
+          <circle id="cp-pitch-r" cx="474" cy="270" r="29" fill="#1A0E08"/>
+          <line class="mouth-line" x1="178" y1="490" x2="502" y2="490" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+          <path class="mouth-smile" transform="translate(178,409)" fill="#FFFFFF" d="M324 0C324 21.2742 319.81 42.34 311.668 61.9947C303.527 81.6495 291.594 99.5082 276.551 114.551C261.508 129.594 243.649 141.527 223.995 149.669C204.34 157.81 183.274 162 162 162C140.726 162 119.66 157.81 100.005 149.668C80.3505 141.527 62.4918 129.594 47.4487 114.551C32.4056 99.5082 20.4728 81.6495 12.3315 61.9947C4.19025 42.34 0 21.2741 0 0L324 0Z"/>
+          <text x="50" y="656" font-family="Raleway,sans-serif" font-weight="800" font-size="100" fill="#1A0E08" dominant-baseline="hanging">#1A0E08</text>
+          <text x="50" y="783" font-family="DM Sans,sans-serif" font-weight="400" font-size="50" fill="#1A0E08" dominant-baseline="hanging">Pitch</text>
+          <text x="50" y="936" font-family="DM Sans,sans-serif" font-weight="400" font-size="32" fill="#4A3530" dominant-baseline="hanging">Dark / Headings</text>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <!-- Supporting neutrals -->
+  <div class="color-row">
+    <div class="swatch"><div class="swatch-fill" style="background:#FAFAF8;border-bottom:1px solid #EAE4DA;"></div><div class="swatch-info"><p class="swatch-role">Base</p><p class="swatch-name">Chalk</p><p class="swatch-hex">#FAFAF8</p></div></div>
+    <div class="swatch"><div class="swatch-fill" style="background:#F3EBE1;"></div><div class="swatch-info"><p class="swatch-role">Surface</p><p class="swatch-name">Ivory</p><p class="swatch-hex">#F3EBE1</p></div></div>
+    <div class="swatch"><div class="swatch-fill" style="background:#4A3530;"></div><div class="swatch-info"><p class="swatch-role">Mid · Text</p><p class="swatch-name">Walnut</p><p class="swatch-hex">#4A3530</p></div></div>
+  </div>
+
+  <p class="mono-label" style="margin-top:48px;">Approved Combinations</p>
+  <div class="combos">
+    <div class="combo">
+      <div class="combo-prev" style="background:#1A0E08;">
+        <div class="combo-bar" style="background:#FF5300;width:68%;"></div>
+        <div class="combo-dots"><div class="combo-dot" style="background:#FF5300;"></div><div class="combo-dot" style="background:#FF8D60;"></div><div class="combo-dot" style="background:rgba(255,255,255,.2);"></div></div>
+      </div>
+      <div class="combo-info"><p class="combo-name">Dark Hero</p><p class="combo-desc">Pitch bg · Forge + Ember accents · White text — hero sections, footers, dark panels</p></div>
+    </div>
+    <div class="combo">
+      <div class="combo-prev" style="background:#FAFAF8;">
+        <div class="combo-bar" style="background:#FF5300;width:42%;"></div>
+        <div class="combo-dots"><div class="combo-dot" style="background:#1A0E08;"></div><div class="combo-dot" style="background:#4A3530;"></div><div class="combo-dot" style="background:#FF5300;"></div></div>
+      </div>
+      <div class="combo-info"><p class="combo-name">Light Default</p><p class="combo-desc">Chalk bg · Pitch text · Forge accent — primary UI, navigation, content pages</p></div>
+    </div>
+    <div class="combo">
+      <div class="combo-prev" style="background:#FF5300;">
+        <div class="combo-bar" style="background:rgba(255,255,255,.9);width:55%;"></div>
+        <div class="combo-dots"><div class="combo-dot" style="background:#FAFAF8;"></div><div class="combo-dot" style="background:rgba(255,255,255,.4);"></div><div class="combo-dot" style="background:#1A0E08;"></div></div>
+      </div>
+      <div class="combo-info"><p class="combo-name">Brand Statement</p><p class="combo-desc">Forge bg · White logo + text — CTAs, covers, brand hero moments</p></div>
+    </div>
+  </div>
+
+  <!-- ── TINTS & SHADES ── -->
+  <div class="scales-section">
+    <p class="scales-label">Tints &amp; Shades</p>
+    <p class="scales-desc">Each palette color expanded across 15 steps — seven tints toward white, the base, and seven shades toward black. Steps 50–350 for backgrounds, surfaces, and hover states; 600–900 for borders, pressed states, and deep text layers. Click any swatch to copy its hex.</p>
+
+    <!-- Chalk -->
+    <div class="scale-group">
+      <div class="scale-lbl"><span class="scale-lbl-name">Chalk</span><span class="scale-lbl-role">Base</span></div>
+      <div class="scale-strip">
+        <div class="sc-sw" data-light style="background:#FFFFFF" onclick="scCopy('#FFFFFF')"><span class="sc-sw-step">50</span><span class="sc-sw-hex">#FFFFFF</span></div>
+        <div class="sc-sw" data-light style="background:#FEFEFE" onclick="scCopy('#FEFEFE')"><span class="sc-sw-step">100</span><span class="sc-sw-hex">#FEFEFE</span></div>
+        <div class="sc-sw" data-light style="background:#FEFEFD" onclick="scCopy('#FEFEFD')"><span class="sc-sw-step">150</span><span class="sc-sw-hex">#FEFEFD</span></div>
+        <div class="sc-sw" data-light style="background:#FDFDFD" onclick="scCopy('#FDFDFD')"><span class="sc-sw-step">200</span><span class="sc-sw-hex">#FDFDFD</span></div>
+        <div class="sc-sw" data-light style="background:#FDFDFC" onclick="scCopy('#FDFDFC')"><span class="sc-sw-step">250</span><span class="sc-sw-hex">#FDFDFC</span></div>
+        <div class="sc-sw" data-light style="background:#FCFCFA" onclick="scCopy('#FCFCFA')"><span class="sc-sw-step">300</span><span class="sc-sw-hex">#FCFCFA</span></div>
+        <div class="sc-sw" data-light style="background:#FBFBF9" onclick="scCopy('#FBFBF9')"><span class="sc-sw-step">350</span><span class="sc-sw-hex">#FBFBF9</span></div>
+        <div class="sc-sw sc-base" data-light style="background:#FAFAF8" onclick="scCopy('#FAFAF8')"><span class="sc-sw-step">BASE</span><span class="sc-sw-hex">#FAFAF8</span></div>
+        <div class="sc-sw" data-light style="background:#DCDCDA" onclick="scCopy('#DCDCDA')"><span class="sc-sw-step">600</span><span class="sc-sw-hex">#DCDCDA</span></div>
+        <div class="sc-sw" data-light style="background:#BCBCBA" onclick="scCopy('#BCBCBA')"><span class="sc-sw-step">650</span><span class="sc-sw-hex">#BCBCBA</span></div>
+        <div class="sc-sw" data-light style="background:#9B9B9A" onclick="scCopy('#9B9B9A')"><span class="sc-sw-step">700</span><span class="sc-sw-hex">#9B9B9A</span></div>
+        <div class="sc-sw" style="background:#7D7D7C" onclick="scCopy('#7D7D7C')"><span class="sc-sw-step">750</span><span class="sc-sw-hex">#7D7D7C</span></div>
+        <div class="sc-sw" style="background:#5F5F5E" onclick="scCopy('#5F5F5E')"><span class="sc-sw-step">800</span><span class="sc-sw-hex">#5F5F5E</span></div>
+        <div class="sc-sw" style="background:#3F3F3E" onclick="scCopy('#3F3F3E')"><span class="sc-sw-step">850</span><span class="sc-sw-hex">#3F3F3E</span></div>
+        <div class="sc-sw" style="background:#1E1E1E" onclick="scCopy('#1E1E1E')"><span class="sc-sw-step">900</span><span class="sc-sw-hex">#1E1E1E</span></div>
+      </div>
+    </div>
+
+    <!-- Ivory -->
+    <div class="scale-group">
+      <div class="scale-lbl"><span class="scale-lbl-name">Ivory</span><span class="scale-lbl-role">Surface</span></div>
+      <div class="scale-strip">
+        <div class="sc-sw" data-light style="background:#FEFEFE" onclick="scCopy('#FEFEFE')"><span class="sc-sw-step">50</span><span class="sc-sw-hex">#FEFEFE</span></div>
+        <div class="sc-sw" data-light style="background:#FEFDFB" onclick="scCopy('#FEFDFB')"><span class="sc-sw-step">100</span><span class="sc-sw-hex">#FEFDFB</span></div>
+        <div class="sc-sw" data-light style="background:#FCFBF8" onclick="scCopy('#FCFBF8')"><span class="sc-sw-step">150</span><span class="sc-sw-hex">#FCFBF8</span></div>
+        <div class="sc-sw" data-light style="background:#FBF8F5" onclick="scCopy('#FBF8F5')"><span class="sc-sw-step">200</span><span class="sc-sw-hex">#FBF8F5</span></div>
+        <div class="sc-sw" data-light style="background:#F9F5F0" onclick="scCopy('#F9F5F0')"><span class="sc-sw-step">250</span><span class="sc-sw-hex">#F9F5F0</span></div>
+        <div class="sc-sw" data-light style="background:#F7F2EC" onclick="scCopy('#F7F2EC')"><span class="sc-sw-step">300</span><span class="sc-sw-hex">#F7F2EC</span></div>
+        <div class="sc-sw" data-light style="background:#F5EFE7" onclick="scCopy('#F5EFE7')"><span class="sc-sw-step">350</span><span class="sc-sw-hex">#F5EFE7</span></div>
+        <div class="sc-sw sc-base" data-light style="background:#F3EBE1" onclick="scCopy('#F3EBE1')"><span class="sc-sw-step">BASE</span><span class="sc-sw-hex">#F3EBE1</span></div>
+        <div class="sc-sw" data-light style="background:#D6CFC6" onclick="scCopy('#D6CFC6')"><span class="sc-sw-step">600</span><span class="sc-sw-hex">#D6CFC6</span></div>
+        <div class="sc-sw" data-light style="background:#B6B0A9" onclick="scCopy('#B6B0A9')"><span class="sc-sw-step">650</span><span class="sc-sw-hex">#B6B0A9</span></div>
+        <div class="sc-sw" data-light style="background:#97928C" onclick="scCopy('#97928C')"><span class="sc-sw-step">700</span><span class="sc-sw-hex">#97928C</span></div>
+        <div class="sc-sw" style="background:#7A7671" onclick="scCopy('#7A7671')"><span class="sc-sw-step">750</span><span class="sc-sw-hex">#7A7671</span></div>
+        <div class="sc-sw" style="background:#5C5956" onclick="scCopy('#5C5956')"><span class="sc-sw-step">800</span><span class="sc-sw-hex">#5C5956</span></div>
+        <div class="sc-sw" style="background:#3D3B38" onclick="scCopy('#3D3B38')"><span class="sc-sw-step">850</span><span class="sc-sw-hex">#3D3B38</span></div>
+        <div class="sc-sw" style="background:#1D1C1B" onclick="scCopy('#1D1C1B')"><span class="sc-sw-step">900</span><span class="sc-sw-hex">#1D1C1B</span></div>
+      </div>
+    </div>
+
+    <!-- Forge -->
+    <div class="scale-group">
+      <div class="scale-lbl"><span class="scale-lbl-name">Forge</span><span class="scale-lbl-role">Primary</span></div>
+      <div class="scale-strip">
+        <div class="sc-sw" data-light style="background:#FFF6F2" onclick="scCopy('#FFF6F2')"><span class="sc-sw-step">50</span><span class="sc-sw-hex">#FFF6F2</span></div>
+        <div class="sc-sw" data-light style="background:#FFEAE0" onclick="scCopy('#FFEAE0')"><span class="sc-sw-step">100</span><span class="sc-sw-hex">#FFEAE0</span></div>
+        <div class="sc-sw" data-light style="background:#FFD9C7" onclick="scCopy('#FFD9C7')"><span class="sc-sw-step">150</span><span class="sc-sw-hex">#FFD9C7</span></div>
+        <div class="sc-sw" data-light style="background:#FFC3A6" onclick="scCopy('#FFC3A6')"><span class="sc-sw-step">200</span><span class="sc-sw-hex">#FFC3A6</span></div>
+        <div class="sc-sw" data-light style="background:#FFA980" onclick="scCopy('#FFA980')"><span class="sc-sw-step">250</span><span class="sc-sw-hex">#FFA980</span></div>
+        <div class="sc-sw" data-light style="background:#FF8F59" onclick="scCopy('#FF8F59')"><span class="sc-sw-step">300</span><span class="sc-sw-hex">#FF8F59</span></div>
+        <div class="sc-sw" data-light style="background:#FF7533" onclick="scCopy('#FF7533')"><span class="sc-sw-step">350</span><span class="sc-sw-hex">#FF7533</span></div>
+        <div class="sc-sw sc-base" style="background:#FF5300" onclick="scCopy('#FF5300')"><span class="sc-sw-step">BASE</span><span class="sc-sw-hex">#FF5300</span></div>
+        <div class="sc-sw" style="background:#E04900" onclick="scCopy('#E04900')"><span class="sc-sw-step">600</span><span class="sc-sw-hex">#E04900</span></div>
+        <div class="sc-sw" style="background:#BF3E00" onclick="scCopy('#BF3E00')"><span class="sc-sw-step">650</span><span class="sc-sw-hex">#BF3E00</span></div>
+        <div class="sc-sw" style="background:#9E3300" onclick="scCopy('#9E3300')"><span class="sc-sw-step">700</span><span class="sc-sw-hex">#9E3300</span></div>
+        <div class="sc-sw" style="background:#802A00" onclick="scCopy('#802A00')"><span class="sc-sw-step">750</span><span class="sc-sw-hex">#802A00</span></div>
+        <div class="sc-sw" style="background:#612000" onclick="scCopy('#612000')"><span class="sc-sw-step">800</span><span class="sc-sw-hex">#612000</span></div>
+        <div class="sc-sw" style="background:#401500" onclick="scCopy('#401500')"><span class="sc-sw-step">850</span><span class="sc-sw-hex">#401500</span></div>
+        <div class="sc-sw" style="background:#1F0A00" onclick="scCopy('#1F0A00')"><span class="sc-sw-step">900</span><span class="sc-sw-hex">#1F0A00</span></div>
+      </div>
+    </div>
+
+    <!-- Ember -->
+    <div class="scale-group">
+      <div class="scale-lbl"><span class="scale-lbl-name">Ember</span><span class="scale-lbl-role">Secondary</span></div>
+      <div class="scale-strip">
+        <div class="sc-sw" data-light style="background:#FFF9F7" onclick="scCopy('#FFF9F7')"><span class="sc-sw-step">50</span><span class="sc-sw-hex">#FFF9F7</span></div>
+        <div class="sc-sw" data-light style="background:#FFF1EC" onclick="scCopy('#FFF1EC')"><span class="sc-sw-step">100</span><span class="sc-sw-hex">#FFF1EC</span></div>
+        <div class="sc-sw" data-light style="background:#FFE6DC" onclick="scCopy('#FFE6DC')"><span class="sc-sw-step">150</span><span class="sc-sw-hex">#FFE6DC</span></div>
+        <div class="sc-sw" data-light style="background:#FFD7C7" onclick="scCopy('#FFD7C7')"><span class="sc-sw-step">200</span><span class="sc-sw-hex">#FFD7C7</span></div>
+        <div class="sc-sw" data-light style="background:#FFC6B0" onclick="scCopy('#FFC6B0')"><span class="sc-sw-step">250</span><span class="sc-sw-hex">#FFC6B0</span></div>
+        <div class="sc-sw" data-light style="background:#FFB598" onclick="scCopy('#FFB598')"><span class="sc-sw-step">300</span><span class="sc-sw-hex">#FFB598</span></div>
+        <div class="sc-sw" data-light style="background:#FFA480" onclick="scCopy('#FFA480')"><span class="sc-sw-step">350</span><span class="sc-sw-hex">#FFA480</span></div>
+        <div class="sc-sw sc-base" data-light style="background:#FF8D60" onclick="scCopy('#FF8D60')"><span class="sc-sw-step">BASE</span><span class="sc-sw-hex">#FF8D60</span></div>
+        <div class="sc-sw" data-light style="background:#FF7C54" onclick="scCopy('#FF7C54')"><span class="sc-sw-step">600</span><span class="sc-sw-hex">#FF7C54</span></div>
+        <div class="sc-sw" style="background:#BF6A48" onclick="scCopy('#BF6A48')"><span class="sc-sw-step">650</span><span class="sc-sw-hex">#BF6A48</span></div>
+        <div class="sc-sw" style="background:#9E573C" onclick="scCopy('#9E573C')"><span class="sc-sw-step">700</span><span class="sc-sw-hex">#9E573C</span></div>
+        <div class="sc-sw" style="background:#804730" onclick="scCopy('#804730')"><span class="sc-sw-step">750</span><span class="sc-sw-hex">#804730</span></div>
+        <div class="sc-sw" style="background:#613624" onclick="scCopy('#613624')"><span class="sc-sw-step">800</span><span class="sc-sw-hex">#613624</span></div>
+        <div class="sc-sw" style="background:#402318" onclick="scCopy('#402318')"><span class="sc-sw-step">850</span><span class="sc-sw-hex">#402318</span></div>
+        <div class="sc-sw" style="background:#1F110C" onclick="scCopy('#1F110C')"><span class="sc-sw-step">900</span><span class="sc-sw-hex">#1F110C</span></div>
+      </div>
+    </div>
+
+    <!-- Walnut -->
+    <div class="scale-group">
+      <div class="scale-lbl"><span class="scale-lbl-name">Walnut</span><span class="scale-lbl-role">Mid · Text</span></div>
+      <div class="scale-strip">
+        <div class="sc-sw" data-light style="background:#F6F5F5" onclick="scCopy('#F6F5F5')"><span class="sc-sw-step">50</span><span class="sc-sw-hex">#F6F5F5</span></div>
+        <div class="sc-sw" data-light style="background:#E9E7E6" onclick="scCopy('#E9E7E6')"><span class="sc-sw-step">100</span><span class="sc-sw-hex">#E9E7E6</span></div>
+        <div class="sc-sw" data-light style="background:#D7D3D2" onclick="scCopy('#D7D3D2')"><span class="sc-sw-step">150</span><span class="sc-sw-hex">#D7D3D2</span></div>
+        <div class="sc-sw" data-light style="background:#C0B8B7" onclick="scCopy('#C0B8B7')"><span class="sc-sw-step">200</span><span class="sc-sw-hex">#C0B8B7</span></div>
+        <div class="sc-sw" data-light style="background:#A59A98" onclick="scCopy('#A59A98')"><span class="sc-sw-step">250</span><span class="sc-sw-hex">#A59A98</span></div>
+        <div class="sc-sw" style="background:#897C78" onclick="scCopy('#897C78')"><span class="sc-sw-step">300</span><span class="sc-sw-hex">#897C78</span></div>
+        <div class="sc-sw" style="background:#6E5D59" onclick="scCopy('#6E5D59')"><span class="sc-sw-step">350</span><span class="sc-sw-hex">#6E5D59</span></div>
+        <div class="sc-sw sc-base" style="background:#4A3530" onclick="scCopy('#4A3530')"><span class="sc-sw-step">BASE</span><span class="sc-sw-hex">#4A3530</span></div>
+        <div class="sc-sw" style="background:#412F2A" onclick="scCopy('#412F2A')"><span class="sc-sw-step">600</span><span class="sc-sw-hex">#412F2A</span></div>
+        <div class="sc-sw" style="background:#382824" onclick="scCopy('#382824')"><span class="sc-sw-step">650</span><span class="sc-sw-hex">#382824</span></div>
+        <div class="sc-sw" style="background:#2E211E" onclick="scCopy('#2E211E')"><span class="sc-sw-step">700</span><span class="sc-sw-hex">#2E211E</span></div>
+        <div class="sc-sw" style="background:#251B18" onclick="scCopy('#251B18')"><span class="sc-sw-step">750</span><span class="sc-sw-hex">#251B18</span></div>
+        <div class="sc-sw" style="background:#1C1412" onclick="scCopy('#1C1412')"><span class="sc-sw-step">800</span><span class="sc-sw-hex">#1C1412</span></div>
+        <div class="sc-sw" style="background:#130D0C" onclick="scCopy('#130D0C')"><span class="sc-sw-step">850</span><span class="sc-sw-hex">#130D0C</span></div>
+        <div class="sc-sw" style="background:#090606" onclick="scCopy('#090606')"><span class="sc-sw-step">900</span><span class="sc-sw-hex">#090606</span></div>
+      </div>
+    </div>
+
+    <!-- Pitch -->
+    <div class="scale-group">
+      <div class="scale-lbl"><span class="scale-lbl-name">Pitch</span><span class="scale-lbl-role">Dark · Head</span></div>
+      <div class="scale-strip">
+        <div class="sc-sw" data-light style="background:#F4F3F3" onclick="scCopy('#F4F3F3')"><span class="sc-sw-step">50</span><span class="sc-sw-hex">#F4F3F3</span></div>
+        <div class="sc-sw" data-light style="background:#E3E2E1" onclick="scCopy('#E3E2E1')"><span class="sc-sw-step">100</span><span class="sc-sw-hex">#E3E2E1</span></div>
+        <div class="sc-sw" data-light style="background:#CDCAC9" onclick="scCopy('#CDCAC9')"><span class="sc-sw-step">150</span><span class="sc-sw-hex">#CDCAC9</span></div>
+        <div class="sc-sw" data-light style="background:#AFABA9" onclick="scCopy('#AFABA9')"><span class="sc-sw-step">200</span><span class="sc-sw-hex">#AFABA9</span></div>
+        <div class="sc-sw" data-light style="background:#8D8784" onclick="scCopy('#8D8784')"><span class="sc-sw-step">250</span><span class="sc-sw-hex">#8D8784</span></div>
+        <div class="sc-sw" style="background:#6A625E" onclick="scCopy('#6A625E')"><span class="sc-sw-step">300</span><span class="sc-sw-hex">#6A625E</span></div>
+        <div class="sc-sw" style="background:#483E39" onclick="scCopy('#483E39')"><span class="sc-sw-step">350</span><span class="sc-sw-hex">#483E39</span></div>
+        <div class="sc-sw sc-base" style="background:#1A0E08" onclick="scCopy('#1A0E08')"><span class="sc-sw-step">BASE</span><span class="sc-sw-hex">#1A0E08</span></div>
+        <div class="sc-sw" style="background:#170C07" onclick="scCopy('#170C07')"><span class="sc-sw-step">600</span><span class="sc-sw-hex">#170C07</span></div>
+        <div class="sc-sw" style="background:#140B06" onclick="scCopy('#140B06')"><span class="sc-sw-step">650</span><span class="sc-sw-hex">#140B06</span></div>
+        <div class="sc-sw" style="background:#100905" onclick="scCopy('#100905')"><span class="sc-sw-step">700</span><span class="sc-sw-hex">#100905</span></div>
+        <div class="sc-sw" style="background:#0D0704" onclick="scCopy('#0D0704')"><span class="sc-sw-step">750</span><span class="sc-sw-hex">#0D0704</span></div>
+        <div class="sc-sw" style="background:#0A0503" onclick="scCopy('#0A0503')"><span class="sc-sw-step">800</span><span class="sc-sw-hex">#0A0503</span></div>
+        <div class="sc-sw" style="background:#070402" onclick="scCopy('#070402')"><span class="sc-sw-step">850</span><span class="sc-sw-hex">#070402</span></div>
+        <div class="sc-sw" style="background:#030201" onclick="scCopy('#030201')"><span class="sc-sw-step">900</span><span class="sc-sw-hex">#030201</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- copy toast -->
+  <div class="sc-copied" id="scToast"></div>
+
+</section>
+
+<!-- ══════════════════════════════════════
+     05 TYPOGRAPHY
+══════════════════════════════════════ -->
+<section id="typography" class="sec">
+  <div class="sec-hd">
+    <span class="sec-num">05</span>
+    <div>
+      <h2 class="sec-title">Typography</h2>
+      <p class="sec-sub">Two typefaces, three roles. Raleway leads with geometric authority. DM Sans follows with clarity and warmth.</p>
+    </div>
+  </div>
+
+  <div class="font-pair">
+    <div class="font-card">
+      <p class="font-role">Display · Headings</p>
+      <p class="font-name">Raleway</p>
+      <p class="font-meta">Google Fonts · Weights 700 · 800</p>
+      <div class="font-samp">
+        <p class="font-abc" style="font-family:'Raleway',sans-serif;font-weight:800;">ABCDEFGHIJKLM<br>NOPQRSTUVWXYZ<br>0123456789</p>
+        <div class="font-wts">
+          <span class="wt" style="font-family:'Raleway',sans-serif;font-weight:700;">700 — Heading</span>
+          <span class="wt" style="font-family:'Raleway',sans-serif;font-weight:800;">800 — Display</span>
+        </div>
+      </div>
+    </div>
+    <div class="font-card">
+      <p class="font-role">Body · UI</p>
+      <p class="font-name">DM Sans</p>
+      <p class="font-meta">Google Fonts · Weights 400 · 500 · 600</p>
+      <div class="font-samp">
+        <p class="font-abc" style="font-family:'DM Sans',sans-serif;font-weight:400;font-size:16px;">abcdefghijklmnopqrstuvwxyz<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>0123456789 !@#$%&</p>
+        <div class="font-wts">
+          <span class="wt" style="font-family:'DM Sans',sans-serif;font-weight:400;">400 · Body</span>
+          <span class="wt" style="font-family:'DM Sans',sans-serif;font-weight:500;">500 · UI</span>
+          <span class="wt" style="font-family:'DM Sans',sans-serif;font-weight:600;">600 · Labels</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="mono-label">Type Scale</p>
+  <div class="type-scale">
+    <div class="ts-row">
+      <div class="ts-meta"><p class="ts-label">Display</p><p class="ts-spec">Raleway 800 · 64px · 1.0</p></div>
+      <div class="ts-samp"><span style="font-family:'Raleway',sans-serif;font-weight:800;font-size:64px;line-height:1;color:var(--pitch);">Engineering</span></div>
+    </div>
+    <div class="ts-row">
+      <div class="ts-meta"><p class="ts-label">Heading 1</p><p class="ts-spec">Raleway 800 · 40px · 1.08</p></div>
+      <div class="ts-samp"><span style="font-family:'Raleway',sans-serif;font-weight:800;font-size:40px;line-height:1.08;color:var(--pitch);">Built to last.</span></div>
+    </div>
+    <div class="ts-row">
+      <div class="ts-meta"><p class="ts-label">Heading 2</p><p class="ts-spec">Raleway 700 · 28px · 1.15</p></div>
+      <div class="ts-samp"><span style="font-family:'Raleway',sans-serif;font-weight:700;font-size:28px;line-height:1.15;color:var(--pitch);">Selected Work</span></div>
+    </div>
+    <div class="ts-row">
+      <div class="ts-meta"><p class="ts-label">Heading 3</p><p class="ts-spec">Raleway 700 · 20px · 1.2</p></div>
+      <div class="ts-samp"><span style="font-family:'Raleway',sans-serif;font-weight:700;font-size:20px;color:var(--pitch);">Brand · UI/UX · Interior</span></div>
+    </div>
+    <div class="ts-row">
+      <div class="ts-meta"><p class="ts-label">Body Large</p><p class="ts-spec">DM Sans 400 · 16px · 1.7</p></div>
+      <div class="ts-samp"><span style="font-family:'DM Sans',sans-serif;font-weight:400;font-size:16px;line-height:1.7;color:var(--walnut);">We design with purpose — building systems that hold up under the weight of real use, not just ideal conditions.</span></div>
+    </div>
+    <div class="ts-row">
+      <div class="ts-meta"><p class="ts-label">Body</p><p class="ts-spec">DM Sans 400 · 14px · 1.65</p></div>
+      <div class="ts-samp"><span style="font-family:'DM Sans',sans-serif;font-weight:400;font-size:14px;line-height:1.65;color:var(--walnut);">Structural design thinking applied to digital and physical space — every project resolved to its essential form.</span></div>
+    </div>
+    <div class="ts-row">
+      <div class="ts-meta"><p class="ts-label">Label / UI</p><p class="ts-spec">DM Sans 600 · 12px</p></div>
+      <div class="ts-samp"><span style="font-family:'DM Sans',sans-serif;font-weight:600;font-size:12px;color:var(--forge);">Brand Identity · Product Design · UI/UX · Interior</span></div>
+    </div>
+    <div class="ts-row">
+      <div class="ts-meta"><p class="ts-label">Mono</p><p class="ts-spec">JetBrains Mono 400 · 11px</p></div>
+      <div class="ts-samp"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--walnut);letter-spacing:.05em;">#FF5300 · Forge · Raleway 800 · DM Sans</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     06 COMPONENTS
+══════════════════════════════════════ -->
+<section id="components" class="sec sec-ivory">
+  <div class="sec-hd">
+    <span class="sec-num">06</span>
+    <div>
+      <h2 class="sec-title">Components</h2>
+      <p class="sec-sub">Core UI building blocks — consistent across all Damcraft digital touchpoints.</p>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="comp-group">
+    <p class="comp-label">Buttons</p>
+    <div class="btn-row">
+      <div class="btn btn-p">Start a Project →</div>
+      <div class="btn btn-o">View Work</div>
+      <div class="btn btn-g">Learn More</div>
+      <div class="btn btn-p btn-sm">Small</div>
+      <div class="btn btn-p btn-lg">Large →</div>
+    </div>
+    <div class="btn-row-dark">
+      <div class="btn btn-p">Start a Project →</div>
+      <div class="btn" style="background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.2);">View Work</div>
+      <div class="btn" style="background:transparent;color:rgba(255,83,0,.9);border:1.5px solid rgba(255,83,0,.35);">Contact</div>
+    </div>
+  </div>
+
+  <!-- Badges -->
+  <div class="comp-group">
+    <p class="comp-label">Badges & Tags</p>
+    <div class="badge-row">
+      <span class="bdg bdg-f"><span class="bdg-dot" style="background:#FF5300;"></span>UI/UX Design</span>
+      <span class="bdg bdg-p">Brand Identity</span>
+      <span class="bdg bdg-i">Interior Design</span>
+      <span class="bdg bdg-e"><span class="bdg-dot" style="background:#FF8D60;"></span>Product Design</span>
+      <span class="bdg bdg-f">Available Q3</span>
+      <span class="bdg" style="background:#FF5300;color:#fff;">New</span>
+    </div>
+  </div>
+
+  <!-- Cards -->
+  <div class="comp-group">
+    <p class="comp-label">Project Cards</p>
+    <div class="card-grid">
+      <div class="ui-card">
+        <div class="card-cover" style="background:#FF5300;"><span class="card-tag-chip">Brand · UI/UX</span></div>
+        <div class="card-body"><p class="card-type">Brand Identity</p><p class="card-title">Arcline Structures</p><p class="card-desc">Identity system and digital platform for a structural engineering consultancy.</p><p class="card-cta">View Case Study →</p></div>
+      </div>
+      <div class="ui-card">
+        <div class="card-cover" style="background:#1A0E08;"><span class="card-tag-chip">Product</span></div>
+        <div class="card-body"><p class="card-type">Product Design</p><p class="card-title">Velo Dashboard</p><p class="card-desc">End-to-end product design for a fleet management SaaS platform.</p><p class="card-cta">View Case Study →</p></div>
+      </div>
+      <div class="ui-card">
+        <div class="card-cover" style="background:#4A3530;"><span class="card-tag-chip">Interior · Brand</span></div>
+        <div class="card-body"><p class="card-type">Interior · Brand</p><p class="card-title">Halo Studio</p><p class="card-desc">Brand identity and interior concept for a Bangalore creative studio.</p><p class="card-cta">View Case Study →</p></div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════
+     07 BRAND VOICE
+══════════════════════════════════════ -->
+<section id="voice" class="sec sec-dark">
+  <div class="sec-hd">
+    <span class="sec-num">07</span>
+    <div>
+      <h2 class="sec-title">Brand Voice</h2>
+      <p class="sec-sub">How Damcraft speaks — precise, purposeful, and never without intention.</p>
+    </div>
+  </div>
+
+  <!-- Taglines -->
+  <p class="mono-label">Taglines</p>
+  <div style="margin-bottom:56px;">
+    <p class="tagline-primary">Built to Last.</p>
+    <span class="tagline-label">Primary Tagline</span>
+    <div class="tagline-alts">
+      <p class="tagline-alt">Precision by Design.</p>
+      <p class="tagline-alt">We Build Brands.</p>
+      <p class="tagline-alt">Design. Build. Endure.</p>
+    </div>
+  </div>
+
+  <!-- Voice Traits -->
+  <p class="mono-label">Voice Traits</p>
+  <div class="voice-traits">
+    <div class="trait-card">
+      <p class="trait-yes">Confident</p>
+      <p class="trait-not">not arrogant</p>
+    </div>
+    <div class="trait-card">
+      <p class="trait-yes">Precise</p>
+      <p class="trait-not">not cold</p>
+    </div>
+    <div class="trait-card">
+      <p class="trait-yes">Thoughtful</p>
+      <p class="trait-not">not academic</p>
+    </div>
+    <div class="trait-card">
+      <p class="trait-yes">Bold</p>
+      <p class="trait-not">not loud</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════
+     08 VISUAL LANGUAGE
+══════════════════════════════════════ -->
+<section id="patterns" class="sec">
+  <div class="sec-hd">
+    <span class="sec-num">08</span>
+    <div>
+      <h2 class="sec-title">Visual Language</h2>
+      <p class="sec-sub">Structural motifs drawn from the brand's core imagery — the arch, the grid, the weave. Applied to textures, backgrounds, and surface treatments.</p>
+    </div>
+  </div>
+
+  <div class="pattern-grid">
+
+    <!-- Arch Dam Grid -->
+    <div class="pattern-card">
+      <div class="pattern-prev">
+        <svg width="180" height="180" viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="arch-p" width="22" height="22" patternUnits="userSpaceOnUse">
+              <path d="M3,22 L3,12 Q11,2 19,12 L19,22" fill="none" stroke="rgba(255,83,0,0.38)" stroke-width="1.5"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#arch-p)"/>
+        </svg>
+      </div>
+      <div class="pattern-info">
+        <p class="pattern-name">Arch Dam Grid</p>
+        <p class="pattern-use">The brand mark repeated as a tile. Use as a background texture on hero sections, packaging, and collateral surfaces.</p>
+      </div>
+    </div>
+
+    <!-- Structural Lines -->
+    <div class="pattern-card">
+      <div class="pattern-prev">
+        <svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="str-p" width="180" height="18" patternUnits="userSpaceOnUse">
+              <rect width="180" height="3" y="0" fill="rgba(255,83,0,0.32)"/>
+              <rect width="180" height="1" y="7" fill="rgba(255,83,0,0.13)"/>
+              <rect width="180" height="1" y="12" fill="rgba(255,83,0,0.13)"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#str-p)"/>
+        </svg>
+      </div>
+      <div class="pattern-info">
+        <p class="pattern-name">Structural Lines</p>
+        <p class="pattern-use">Layered horizontal rules inspired by architectural section drawings. Use on editorial layouts, dividers, and document headers.</p>
+      </div>
+    </div>
+
+    <!-- Honeycomb Motif -->
+    <div class="pattern-card">
+      <div class="pattern-prev">
+        <svg width="180" height="180" viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="hex-p" width="21" height="18.2" patternUnits="userSpaceOnUse">
+              <polygon points="10.5,1 19,5.6 19,14.6 10.5,19.2 2,14.6 2,5.6" fill="none" stroke="rgba(255,83,0,0.35)" stroke-width="1"/>
+              <polygon points="21,10.1 29.5,14.7 29.5,23.7 21,28.3 12.5,23.7 12.5,14.7" fill="none" stroke="rgba(255,83,0,0.35)" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#hex-p)"/>
+        </svg>
+      </div>
+      <div class="pattern-info">
+        <p class="pattern-name">Honeycomb Motif</p>
+        <p class="pattern-use">The beaver's geometry — engineered efficiency in repeating form. Use on product packaging, section backgrounds, and brand merchandise.</p>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════
+     09 BRAND IN USE
+══════════════════════════════════════ -->
+<section id="brand-use" class="sec sec-dark">
+  <div class="sec-hd">
+    <span class="sec-num">09</span>
+    <div>
+      <h2 class="sec-title">Brand in Use</h2>
+      <p class="sec-sub">How the system comes together across digital and print touchpoints.</p>
+    </div>
+  </div>
+
+  <p class="mono-label">Website</p>
+  <div class="site-frame">
+    <div class="s-nav">
+      <div class="s-nav-logo">
+        <svg viewBox="0 0 504 450" width="26" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#1A0E08" d="M123.28,370.98l27.33,79.02h-54.66l27.33-79.02ZM269.39,450h22.87l-22.87-55.24v55.24ZM408.88,450v-55.24l-22.75,55.24h22.75ZM260.7,0h-17.4C108.93,0,0,108.93,0,243.3v206.7h54.55l45.24-126h47.27l45.24,126h36.49v-126h46.11l53.9,126h20.97l53.9-126h45.82v126h54.52v-206.7C504,108.93,395.07,0,260.7,0Z"/>
+        </svg>
+        <span class="s-nav-craft">CRAFT</span>
+      </div>
+      <div class="s-nav-links">
+        <span>Work</span><span>Studio</span><span>Services</span>
+        <span class="s-nav-cta">Start a Project</span>
+      </div>
+    </div>
+    <div class="s-hero">
+      <div class="s-pill"><span class="s-pill-dot"></span>Design Studio · Est. 2024</div>
+      <h2>Built to last.<br><em>Crafted to move.</em></h2>
+      <p>We design UI, brand identities, and spaces that hold up — because good work isn't finished until it can't be improved.</p>
+      <div class="s-btns">
+        <div class="btn btn-p">See Our Work →</div>
+        <div style="font-size:14px;font-weight:500;color:var(--walnut);cursor:default;">Our Process ↗</div>
+      </div>
+    </div>
+    <div class="s-work">
+      <h3>Selected Work</h3>
+      <div class="s-cards">
+        <div class="s-card">
+          <div class="s-card-img" style="background:#FF5300;"><span style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.07em;text-transform:uppercase;padding:3px 7px;background:rgba(0,0,0,.2);color:rgba(255,255,255,.8);border-radius:3px;">Brand · UI/UX</span></div>
+          <div class="s-card-body"><p class="s-card-type">Brand Identity</p><p class="s-card-title">Arcline Structures</p></div>
+        </div>
+        <div class="s-card">
+          <div class="s-card-img" style="background:#1A0E08;"><span style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.07em;text-transform:uppercase;padding:3px 7px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);border-radius:3px;">Product</span></div>
+          <div class="s-card-body"><p class="s-card-type">Product Design</p><p class="s-card-title">Velo Dashboard</p></div>
+        </div>
+        <div class="s-card">
+          <div class="s-card-img" style="background:#4A3530;"><span style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.07em;text-transform:uppercase;padding:3px 7px;background:rgba(0,0,0,.25);color:rgba(255,255,255,.7);border-radius:3px;">Interior · Brand</span></div>
+          <div class="s-card-body"><p class="s-card-type">Interior · Brand</p><p class="s-card-title">Halo Studio</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="s-footer">
+      <span>DAMCRAFT · STUDIO</span>
+      <span>© 2024 Damcraft. All rights reserved.</span>
+    </div>
+  </div>
+
+  <p class="mono-label">Letterhead</p>
+  <div class="lh-mock">
+    <div class="lh-sheet">
+      <div class="lh-stripe"></div>
+      <div class="lh-header">
+        <div class="logo-lk">
+          <svg viewBox="1087 261 510 558" width="56" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#FF5300" d="M1116.52,815.18c-3.84,0-7.41-.7-10.69-2.09-3.29-1.39-6.16-3.34-8.6-5.83-2.45-2.5-4.36-5.42-5.72-8.78-1.37-3.36-2.05-7.03-2.05-11.02s.67-7.67,2.02-11.05,3.24-6.31,5.69-8.78c2.45-2.47,5.32-4.39,8.6-5.76,3.29-1.37,6.88-2.05,10.76-2.05s7.38.65,10.48,1.94c3.1,1.3,5.72,3.02,7.88,5.18s3.7,4.56,4.61,7.2l-9.86,4.75c-.91-2.59-2.51-4.74-4.79-6.44-2.28-1.7-5.05-2.56-8.32-2.56s-5.95.74-8.35,2.23c-2.4,1.49-4.26,3.54-5.58,6.16-1.32,2.62-1.98,5.68-1.98,9.18s.66,6.58,1.98,9.22c1.32,2.64,3.18,4.7,5.58,6.19,2.4,1.49,5.18,2.23,8.35,2.23s6.04-.85,8.32-2.56c2.28-1.7,3.88-3.85,4.79-6.44l9.86,4.75c-.91,2.64-2.45,5.04-4.61,7.2s-4.79,3.89-7.88,5.18-6.59,1.94-10.48,1.94Z"/>
+            <path fill="#FF5300" d="M1210.86,813.46v-53.64h20.52c3.7,0,6.97.65,9.83,1.94,2.86,1.3,5.1,3.22,6.73,5.76,1.63,2.54,2.45,5.69,2.45,9.43s-.84,6.76-2.52,9.32c-1.68,2.57-3.94,4.5-6.77,5.8l12.24,21.38h-12.53l-13.25-23.69,7.2,4.25h-12.74v19.44h-11.16ZM1222.02,784.3h9.43c1.58,0,2.95-.31,4.1-.94,1.15-.62,2.05-1.49,2.7-2.59.65-1.1.97-2.38.97-3.82s-.32-2.78-.97-3.89c-.65-1.1-1.55-1.97-2.7-2.59-1.15-.62-2.52-.94-4.1-.94h-9.43v14.76Z"/>
+            <path fill="#FF5300" d="M1324.71,813.46l18.14-53.64h14.83l18.14,53.64h-12.17l-3.6-10.94h-19.66l-3.6,10.94h-12.1ZM1343.5,792.79h13.46l-8.21-25.34h3.02l-8.28,25.34Z"/>
+            <path fill="#FF5300" d="M1447.2,813.46v-53.64h36.72v9.72h-25.56v13.61h21.96v9.72h-21.96v20.59h-11.16Z"/>
+            <path fill="#FF5300" d="M1568.9,813.46v-43.92h-13.61v-9.72h38.16v9.72h-13.39v43.92h-11.16Z"/>
+            <polygon fill="#FF5300" points="1173.34 714.82 1228.27 714.82 1201.36 638.19 1173.34 714.82"/>
+            <polygon fill="#FF5300" points="1357.37 714.82 1383.79 714.82 1357.37 664.29 1357.37 714.82"/>
+            <polygon fill="#FF5300" points="1496.05 714.82 1496.05 664.29 1469.63 714.82 1496.05 714.82"/>
+            <path fill="#FF5300" d="M1350.15,264.82h-17.4c-134.37,0-243.3,108.93-243.3,243.3v206.7h44.63l48.09-126h38.37l47.92,126h45.52v-126h46.54l65.5,126h1.09l66.12-126h46.23v126h54v-206.7c0-134.37-108.93-243.3-243.3-243.3Z"/>
+          </svg>
+        </div>
+        <div class="lh-addr">
+          damcraft.com<br>
+          hello@damcraft.com<br>
+          +91 93353 55931<br>
+          Noida, UP, India
+        </div>
+      </div>
+      <div class="lh-body">
+        <div class="lh-to">
+          <p class="lh-to-lbl">To</p>
+          <p class="lh-to-name">Client Name</p>
+          <p class="lh-to-co">Company · City</p>
+        </div>
+        <p class="lh-subject">Project Proposal — Brand Identity</p>
+        <div class="lh-lines">
+          <div class="lh-line f"></div>
+          <div class="lh-line m"></div>
+          <div class="lh-line f"></div>
+          <div class="lh-line s"></div>
+          <div class="lh-line f" style="margin-top:10px;"></div>
+          <div class="lh-line m"></div>
+          <div class="lh-line f"></div>
+          <div class="lh-line m"></div>
+          <div class="lh-line xs"></div>
+          <div class="lh-line f" style="margin-top:10px;"></div>
+          <div class="lh-line s"></div>
+        </div>
+      </div>
+      <div class="lh-foot"></div>
+    </div>
+    <div style="align-self:center;padding-left:4px;">
+      <p style="font-family:'Raleway',sans-serif;font-weight:700;font-size:14px;color:rgba(255,255,255,.65);margin-bottom:10px;">A4 · 210 × 297 mm</p>
+      <p style="font-size:13px;color:rgba(255,255,255,.3);line-height:1.7;">Forge stripe header<br>Logo top-left · Contact right<br><br>Gradient rule footer<br>Body in DM Sans 10 / 16</p>
+    </div>
+  </div>
+
+  <p class="mono-label">Business Card</p>
+  <div class="biz-wrap">
+
+    <div class="biz-card biz-front">
+      <div class="biz-front-lk">
+        <svg viewBox="1087 261 510 558" width="76" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#FF5300" d="M1116.52,815.18c-3.84,0-7.41-.7-10.69-2.09-3.29-1.39-6.16-3.34-8.6-5.83-2.45-2.5-4.36-5.42-5.72-8.78-1.37-3.36-2.05-7.03-2.05-11.02s.67-7.67,2.02-11.05,3.24-6.31,5.69-8.78c2.45-2.47,5.32-4.39,8.6-5.76,3.29-1.37,6.88-2.05,10.76-2.05s7.38.65,10.48,1.94c3.1,1.3,5.72,3.02,7.88,5.18s3.7,4.56,4.61,7.2l-9.86,4.75c-.91-2.59-2.51-4.74-4.79-6.44-2.28-1.7-5.05-2.56-8.32-2.56s-5.95.74-8.35,2.23c-2.4,1.49-4.26,3.54-5.58,6.16-1.32,2.62-1.98,5.68-1.98,9.18s.66,6.58,1.98,9.22c1.32,2.64,3.18,4.7,5.58,6.19,2.4,1.49,5.18,2.23,8.35,2.23s6.04-.85,8.32-2.56c2.28-1.7,3.88-3.85,4.79-6.44l9.86,4.75c-.91,2.64-2.45,5.04-4.61,7.2s-4.79,3.89-7.88,5.18-6.59,1.94-10.48,1.94Z"/>
+          <path fill="#FF5300" d="M1210.86,813.46v-53.64h20.52c3.7,0,6.97.65,9.83,1.94,2.86,1.3,5.1,3.22,6.73,5.76,1.63,2.54,2.45,5.69,2.45,9.43s-.84,6.76-2.52,9.32c-1.68,2.57-3.94,4.5-6.77,5.8l12.24,21.38h-12.53l-13.25-23.69,7.2,4.25h-12.74v19.44h-11.16ZM1222.02,784.3h9.43c1.58,0,2.95-.31,4.1-.94,1.15-.62,2.05-1.49,2.7-2.59.65-1.1.97-2.38.97-3.82s-.32-2.78-.97-3.89c-.65-1.1-1.55-1.97-2.7-2.59-1.15-.62-2.52-.94-4.1-.94h-9.43v14.76Z"/>
+          <path fill="#FF5300" d="M1324.71,813.46l18.14-53.64h14.83l18.14,53.64h-12.17l-3.6-10.94h-19.66l-3.6,10.94h-12.1ZM1343.5,792.79h13.46l-8.21-25.34h3.02l-8.28,25.34Z"/>
+          <path fill="#FF5300" d="M1447.2,813.46v-53.64h36.72v9.72h-25.56v13.61h21.96v9.72h-21.96v20.59h-11.16Z"/>
+          <path fill="#FF5300" d="M1568.9,813.46v-43.92h-13.61v-9.72h38.16v9.72h-13.39v43.92h-11.16Z"/>
+          <polygon fill="#FF5300" points="1173.34 714.82 1228.27 714.82 1201.36 638.19 1173.34 714.82"/>
+          <polygon fill="#FF5300" points="1357.37 714.82 1383.79 714.82 1357.37 664.29 1357.37 714.82"/>
+          <polygon fill="#FF5300" points="1496.05 714.82 1496.05 664.29 1469.63 714.82 1496.05 714.82"/>
+          <path fill="#FF5300" d="M1350.15,264.82h-17.4c-134.37,0-243.3,108.93-243.3,243.3v206.7h44.63l48.09-126h38.37l47.92,126h45.52v-126h46.54l65.5,126h1.09l66.12-126h46.23v126h54v-206.7c0-134.37-108.93-243.3-243.3-243.3Z"/>
+        </svg>
+        <p class="biz-front-craft">CRAFT</p>
+      </div>
+      <p style="position:absolute;bottom:16px;right:20px;font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.25);letter-spacing:.07em;text-transform:uppercase;">Front</p>
+    </div>
+
+    <div class="biz-card biz-back">
+      <svg viewBox="0 0 504 450" width="180" style="position:absolute;top:-32px;right:-28px;opacity:.12;" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#fff" d="M123.28,370.98l27.33,79.02h-54.66l27.33-79.02ZM269.39,450h22.87l-22.87-55.24v55.24ZM408.88,450v-55.24l-22.75,55.24h22.75ZM260.7,0h-17.4C108.93,0,0,108.93,0,243.3v206.7h54.55l45.24-126h47.27l45.24,126h36.49v-126h46.11l53.9,126h20.97l53.9-126h45.82v126h54.52v-206.7C504,108.93,395.07,0,260.7,0Z"/>
+      </svg>
+      <div style="position:relative;">
+        <p class="biz-back-name">Studio Director</p>
+        <p class="biz-back-role">Multi-disciplinary Design Studio</p>
+      </div>
+      <div class="biz-contact" style="position:relative;">
+        <p>hello@damcraft.com</p>
+        <p>damcraft.com</p>
+        <p>+91 93353 55931</p>
+        <p>Noida, UP, India</p>
+        <p class="biz-note" style="margin-top:8px;">Back</p>
+      </div>
+    </div>
+
+    <div style="align-self:center;padding-left:12px;">
+      <p style="font-family:'Raleway',sans-serif;font-weight:700;font-size:14px;color:rgba(255,255,255,.65);margin-bottom:10px;">85 × 54 mm Standard</p>
+      <p style="font-size:13px;color:rgba(255,255,255,.3);line-height:1.7;">Front: Pitch background<br>with Forge logo<br><br>Back: Forge background<br>with ghosted arch mark</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════
+     10 EMAIL SIGNATURE
+══════════════════════════════════════ -->
+<section id="email-sig" class="sec sec-dark">
+  <div class="sec-hd">
+    <span class="sec-num">10</span>
+    <div>
+      <h2 class="sec-title">Email Signature</h2>
+      <p class="sec-sub">Consistent signature for all Damcraft communications. Light variant for standard emails; Dark for brand-forward outreach.</p>
+    </div>
+  </div>
+
+  <p class="mono-label">Signature Variants</p>
+  <div class="sig-grid">
+
+    <!-- Light -->
+    <div>
+      <p class="sig-vl" style="color:rgba(255,255,255,.28);">Light · Standard</p>
+      <div class="sig-shell" style="background:#FFFFFF;border:1px solid rgba(255,255,255,.09);">
+        <div class="sig-inner">
+          <div class="sig-logo-col">
+            <svg viewBox="0 0 504 450" width="34" xmlns="http://www.w3.org/2000/svg">
+              <path fill="#FF5300" d="M123.28,370.98l27.33,79.02h-54.66l27.33-79.02ZM269.39,450h22.87l-22.87-55.24v55.24ZM408.88,450v-55.24l-22.75,55.24h22.75ZM260.7,0h-17.4C108.93,0,0,108.93,0,243.3v206.7h54.55l45.24-126h47.27l45.24,126h36.49v-126h46.11l53.9,126h20.97l53.9-126h45.82v126h54.52v-206.7C504,108.93,395.07,0,260.7,0Z"/>
+            </svg>
+            <span class="sig-cw" style="color:var(--pitch);">CRAFT</span>
+          </div>
+          <div class="sig-div" style="background:#E4DDD2;"></div>
+          <div>
+            <p class="sig-name" style="color:var(--pitch);">Saurabh Pandey</p>
+            <p class="sig-role" style="color:var(--walnut);">Creative Director · Damcraft Studio</p>
+            <div class="sig-rule" style="background:#EAE3D8;"></div>
+            <p class="sig-ln" style="color:var(--forge);">hello@damcraft.com</p>
+            <p class="sig-ln" style="color:var(--walnut);">damcraft.com</p>
+            <p class="sig-ln" style="color:var(--walnut);">+91 93353 55931</p>
+            <p class="sig-ln" style="color:var(--walnut);">Noida, UP, India</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dark -->
+    <div>
+      <p class="sig-vl" style="color:rgba(255,255,255,.28);">Dark · Brand</p>
+      <div class="sig-shell" style="background:#0F0804;border:1px solid rgba(255,255,255,.06);">
+        <div class="sig-inner">
+          <div class="sig-logo-col">
+            <svg viewBox="0 0 504 450" width="34" xmlns="http://www.w3.org/2000/svg">
+              <path fill="#FF5300" d="M123.28,370.98l27.33,79.02h-54.66l27.33-79.02ZM269.39,450h22.87l-22.87-55.24v55.24ZM408.88,450v-55.24l-22.75,55.24h22.75ZM260.7,0h-17.4C108.93,0,0,108.93,0,243.3v206.7h54.55l45.24-126h47.27l45.24,126h36.49v-126h46.11l53.9,126h20.97l53.9-126h45.82v126h54.52v-206.7C504,108.93,395.07,0,260.7,0Z"/>
+            </svg>
+            <span class="sig-cw" style="color:rgba(255,255,255,.4);">CRAFT</span>
+          </div>
+          <div class="sig-div" style="background:rgba(255,255,255,.1);"></div>
+          <div>
+            <p class="sig-name" style="color:var(--chalk);">Saurabh Pandey</p>
+            <p class="sig-role" style="color:rgba(255,255,255,.38);">Creative Director · Damcraft Studio</p>
+            <div class="sig-rule" style="background:rgba(255,255,255,.07);"></div>
+            <p class="sig-ln" style="color:var(--ember);">hello@damcraft.com</p>
+            <p class="sig-ln" style="color:rgba(255,255,255,.35);">damcraft.com</p>
+            <p class="sig-ln" style="color:rgba(255,255,255,.35);">+91 93353 55931</p>
+            <p class="sig-ln" style="color:rgba(255,255,255,.35);">Noida, UP, India</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="mono-label" style="margin-top:52px;">Specifications</p>
+  <div class="sig-specs">
+    <div class="sig-spec">
+      <p class="sig-spec-lbl">Logo Mark</p>
+      <p class="sig-spec-val">34 × 30 px</p>
+      <p class="sig-spec-sub">Arch mark only · Forge #FF5300</p>
+    </div>
+    <div class="sig-spec">
+      <p class="sig-spec-lbl">Name</p>
+      <p class="sig-spec-val">Raleway 700 · 14.5px</p>
+      <p class="sig-spec-sub">Pitch on light · Chalk on dark</p>
+    </div>
+    <div class="sig-spec">
+      <p class="sig-spec-lbl">Role</p>
+      <p class="sig-spec-val">DM Sans 500 · 11px</p>
+      <p class="sig-spec-sub">Walnut on light · 38% white on dark</p>
+    </div>
+    <div class="sig-spec">
+      <p class="sig-spec-lbl">Contact</p>
+      <p class="sig-spec-val">JetBrains Mono 400 · 10px</p>
+      <p class="sig-spec-sub">Email in Forge · rest in Walnut</p>
+    </div>
+    <div class="sig-spec">
+      <p class="sig-spec-lbl">Divider</p>
+      <p class="sig-spec-val">1px vertical · 42px tall</p>
+      <p class="sig-spec-sub">#E4DDD2 on light · 10% white on dark</p>
+    </div>
+    <div class="sig-spec">
+      <p class="sig-spec-lbl">Clearspace</p>
+      <p class="sig-spec-val">16px gap logo ↔ divider ↔ text</p>
+      <p class="sig-spec-sub">Min 24px padding in email clients</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════
+     11 GRADIENTS
+══════════════════════════════════════ -->
+<section id="gradients" class="sec sec-ivory">
+  <div class="sec-hd">
+    <span class="sec-num">11</span>
+    <div>
+      <h2 class="sec-title">Gradients</h2>
+      <p class="sec-sub">Two curated transitions drawn entirely from the Forge palette. Use one or the other per surface — never both together.</p>
+    </div>
+  </div>
+
+  <div class="grad-grid">
+
+    <!-- Gradient 1 -->
+    <div class="grad-card">
+      <div class="grad-preview" style="background:linear-gradient(135deg,#1A0E08 0%,#FF5300 100%);"></div>
+      <div class="grad-info">
+        <div class="grad-header">
+          <p class="grad-name">Forge Fire</p>
+          <div class="grad-swatches">
+            <div class="grad-dot" style="background:#1A0E08;" title="Pitch"></div>
+            <span class="grad-arr">→</span>
+            <div class="grad-dot" style="background:#FF5300;" title="Forge"></div>
+          </div>
+        </div>
+        <p class="grad-css">linear-gradient(135deg, #1A0E08 0%, #FF5300 100%)</p>
+        <p class="grad-use-lbl">Best for</p>
+        <p class="grad-use">Hero sections · Full-bleed banners · Dark mode CTAs · Footer backgrounds</p>
+        <p class="grad-note">Pitch melts into Forge — industrial, bold, unmistakable</p>
+      </div>
+    </div>
+
+    <!-- Gradient 2 -->
+    <div class="grad-card">
+      <div class="grad-preview" style="background:linear-gradient(135deg,#FF8D60 0%,#FF5300 100%);"></div>
+      <div class="grad-info">
+        <div class="grad-header">
+          <p class="grad-name">Ember Sunrise</p>
+          <div class="grad-swatches">
+            <div class="grad-dot" style="background:#FF8D60;" title="Ember"></div>
+            <span class="grad-arr">→</span>
+            <div class="grad-dot" style="background:#FF5300;" title="Forge"></div>
+          </div>
+        </div>
+        <p class="grad-css">linear-gradient(135deg, #FF8D60 0%, #FF5300 100%)</p>
+        <p class="grad-use-lbl">Best for</p>
+        <p class="grad-use">Primary buttons · Tag chips · Section accent strips · Icon backgrounds</p>
+        <p class="grad-note">Ember shifts into Forge heat — warm, vibrant, energetic</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Direction variants -->
+  <p class="mono-label" style="margin-top:52px;">Direction Variants</p>
+  <div class="grad-dir-grid">
+
+    <div class="grad-dir-block">
+      <p class="grad-dir-title">Forge Fire</p>
+      <div class="grad-dir-row">
+        <div class="grad-dir-item">
+          <div class="grad-dir-swatch" style="background:linear-gradient(to bottom,#1A0E08,#FF5300);"></div>
+          <span class="grad-dir-lbl">↓ 180°</span>
+        </div>
+        <div class="grad-dir-item">
+          <div class="grad-dir-swatch" style="background:linear-gradient(135deg,#1A0E08,#FF5300);"></div>
+          <span class="grad-dir-lbl">↘ 135°</span>
+        </div>
+        <div class="grad-dir-item">
+          <div class="grad-dir-swatch" style="background:linear-gradient(to right,#1A0E08,#FF5300);"></div>
+          <span class="grad-dir-lbl">→ 90°</span>
+        </div>
+        <div class="grad-dir-item">
+          <div class="grad-dir-swatch" style="background:linear-gradient(to top,#1A0E08,#FF5300);"></div>
+          <span class="grad-dir-lbl">↑ 0°</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grad-dir-block">
+      <p class="grad-dir-title">Ember Sunrise</p>
+      <div class="grad-dir-row">
+        <div class="grad-dir-item">
+          <div class="grad-dir-swatch" style="background:linear-gradient(to bottom,#FF8D60,#FF5300);"></div>
+          <span class="grad-dir-lbl">↓ 180°</span>
+        </div>
+        <div class="grad-dir-item">
+          <div class="grad-dir-swatch" style="background:linear-gradient(135deg,#FF8D60,#FF5300);"></div>
+          <span class="grad-dir-lbl">↘ 135°</span>
+        </div>
+        <div class="grad-dir-item">
+          <div class="grad-dir-swatch" style="background:linear-gradient(to right,#FF8D60,#FF5300);"></div>
+          <span class="grad-dir-lbl">→ 90°</span>
+        </div>
+        <div class="grad-dir-item">
+          <div class="grad-dir-swatch" style="background:linear-gradient(to top,#FF8D60,#FF5300);"></div>
+          <span class="grad-dir-lbl">↑ 0°</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Pair rule -->
+  <div class="grad-rule">
+    <span class="grad-rule-icon">⚠</span>
+    <p class="grad-rule-text"><strong>Pair logic:</strong> Use <strong>Forge Fire</strong> for large dark canvases. Use <strong>Ember Sunrise</strong> for small UI elements. Never layer one on top of the other — they share hues and will visually clash. One gradient per surface, always.</p>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════
+     12 APP ICONS
+══════════════════════════════════════ -->
+
+<!-- Reusable arch mark symbol + gradient -->
+<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden">
+  <defs>
+    <symbol id="ai-arch" viewBox="1087 261 510 454">
+      <polygon points="1173.34 714.82 1228.27 714.82 1201.36 638.19 1173.34 714.82"/>
+      <polygon points="1357.37 714.82 1383.79 714.82 1357.37 664.29 1357.37 714.82"/>
+      <polygon points="1496.05 714.82 1496.05 664.29 1469.63 714.82 1496.05 714.82"/>
+      <path d="M1350.15,264.82h-17.4c-134.37,0-243.3,108.93-243.3,243.3v206.7h44.63l48.09-126h38.37l47.92,126h45.52v-126h46.54l65.5,126h1.09l66.12-126h46.23v126h54v-206.7c0-134.37-108.93-243.3-243.3-243.3Z"/>
+    </symbol>
+    <linearGradient id="ai-ff-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1A0E08"/>
+      <stop offset="100%" stop-color="#FF5300"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<section id="app-icons" class="sec sec-ivory">
+  <div class="sec-hd">
+    <span class="sec-num">12</span>
+    <div>
+      <h2 class="sec-title">App Icons</h2>
+      <p class="sec-sub">The arch mark is the icon — never the full logotype. Three approved backgrounds, platform shapes are applied by the OS — never add them manually.</p>
+    </div>
+  </div>
+
+  <!-- Approved Variants -->
+  <p class="mono-label">Approved Variants</p>
+  <div class="icon-vars">
+
+    <!-- Variant 1 — Chalk · Light -->
+    <div class="icon-var">
+      <div class="icon-var-previews">
+        <div class="icon-pv">
+          <!-- iOS 72px squircle -->
+          <svg width="72" height="72" viewBox="0 0 72 72"><defs><clipPath id="av1-l"><rect width="72" height="72" rx="16"/></clipPath></defs><g clip-path="url(#av1-l)"><rect width="72" height="72" fill="#FAFAF8"/><use href="#ai-arch" fill="#FF5300" x="11" y="11" width="50" height="50"/></g></svg>
+          <span class="icon-pv-lbl">iOS</span>
+        </div>
+        <div class="icon-pv">
+          <!-- iOS 36px small -->
+          <svg width="36" height="36" viewBox="0 0 36 36"><defs><clipPath id="av1-ls"><rect width="36" height="36" rx="8"/></clipPath></defs><g clip-path="url(#av1-ls)"><rect width="36" height="36" fill="#FAFAF8"/><use href="#ai-arch" fill="#FF5300" x="5" y="5" width="26" height="26"/></g></svg>
+          <span class="icon-pv-lbl">@2x</span>
+        </div>
+        <div class="icon-pv">
+          <!-- Android 72px circle -->
+          <svg width="72" height="72" viewBox="0 0 72 72"><defs><clipPath id="av1-la"><circle cx="36" cy="36" r="36"/></clipPath></defs><g clip-path="url(#av1-la)"><rect width="72" height="72" fill="#FAFAF8"/><use href="#ai-arch" fill="#FF5300" x="11" y="11" width="50" height="50"/></g></svg>
+          <span class="icon-pv-lbl">Android</span>
+        </div>
+      </div>
+      <p class="icon-var-name">Chalk — Light</p>
+      <p class="icon-var-use">Default. App Store listing.<br>Light mode home screens.</p>
+    </div>
+
+    <!-- Variant 2 — Pitch · Dark -->
+    <div class="icon-var">
+      <div class="icon-var-previews">
+        <div class="icon-pv">
+          <svg width="72" height="72" viewBox="0 0 72 72"><defs><clipPath id="av2-l"><rect width="72" height="72" rx="16"/></clipPath></defs><g clip-path="url(#av2-l)"><rect width="72" height="72" fill="#1A0E08"/><use href="#ai-arch" fill="#FF5300" x="11" y="11" width="50" height="50"/></g></svg>
+          <span class="icon-pv-lbl">iOS</span>
+        </div>
+        <div class="icon-pv">
+          <svg width="36" height="36" viewBox="0 0 36 36"><defs><clipPath id="av2-ls"><rect width="36" height="36" rx="8"/></clipPath></defs><g clip-path="url(#av2-ls)"><rect width="36" height="36" fill="#1A0E08"/><use href="#ai-arch" fill="#FF5300" x="5" y="5" width="26" height="26"/></g></svg>
+          <span class="icon-pv-lbl">@2x</span>
+        </div>
+        <div class="icon-pv">
+          <svg width="72" height="72" viewBox="0 0 72 72"><defs><clipPath id="av2-la"><circle cx="36" cy="36" r="36"/></clipPath></defs><g clip-path="url(#av2-la)"><rect width="72" height="72" fill="#1A0E08"/><use href="#ai-arch" fill="#FF5300" x="11" y="11" width="50" height="50"/></g></svg>
+          <span class="icon-pv-lbl">Android</span>
+        </div>
+      </div>
+      <p class="icon-var-name">Pitch — Dark</p>
+      <p class="icon-var-use">Dark mode. OLED screens.<br>Premium contexts.</p>
+    </div>
+
+    <!-- Variant 3 — Forge Fire · Gradient -->
+    <div class="icon-var">
+      <div class="icon-var-previews">
+        <div class="icon-pv">
+          <svg width="72" height="72" viewBox="0 0 72 72"><defs><clipPath id="av3-l"><rect width="72" height="72" rx="16"/></clipPath><linearGradient id="av3-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1A0E08"/><stop offset="100%" stop-color="#FF5300"/></linearGradient></defs><g clip-path="url(#av3-l)"><rect width="72" height="72" fill="url(#av3-g)"/><use href="#ai-arch" fill="#FAFAF8" x="11" y="11" width="50" height="50"/></g></svg>
+          <span class="icon-pv-lbl">iOS</span>
+        </div>
+        <div class="icon-pv">
+          <svg width="36" height="36" viewBox="0 0 36 36"><defs><clipPath id="av3-ls"><rect width="36" height="36" rx="8"/></clipPath><linearGradient id="av3-gs" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1A0E08"/><stop offset="100%" stop-color="#FF5300"/></linearGradient></defs><g clip-path="url(#av3-ls)"><rect width="36" height="36" fill="url(#av3-gs)"/><use href="#ai-arch" fill="#FAFAF8" x="5" y="5" width="26" height="26"/></g></svg>
+          <span class="icon-pv-lbl">@2x</span>
+        </div>
+        <div class="icon-pv">
+          <svg width="72" height="72" viewBox="0 0 72 72"><defs><clipPath id="av3-la"><circle cx="36" cy="36" r="36"/></clipPath><linearGradient id="av3-ga" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1A0E08"/><stop offset="100%" stop-color="#FF5300"/></linearGradient></defs><g clip-path="url(#av3-la)"><rect width="72" height="72" fill="url(#av3-ga)"/><use href="#ai-arch" fill="#FAFAF8" x="11" y="11" width="50" height="50"/></g></svg>
+          <span class="icon-pv-lbl">Android</span>
+        </div>
+      </div>
+      <p class="icon-var-name">Forge Fire — Gradient</p>
+      <p class="icon-var-use">Hero widgets. Promotional<br>assets. Not for App Store.</p>
+    </div>
+
+  </div>
+
+  <!-- ── iOS · iPadOS ── -->
+  <div class="platform-block">
+    <div class="platform-block-hd">
+      <div class="pb-icon" style="background:#000;">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="1" width="16" height="16" rx="3.6" fill="white"/></svg>
+      </div>
+      <div>
+        <p class="pb-name">iOS · iPadOS</p>
+        <p class="pb-sub">App Store Connect · Required formats</p>
+      </div>
+    </div>
+    <p class="pb-note">iOS automatically applies the squircle mask. Export a flat square PNG at 1024×1024 with no transparency, no rounded corners, and no drop shadows.</p>
+
+    <!-- Size visual -->
+    <div class="sizes-vis">
+      <div class="sz-item">
+        <svg width="64" height="64" viewBox="0 0 64 64"><defs><clipPath id="sz-ios-1"><rect width="64" height="64" rx="14"/></clipPath></defs><g clip-path="url(#sz-ios-1)"><rect width="64" height="64" fill="#1A0E08"/><use href="#ai-arch" fill="#FF5300" x="10" y="10" width="44" height="44"/></g></svg>
+        <span class="sz-lbl">App Store<br>1024 px</span>
+      </div>
+      <div class="sz-item">
+        <svg width="48" height="48" viewBox="0 0 48 48"><defs><clipPath id="sz-ios-2"><rect width="48" height="48" rx="11"/></clipPath></defs><g clip-path="url(#sz-ios-2)"><rect width="48" height="48" fill="#1A0E08"/><use href="#ai-arch" fill="#FF5300" x="7" y="7" width="34" height="34"/></g></svg>
+        <span class="sz-lbl">Home @3x<br>180 px</span>
+      </div>
+      <div class="sz-item">
+        <svg width="36" height="36" viewBox="0 0 36 36"><defs><clipPath id="sz-ios-3"><rect width="36" height="36" rx="8"/></clipPath></defs><g clip-path="url(#sz-ios-3)"><rect width="36" height="36" fill="#1A0E08"/><use href="#ai-arch" fill="#FF5300" x="5" y="5" width="26" height="26"/></g></svg>
+        <span class="sz-lbl">Home @2x<br>120 px</span>
+      </div>
+      <div class="sz-item">
+        <svg width="26" height="26" viewBox="0 0 26 26"><defs><clipPath id="sz-ios-4"><rect width="26" height="26" rx="6"/></clipPath></defs><g clip-path="url(#sz-ios-4)"><rect width="26" height="26" fill="#1A0E08"/><use href="#ai-arch" fill="#FF5300" x="4" y="4" width="18" height="18"/></g></svg>
+        <span class="sz-lbl">Settings @3x<br>87 px</span>
+      </div>
+      <div class="sz-item">
+        <svg width="20" height="20" viewBox="0 0 20 20"><defs><clipPath id="sz-ios-5"><rect width="20" height="20" rx="4.5"/></clipPath></defs><g clip-path="url(#sz-ios-5)"><rect width="20" height="20" fill="#1A0E08"/><use href="#ai-arch" fill="#FF5300" x="3" y="3" width="14" height="14"/></g></svg>
+        <span class="sz-lbl">Notif. @3x<br>60 px</span>
+      </div>
+      <div class="sz-item">
+        <svg width="14" height="14" viewBox="0 0 14 14"><defs><clipPath id="sz-ios-6"><rect width="14" height="14" rx="3"/></clipPath></defs><g clip-path="url(#sz-ios-6)"><rect width="14" height="14" fill="#1A0E08"/><use href="#ai-arch" fill="#FF5300" x="2" y="2" width="10" height="10"/></g></svg>
+        <span class="sz-lbl">Settings @2x<br>58 px</span>
+      </div>
+    </div>
+
+    <!-- iOS size table -->
+    <table class="sz-tbl">
+      <thead><tr><th>Usage</th><th>Points</th><th>@2x</th><th>@3x</th></tr></thead>
+      <tbody>
+        <tr class="hi"><td>App Store</td><td class="mc">—</td><td class="mc">1024 × 1024</td><td class="mc">—</td></tr>
+        <tr><td>iPhone Home Screen</td><td class="mc">60 pt</td><td class="mc">120 × 120</td><td class="mc">180 × 180</td></tr>
+        <tr><td>iPad Home Screen</td><td class="mc">76 pt</td><td class="mc">152 × 152</td><td class="mc">—</td></tr>
+        <tr><td>iPad Pro Home Screen</td><td class="mc">83.5 pt</td><td class="mc">167 × 167</td><td class="mc">—</td></tr>
+        <tr><td>Spotlight</td><td class="mc">40 pt</td><td class="mc">80 × 80</td><td class="mc">120 × 120</td></tr>
+        <tr><td>Settings</td><td class="mc">29 pt</td><td class="mc">58 × 58</td><td class="mc">87 × 87</td></tr>
+        <tr><td>Notification</td><td class="mc">20 pt</td><td class="mc">40 × 40</td><td class="mc">60 × 60</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── Android · Play Store ── -->
+  <div class="platform-block">
+    <div class="platform-block-hd">
+      <div class="pb-icon" style="background:#01875F;">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="white"><path d="M2 3.5 L9 9 L2 14.5 V3.5Z"/><path d="M10 9 L16 5.5 L13 9 L16 12.5 Z"/><path d="M3.5 2.5 L10.5 9 L3.5 15.5" stroke="white" stroke-width="1.5" fill="none"/></svg>
+      </div>
+      <div>
+        <p class="pb-name">Android · Play Store</p>
+        <p class="pb-sub">Google Play Console · Required formats</p>
+      </div>
+    </div>
+    <p class="pb-note">Android uses <strong>adaptive icons</strong> — two layers (foreground + background). Keep the logo within the 72 dp safe zone inside the 108 dp canvas. The system applies the shape (circle, squircle, teardrop) per device.</p>
+
+    <!-- Adaptive icon diagram -->
+    <div class="adaptive-blk">
+      <!-- Diagram -->
+      <svg width="112" height="112" viewBox="0 0 112 112" style="flex-shrink:0;">
+        <!-- Shadow -->
+        <circle cx="56" cy="58" r="50" fill="rgba(26,14,8,.08)"/>
+        <!-- Background layer (full canvas) -->
+        <circle cx="56" cy="56" r="50" fill="#1A0E08"/>
+        <!-- Safe zone dashed ring -->
+        <circle cx="56" cy="56" r="33" fill="none" stroke="#FF5300" stroke-width="1.5" stroke-dasharray="5 3"/>
+        <!-- Logo inside safe zone -->
+        <use href="#ai-arch" fill="#FF5300" x="17" y="17" width="78" height="78"/>
+        <!-- Labels -->
+        <line x1="56" y1="6" x2="56" y2="23" stroke="rgba(255,255,255,.25)" stroke-width="1"/>
+        <text x="56" y="4" text-anchor="middle" fill="rgba(255,255,255,.4)" font-family="monospace" font-size="5.5">108 dp canvas</text>
+        <line x1="56" y1="23" x2="89" y2="23" stroke="#FF5300" stroke-width="0.75" stroke-dasharray="3 2"/>
+        <text x="92" y="25" fill="#FF5300" font-family="monospace" font-size="5">72 dp safe zone</text>
+      </svg>
+      <!-- Notes -->
+      <div class="adp-info">
+        <p class="adp-title">Adaptive Icon Layers</p>
+        <p class="adp-body">Export two separate assets: a <strong>background layer</strong> (solid brand colour filling the full 108 dp canvas) and a <strong>foreground layer</strong> (arch mark centred within the 72 dp safe zone, transparent outside). The system composites them and applies the device shape.</p>
+        <div class="adp-spec"><span class="adp-k">Total canvas</span><span class="adp-v">108 × 108 dp</span></div>
+        <div class="adp-spec"><span class="adp-k">Safe zone</span><span class="adp-v">72 × 72 dp (centred)</span></div>
+        <div class="adp-spec"><span class="adp-k">Background</span><span class="adp-v">#1A0E08 or #FAFAF8</span></div>
+        <div class="adp-spec"><span class="adp-k">Foreground fill</span><span class="adp-v">#FF5300</span></div>
+        <div class="adp-spec"><span class="adp-k">Play Store listing</span><span class="adp-v">512 × 512 px PNG</span></div>
+      </div>
+    </div>
+
+    <!-- Android size visual -->
+    <div class="sizes-vis">
+      <div class="sz-item">
+        <svg width="64" height="64" viewBox="0 0 64 64"><defs><clipPath id="sz-and-1"><circle cx="32" cy="32" r="32"/></clipPath></defs><g clip-path="url(#sz-and-1)"><rect width="64" height="64" fill="#1A0E08"/><use href="#ai-arch" fill="#FF5300" x="10" y="10" width="44" height="44"/></g></svg>
+        <span class="sz-lbl">Play Store<br>512 px</span>
+      </div>
+      <div class="sz-item">
+        <svg width="48" height="48" viewBox="0 0 48 48"><defs><clipPath id="sz-and-2"><circle cx="24" cy="24" r="24"/></clipPath></defs><g clip-path="url(#sz-and-2)"><rect width="48" height="48" fill="#1A0E08"/><use href="#ai-arch" fill="#FF5300" x="7" y="7" width="34" height="34"/></g></svg>
+        <span class="sz-lbl">xxxhdpi<br>192 px</span>
+      </div>
+      <div class="sz-item">
+        <svg width="36" height="36" viewBox="0 0 36 36"><defs><clipPath id="sz-and-3"><circle cx="18" cy="18" r="18"/></clipPath></defs><g clip-path="url(#sz-and-3)"><rect width="36" height="36" fill="#1A0E08"/><use href="#ai-arch" fill="#FF5300" x="5" y="5" width="26" height="26"/></g></svg>
+        <span class="sz-lbl">xxhdpi<br>144 px</span>
+      </div>
+      <div class="sz-item">
+        <svg width="26" height="26" viewBox="0 0 26 26"><defs><clipPath id="sz-and-4"><circle cx="13" cy="13" r="13"/></clipPath></defs><g clip-path="url(#sz-and-4)"><rect width="26" height="26" fill="#1A0E08"/><use href="#ai-arch" fill="#FF5300" x="4" y="4" width="18" height="18"/></g></svg>
+        <span class="sz-lbl">xhdpi<br>96 px</span>
+      </div>
+      <div class="sz-item">
+        <svg width="20" height="20" viewBox="0 0 20 20"><defs><clipPath id="sz-and-5"><circle cx="10" cy="10" r="10"/></clipPath></defs><g clip-path="url(#sz-and-5)"><rect width="20" height="20" fill="#1A0E08"/><use href="#ai-arch" fill="#FF5300" x="3" y="3" width="14" height="14"/></g></svg>
+        <span class="sz-lbl">hdpi<br>72 px</span>
+      </div>
+      <div class="sz-item">
+        <svg width="14" height="14" viewBox="0 0 14 14"><defs><clipPath id="sz-and-6"><circle cx="7" cy="7" r="7"/></clipPath></defs><g clip-path="url(#sz-and-6)"><rect width="14" height="14" fill="#1A0E08"/><use href="#ai-arch" fill="#FF5300" x="2" y="2" width="10" height="10"/></g></svg>
+        <span class="sz-lbl">mdpi<br>48 px</span>
+      </div>
+    </div>
+
+    <!-- Android size table -->
+    <table class="sz-tbl">
+      <thead><tr><th>Density</th><th>DPI</th><th>Launcher icon</th><th>Scale</th></tr></thead>
+      <tbody>
+        <tr class="hi"><td>Play Store</td><td class="mc">—</td><td class="mc">512 × 512 px</td><td class="mc">—</td></tr>
+        <tr><td>xxxhdpi</td><td class="mc">640 dpi</td><td class="mc">192 × 192 px</td><td class="mc">4×</td></tr>
+        <tr><td>xxhdpi</td><td class="mc">480 dpi</td><td class="mc">144 × 144 px</td><td class="mc">3×</td></tr>
+        <tr><td>xhdpi</td><td class="mc">320 dpi</td><td class="mc">96 × 96 px</td><td class="mc">2×</td></tr>
+        <tr><td>hdpi</td><td class="mc">240 dpi</td><td class="mc">72 × 72 px</td><td class="mc">1.5×</td></tr>
+        <tr><td>mdpi</td><td class="mc">160 dpi</td><td class="mc">48 × 48 px</td><td class="mc">1×</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── Do / Don't ── -->
+  <p class="mono-label">Do / Don't</p>
+  <div class="icon-rules">
+
+    <!-- DO: Arch mark only -->
+    <div class="icon-rule rule-do">
+      <div class="icon-rule-vis">
+        <svg width="56" height="56" viewBox="0 0 56 56"><defs><clipPath id="dd1"><rect width="56" height="56" rx="12"/></clipPath></defs><g clip-path="url(#dd1)"><rect width="56" height="56" fill="#1A0E08"/><use href="#ai-arch" fill="#FF5300" x="8" y="8" width="40" height="40"/></g></svg>
+      </div>
+      <div class="icon-rule-info">
+        <p class="icon-rule-verdict">✓ Arch mark only</p>
+        <p class="icon-rule-desc">Use the arch mark alone. The full logotype with CRAFT wordmark is illegible at icon sizes.</p>
+      </div>
+    </div>
+
+    <!-- DO: Square export -->
+    <div class="icon-rule rule-do">
+      <div class="icon-rule-vis">
+        <svg width="70" height="56" viewBox="0 0 70 56">
+          <!-- Square export -->
+          <rect x="6" y="8" width="40" height="40" rx="0" fill="none" stroke="#DDD5C4" stroke-width="1.5" stroke-dasharray="4 2"/>
+          <rect x="6" y="8" width="40" height="40" rx="9" fill="#FAFAF8"/>
+          <use href="#ai-arch" fill="#FF5300" x="12" y="12" width="28" height="28"/>
+          <!-- Arrow -->
+          <text x="50" y="32" fill="#4A3530" font-size="10">→</text>
+          <!-- Squircle result -->
+          <rect x="56" y="18" width="20" height="20" rx="4.5" fill="#FAFAF8"/>
+          <use href="#ai-arch" fill="#FF5300" x="59" y="21" width="14" height="14"/>
+        </svg>
+      </div>
+      <div class="icon-rule-info">
+        <p class="icon-rule-verdict">✓ Export flat square</p>
+        <p class="icon-rule-desc">Export a flat 1024×1024 PNG. iOS and Android apply platform shapes automatically.</p>
+      </div>
+    </div>
+
+    <!-- DON'T: Drop shadow -->
+    <div class="icon-rule rule-dont">
+      <div class="icon-rule-vis">
+        <svg width="56" height="56" viewBox="0 0 56 56">
+          <defs><clipPath id="dd3"><rect x="4" y="4" width="48" height="48" rx="11"/></clipPath></defs>
+          <!-- Shadow (wrong) -->
+          <rect x="8" y="10" width="48" height="48" rx="11" fill="rgba(0,0,0,.18)"/>
+          <g clip-path="url(#dd3)">
+            <rect x="4" y="4" width="48" height="48" fill="#1A0E08"/>
+            <use href="#ai-arch" fill="#FF5300" x="10" y="10" width="34" height="34"/>
+          </g>
+          <!-- ✗ badge -->
+          <circle cx="44" cy="12" r="8" fill="#C0392B"/>
+          <text x="44" y="16" text-anchor="middle" fill="white" font-size="10" font-weight="bold">✕</text>
+        </svg>
+      </div>
+      <div class="icon-rule-info">
+        <p class="icon-rule-verdict">✕ No drop shadows</p>
+        <p class="icon-rule-desc">Do not add drop shadows, glows, or outer strokes. The OS handles icon elevation.</p>
+      </div>
+    </div>
+
+    <!-- DON'T: Unapproved colour -->
+    <div class="icon-rule rule-dont">
+      <div class="icon-rule-vis">
+        <svg width="56" height="56" viewBox="0 0 56 56">
+          <defs><clipPath id="dd4"><rect width="56" height="56" rx="12"/></clipPath></defs>
+          <g clip-path="url(#dd4)">
+            <!-- Wrong: blue background -->
+            <rect width="56" height="56" fill="#2563EB"/>
+            <use href="#ai-arch" fill="#FAFAF8" x="8" y="8" width="40" height="40"/>
+          </g>
+          <circle cx="44" cy="12" r="8" fill="#C0392B"/>
+          <text x="44" y="16" text-anchor="middle" fill="white" font-size="10" font-weight="bold">✕</text>
+        </svg>
+      </div>
+      <div class="icon-rule-info">
+        <p class="icon-rule-verdict">✕ Approved colours only</p>
+        <p class="icon-rule-desc">Only use Chalk, Pitch, or Forge Fire backgrounds. Do not invent new tints or colours.</p>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════
+     13 SHADOWS
+══════════════════════════════════════ -->
+<section id="shadows" class="sec sec-ivory">
+  <div class="sec-hd">
+    <span class="sec-num">13</span>
+    <div>
+      <h2 class="sec-title">Shadows</h2>
+      <p class="sec-sub">Damcraft shadows are warm — cast from Pitch, not cold black. Every elevation layer uses <span style="font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(74,53,48,.08);padding:2px 6px;border-radius:4px;color:#4A3530;">rgba(26,14,8,…)</span> to maintain depth within the brand's earthy register.</p>
+    </div>
+  </div>
+
+  <!-- Elevation Scale -->
+  <p class="mono-label">Elevation Scale</p>
+  <div style="background:#E0D5C8;border-radius:20px;padding:40px 28px 80px;">
+    <div class="sh-elev-grid">
+
+      <div class="sh-elev-card">
+        <div class="sh-tile sh-e0"></div>
+        <div>
+          <span class="sh-level">E–0</span>
+          <span class="sh-name">Flat</span>
+          <span class="sh-val">box-shadow: none</span>
+          <span class="sh-use">Inputs · table rows · flush content</span>
+        </div>
+      </div>
+
+      <div class="sh-elev-card">
+        <div class="sh-tile sh-e1"></div>
+        <div>
+          <span class="sh-level">E–1</span>
+          <span class="sh-name">Lifted</span>
+          <span class="sh-val">0 1px 3px rgba(26,14,8,.07), 0 1px 2px rgba(26,14,8,.05)</span>
+          <span class="sh-use">Page cards · tags · chips</span>
+        </div>
+      </div>
+
+      <div class="sh-elev-card">
+        <div class="sh-tile sh-e2"></div>
+        <div>
+          <span class="sh-level">E–2</span>
+          <span class="sh-name">Raised</span>
+          <span class="sh-val">0 4px 12px rgba(26,14,8,.10), 0 2px 4px rgba(26,14,8,.06)</span>
+          <span class="sh-use">Dropdowns · tooltips · hover cards</span>
+        </div>
+      </div>
+
+      <div class="sh-elev-card">
+        <div class="sh-tile sh-e3"></div>
+        <div>
+          <span class="sh-level">E–3</span>
+          <span class="sh-name">Floating</span>
+          <span class="sh-val">0 10px 28px rgba(26,14,8,.13), 0 4px 8px rgba(26,14,8,.07)</span>
+          <span class="sh-use">Modals · command palette · sticky nav</span>
+        </div>
+      </div>
+
+      <div class="sh-elev-card">
+        <div class="sh-tile sh-e4"></div>
+        <div>
+          <span class="sh-level">E–4</span>
+          <span class="sh-name">Elevated</span>
+          <span class="sh-val">0 20px 48px rgba(26,14,8,.18), 0 8px 16px rgba(26,14,8,.09)</span>
+          <span class="sh-use">Side drawers · bottom sheets · panels</span>
+        </div>
+      </div>
+
+      <div class="sh-elev-card">
+        <div class="sh-tile sh-e5"></div>
+        <div>
+          <span class="sh-level">E–5</span>
+          <span class="sh-name">Dominant</span>
+          <span class="sh-val">0 40px 80px rgba(26,14,8,.22), 0 16px 32px rgba(26,14,8,.11)</span>
+          <span class="sh-use">Hero brand cards · oversized features</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Token Reference -->
+  <p class="mono-label" style="margin-top:48px;">Token Reference</p>
+  <table class="sh-token-table">
+    <thead>
+      <tr><th>Token</th><th>Value</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>--shadow-e0</td><td>none</td></tr>
+      <tr><td>--shadow-e1</td><td>0 1px 3px rgba(26,14,8,.07), 0 1px 2px rgba(26,14,8,.05)</td></tr>
+      <tr><td>--shadow-e2</td><td>0 4px 12px rgba(26,14,8,.10), 0 2px 4px rgba(26,14,8,.06)</td></tr>
+      <tr><td>--shadow-e3</td><td>0 10px 28px rgba(26,14,8,.13), 0 4px 8px rgba(26,14,8,.07)</td></tr>
+      <tr><td>--shadow-e4</td><td>0 20px 48px rgba(26,14,8,.18), 0 8px 16px rgba(26,14,8,.09)</td></tr>
+      <tr><td>--shadow-e5</td><td>0 40px 80px rgba(26,14,8,.22), 0 16px 32px rgba(26,14,8,.11)</td></tr>
+      <tr><td>--shadow-forge</td><td>0 8px 24px rgba(255,83,0,.32), 0 3px 8px rgba(255,83,0,.18)</td></tr>
+      <tr><td>--shadow-inset</td><td>inset 0 2px 8px rgba(26,14,8,.20)</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Special Shadows -->
+  <p class="mono-label" style="margin-top:48px;">Special Shadows</p>
+  <div class="sh-special-grid">
+
+    <div class="sh-special-card">
+      <div class="sh-tile sh-forge-tile"></div>
+      <div>
+        <p class="sh-special-title">Forge Glow</p>
+        <p class="sh-special-val">0 8px 24px rgba(255,83,0,.32),<br>0 3px 8px rgba(255,83,0,.18)</p>
+        <p class="sh-special-desc">Reserved for primary CTA buttons only. Signals the highest-priority action on the page — use once per screen maximum.</p>
+      </div>
+    </div>
+
+    <div class="sh-special-card">
+      <div class="sh-tile sh-inset-tile"></div>
+      <div>
+        <p class="sh-special-title">Inset · Pressed</p>
+        <p class="sh-special-val">inset 0 2px 8px rgba(26,14,8,.20)</p>
+        <p class="sh-special-desc">Applied on :active / pressed state. Gives interactive elements a physical "pushed in" sensation on click or tap.</p>
+      </div>
+    </div>
+
+    <div class="sh-special-card">
+      <div class="sh-tile sh-highlight-tile"></div>
+      <div>
+        <p class="sh-special-title">Surface Highlight</p>
+        <p class="sh-special-val">inset 0 1px 0 rgba(255,255,255,.9),<br>0 4px 12px rgba(26,14,8,.10)</p>
+        <p class="sh-special-desc">Inner top highlight paired with a soft drop shadow. Used on raised surface cards to suggest material thickness and light from above.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- When to Use -->
+  <p class="mono-label" style="margin-top:48px;">When to Use Each Level</p>
+  <div class="sh-usage-grid">
+
+    <div class="sh-usage-card">
+      <div class="sh-usage-badge">
+        <span class="sh-usage-dot" style="background:#AFAFAE;"></span>
+        <span class="sh-usage-lvl" style="color:#AFAFAE;">E–0 · Flat</span>
+      </div>
+      <p class="sh-usage-title">Embedded</p>
+      <p class="sh-usage-items">Form inputs · table rows · inline badges · content visually flush with its parent surface</p>
+    </div>
+
+    <div class="sh-usage-card">
+      <div class="sh-usage-badge">
+        <span class="sh-usage-dot" style="background:#FF5300;"></span>
+        <span class="sh-usage-lvl">E–1 · Lifted</span>
+      </div>
+      <p class="sh-usage-title">Surface Cards</p>
+      <p class="sh-usage-items">Content cards on page · image frames · tag chips · subtle separation from background</p>
+    </div>
+
+    <div class="sh-usage-card">
+      <div class="sh-usage-badge">
+        <span class="sh-usage-dot" style="background:#D94700;"></span>
+        <span class="sh-usage-lvl" style="color:#D94700;">E–2 · Raised</span>
+      </div>
+      <p class="sh-usage-title">Interactive UI</p>
+      <p class="sh-usage-items">Dropdowns · tooltips · hover cards · date pickers · context menus</p>
+    </div>
+
+    <div class="sh-usage-card">
+      <div class="sh-usage-badge">
+        <span class="sh-usage-dot" style="background:#B33A00;"></span>
+        <span class="sh-usage-lvl" style="color:#B33A00;">E–3 · Floating</span>
+      </div>
+      <p class="sh-usage-title">Overlay Layer</p>
+      <p class="sh-usage-items">Modals · command palette · sticky navigation · full-width announcement bars</p>
+    </div>
+
+    <div class="sh-usage-card">
+      <div class="sh-usage-badge">
+        <span class="sh-usage-dot" style="background:#802A00;"></span>
+        <span class="sh-usage-lvl" style="color:#802A00;">E–4 · Elevated</span>
+      </div>
+      <p class="sh-usage-title">Panels & Sheets</p>
+      <p class="sh-usage-items">Side drawers · bottom sheets · full-panel overlays · persistent sidebars</p>
+    </div>
+
+    <div class="sh-usage-card">
+      <div class="sh-usage-badge">
+        <span class="sh-usage-dot" style="background:#4D1900;"></span>
+        <span class="sh-usage-lvl" style="color:#4D1900;">E–5 · Dominant</span>
+      </div>
+      <p class="sh-usage-title">Hero Moments</p>
+      <p class="sh-usage-items">Brand hero cards · oversized feature elements · key promotional components that must visually lead the page</p>
+    </div>
+
+  </div>
+
+  <!-- Do / Don't -->
+  <p class="mono-label" style="margin-top:48px;">Do / Don't</p>
+  <div class="sh-dd-grid">
+
+    <div class="sh-dd-card">
+      <div class="sh-dd-prev">
+        <div style="width:88px;height:64px;border-radius:10px;background:#FAFAF8;box-shadow:0 10px 28px rgba(26,14,8,.13),0 4px 8px rgba(26,14,8,.07);"></div>
+      </div>
+      <div class="sh-dd-info">
+        <p class="sh-dd-label" style="color:#2E7D32;">✓ Warm tint</p>
+        <p class="sh-dd-desc">Use rgba(26,14,8,…) — the Pitch shadow keeps depth earthy and on-brand</p>
+      </div>
+    </div>
+
+    <div class="sh-dd-card">
+      <div class="sh-dd-prev">
+        <div style="width:88px;height:64px;border-radius:10px;background:#FAFAF8;box-shadow:0 10px 28px rgba(0,0,0,.30);"></div>
+      </div>
+      <div class="sh-dd-info">
+        <p class="sh-dd-label" style="color:#C62828;">✕ Cold black</p>
+        <p class="sh-dd-desc">Never use pure rgba(0,0,0,…) — reads cold and grey, breaks the warm brand register</p>
+      </div>
+    </div>
+
+    <div class="sh-dd-card">
+      <div class="sh-dd-prev">
+        <div style="width:88px;height:64px;border-radius:10px;background:#FAFAF8;
+          box-shadow:0 4px 12px rgba(26,14,8,.10),0 2px 4px rgba(26,14,8,.06);
+          transition:box-shadow .2s,transform .2s;"
+          onmouseenter="this.style.boxShadow='0 10px 28px rgba(26,14,8,.13),0 4px 8px rgba(26,14,8,.07)';this.style.transform='translateY(-2px)'"
+          onmouseleave="this.style.boxShadow='0 4px 12px rgba(26,14,8,.10),0 2px 4px rgba(26,14,8,.06)';this.style.transform='translateY(0)'"></div>
+      </div>
+      <div class="sh-dd-info">
+        <p class="sh-dd-label" style="color:#2E7D32;">✓ Step up on hover</p>
+        <p class="sh-dd-desc">Raise one level on hover (E2→E3). Hover the card above to see it — deliberate, not dramatic</p>
+      </div>
+    </div>
+
+    <div class="sh-dd-card">
+      <div class="sh-dd-prev">
+        <div style="width:88px;height:64px;border-radius:10px;background:#FAFAF8;box-shadow:0 40px 80px rgba(26,14,8,.22),0 20px 48px rgba(26,14,8,.18),0 10px 28px rgba(26,14,8,.13);"></div>
+      </div>
+      <div class="sh-dd-info">
+        <p class="sh-dd-label" style="color:#C62828;">✕ No stacking</p>
+        <p class="sh-dd-desc">Never combine multiple elevation levels on one element — choose one level and commit to it</p>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+</div>
+
+<script>
+/* ── Color swatch copy ── */
+function scCopy(hex){
+  navigator.clipboard.writeText(hex).catch(function(){});
+  var t=document.getElementById('scToast');
+  t.textContent='Copied '+hex;
+  t.classList.add('show');
+  clearTimeout(scCopy._tid);
+  scCopy._tid=setTimeout(function(){t.classList.remove('show');},1800);
+}
+
+/* ── Character card pupil tracking ── */
+(function(){
+  var CARDS=[
+    {svg:document.getElementById('char-svg-forge'),pupils:[{el:document.getElementById('cp-forge-l'),cx:224,cy:270},{el:document.getElementById('cp-forge-r'),cx:474,cy:270}]},
+    {svg:document.getElementById('char-svg-ember'),pupils:[{el:document.getElementById('cp-ember-l'),cx:224,cy:270},{el:document.getElementById('cp-ember-r'),cx:474,cy:270}]},
+    {svg:document.getElementById('char-svg-pitch'),pupils:[{el:document.getElementById('cp-pitch-l'),cx:224,cy:270},{el:document.getElementById('cp-pitch-r'),cx:474,cy:270}]}
+  ];
+  var MAX_R=46;
+  CARDS.forEach(function(card){
+    card.svg.addEventListener('mousemove',function(e){
+      var r=card.svg.getBoundingClientRect();
+      var sx=680/r.width,sy=1008/r.height;
+      var mx=(e.clientX-r.left)*sx,my=(e.clientY-r.top)*sy;
+      card.pupils.forEach(function(p){
+        var dx=mx-p.cx,dy=my-p.cy;
+        var dist=Math.sqrt(dx*dx+dy*dy)||1;
+        var t=Math.min(dist,MAX_R)/dist;
+        p.el.setAttribute('cx',(p.cx+dx*t).toFixed(1));
+        p.el.setAttribute('cy',(p.cy+dy*t).toFixed(1));
+      });
+    });
+    card.svg.addEventListener('mouseleave',function(){
+      card.pupils.forEach(function(p){
+        p.el.setAttribute('cx',p.cx);
+        p.el.setAttribute('cy',p.cy);
+      });
+    });
+  });
+})();
+</script>
+
+<script>
+const links = document.querySelectorAll('.sb-nav a');
+const secs  = document.querySelectorAll('section[id]');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const a = document.querySelector(`.sb-nav a[href="#${e.target.id}"]`);
+      if (a) a.classList.add('active');
+    }
+  });
+}, {threshold: 0.25});
+secs.forEach(s => io.observe(s));
+</script>
+</body>
+</html>
