@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design Interview Mastery — Damcraft</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --forge: #FF5300;
+    --ember: #FF8D60;
+    --chalk: #FAFAF8;
+    --ivory: #F3EBE1;
+    --walnut: #4A3530;
+    --pitch: #1A0E08;
+    --pitch-mid: #2a1610;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--pitch);
+    color: var(--chalk);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── COVER ─── */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 64px 48px;
+    position: relative;
+    overflow: hidden;
+    background: var(--pitch);
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 80% 20%, rgba(255,83,0,0.13) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cover-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--forge);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    opacity: 0.8;
+  }
+
+  .cover h1 {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 800;
+    font-size: clamp(44px, 7vw, 96px);
+    line-height: 1.0;
+    color: var(--chalk);
+    max-width: 900px;
+    margin-bottom: 32px;
+  }
+
+  .cover h1 span { color: var(--forge); }
+
+  .cover-meta {
+    display: flex;
+    gap: 48px;
+    flex-wrap: wrap;
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,83,0,0.12);
+  }
+
+  .cover-meta-item label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--forge);
+    opacity: 0.55;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .cover-meta-item span {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--chalk);
+    opacity: 0.75;
+  }
+
+  .cover-count {
+    position: absolute;
+    top: 48px;
+    right: 48px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.2);
+  }
+
+  /* ─── TOC ─── */
+  .toc {
+    background: var(--pitch-mid);
+    padding: 80px 48px;
+    border-top: 1px solid rgba(255,83,0,0.1);
+  }
+
+  .toc-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--forge);
+    opacity: 0.6;
+    margin-bottom: 40px;
+  }
+
+  .toc-sections {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+  }
+
+  .toc-card {
+    background: rgba(255,83,0,0.05);
+    border: 1px solid rgba(255,83,0,0.1);
+    border-radius: 12px;
+    padding: 28px 32px;
+    text-decoration: none;
+    display: block;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .toc-card:hover {
+    background: rgba(255,83,0,0.09);
+    border-color: rgba(255,83,0,0.22);
+  }
+
+  .toc-card-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--forge);
+    opacity: 0.5;
+    letter-spacing: 0.12em;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .toc-card-title {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--chalk);
+    line-height: 1.35;
+    margin-bottom: 8px;
+  }
+
+  .toc-card-count {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--chalk);
+    opacity: 0.35;
+  }
+
+  /* ─── SECTION HEADER ─── */
+  .section-header {
+    padding: 96px 48px 0;
+    position: relative;
+  }
+
+  .section-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--forge);
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 800;
+    font-size: clamp(28px, 4vw, 52px);
+    color: var(--chalk);
+    line-height: 1.1;
+    max-width: 640px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid rgba(255,83,0,0.1);
+  }
+
+  .section-title span { color: var(--forge); }
+
+  /* ─── Q&A ITEMS ─── */
+  .qa-block {
+    padding: 0 48px 80px;
+  }
+
+  .qa-item {
+    padding: 52px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  .qa-item:last-child { border-bottom: none; }
+
+  .qa-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--forge);
+    opacity: 0.45;
+    padding-top: 4px;
+    letter-spacing: 0.06em;
+    flex-shrink: 0;
+  }
+
+  .qa-content {}
+
+  .qa-q {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    font-size: clamp(17px, 2vw, 22px);
+    color: var(--chalk);
+    line-height: 1.3;
+    margin-bottom: 24px;
+  }
+
+  .qa-a {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    color: rgba(243,235,225,0.7);
+    line-height: 1.85;
+  }
+
+  .qa-a strong {
+    color: var(--chalk);
+    font-weight: 600;
+  }
+
+  .qa-a em {
+    color: var(--forge);
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  .qa-callout {
+    background: rgba(255,83,0,0.06);
+    border-left: 3px solid var(--forge);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: rgba(243,235,225,0.8);
+    line-height: 1.7;
+  }
+
+  .qa-callout strong {
+    color: var(--chalk);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .vs-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+
+  .vs-bad, .vs-good {
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .vs-bad {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    color: rgba(243,235,225,0.45);
+  }
+
+  .vs-good {
+    background: rgba(255,83,0,0.07);
+    border: 1px solid rgba(255,83,0,0.16);
+    color: rgba(243,235,225,0.85);
+  }
+
+  .vs-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+    opacity: 0.55;
+  }
+
+  .vs-bad .vs-label { color: rgba(255,255,255,0.4); }
+  .vs-good .vs-label { color: var(--forge); }
+
+  /* ─── DIVIDER ─── */
+  .section-divider {
+    height: 1px;
+    background: rgba(255,83,0,0.08);
+    margin: 0 48px;
+  }
+
+  /* ─── FOOTER ─── */
+  .doc-footer {
+    padding: 64px 48px;
+    border-top: 1px solid rgba(255,83,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .doc-footer-brand {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    color: var(--forge);
+    letter-spacing: 0.01em;
+  }
+
+  .doc-footer-note {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 0.1em;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 640px) {
+    .cover, .toc, .section-header, .qa-block, .doc-footer { padding-left: 24px; padding-right: 24px; }
+    .qa-item { grid-template-columns: 32px 1fr; gap: 16px; }
+    .vs-block { grid-template-columns: 1fr; }
+    .cover { padding-bottom: 48px; }
+    .cover-count { display: none; }
+    .cover-meta { gap: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-count">20 Questions / 3 Sections</div>
+  <span class="cover-label">Damcraft · Interview Intelligence Series</span>
+  <h1>Design Interview<br /><span>Mastery Guide</span></h1>
+  <p style="font-size: 17px; color: rgba(243,235,225,0.55); max-width: 540px; line-height: 1.75; margin-bottom: 0;">
+    The questions every design interviewer is really asking — and how to answer them as a designer who thinks, not just someone who executes.
+  </p>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <label>Section 1</label>
+      <span>Design Process · 10 Q&amp;A</span>
+    </div>
+    <div class="cover-meta-item">
+      <label>Section 2</label>
+      <span>Interview Behaviour · 5 Q&amp;A</span>
+    </div>
+    <div class="cover-meta-item">
+      <label>Section 3</label>
+      <span>Business &amp; Product Sense · 5 Q&amp;A</span>
+    </div>
+    <div class="cover-meta-item">
+      <label>Prepared by</label>
+      <span>Damcraft Studio</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <p class="toc-label">Table of Contents</p>
+  <div class="toc-sections">
+    <a href="#section-1" class="toc-card">
+      <span class="toc-card-num">01</span>
+      <div class="toc-card-title">Design Process</div>
+      <div class="toc-card-count">10 questions on how you think, frame, and decide</div>
+    </a>
+    <a href="#section-2" class="toc-card">
+      <span class="toc-card-num">02</span>
+      <div class="toc-card-title">Interview Behaviour You Must Understand</div>
+      <div class="toc-card-count">5 questions on how you perform under pressure</div>
+    </a>
+    <a href="#section-3" class="toc-card">
+      <span class="toc-card-num">03</span>
+      <div class="toc-card-title">Business &amp; Product Sense</div>
+      <div class="toc-card-count">5 questions on how you connect design to outcomes</div>
+    </a>
+  </div>
+</div>
+
+<!-- SECTION 1 -->
+<div id="section-1">
+  <div class="section-header">
+    <span class="section-number">Section 01 / 03</span>
+    <h2 class="section-title">Design <span>Process</span></h2>
+  </div>
+
+  <div class="qa-block">
+
+    <div class="qa-item">
+      <span class="qa-num">01</span>
+      <div class="qa-content">
+        <p class="qa-q">Why does a well-researched design still fail in a real interview critique?</p>
+        <div class="qa-a">
+          <p>Research informs the problem space — but interviews test how you <strong>narrate</strong> that research into decisions. A design fails critique not because the research was wrong, but because the link between the finding and the decision was never made explicit.</p>
+          <p style="margin-top: 16px;">Interviewers cannot see inside your head. If you say "I researched users" and then show a solution without the causal bridge, they see a portfolio piece — not a thinking process. Every design decision needs a stated rationale that traces directly back to a specific insight, constraint, or tradeoff you uncovered.</p>
+          <div class="qa-callout">
+            <strong>The fix</strong>
+            "Users said X → which meant the existing design was failing because Y → so I changed Z." That's the chain. If any link is missing from your presentation, the research looks decorative.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <span class="qa-num">02</span>
+      <div class="qa-content">
+        <p class="qa-q">What's the difference between a design decision and a design preference?</p>
+        <div class="qa-a">
+          <p>A <em>design decision</em> is traceable. You chose a bottom tab bar because users in research consistently needed to switch context mid-task, and top navigation required more finger travel on mobile. A <em>design preference</em> is "I find this cleaner."</p>
+          <div class="vs-block">
+            <div class="vs-bad">
+              <span class="vs-label">Preference (weak)</span>
+              "I used a card layout because it felt more modern and visually balanced."
+            </div>
+            <div class="vs-good">
+              <span class="vs-label">Decision (strong)</span>
+              "I used cards because users needed to scan 6–8 items at once and compare them — a list would've hidden the metadata they relied on most."
+            </div>
+          </div>
+          <p>Preferences collapse under "why." Decisions don't. If an interviewer pushes back and you feel defensive rather than prepared, that was a preference — not a decision.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <span class="qa-num">03</span>
+      <div class="qa-content">
+        <p class="qa-q">Why do interviewers say "you jumped to solutions too fast"?</p>
+        <div class="qa-a">
+          <p>Because you showed screens before showing understanding. The solution was a response to the brief, not a response to a real, investigated problem.</p>
+          <p style="margin-top: 16px;">The proof interviewers are looking for: <strong>would you have arrived at a different solution if the research had shown something different?</strong> If the answer is no — if the solution would have been the same regardless of what users said — then the research was decoration. The solution was already decided before the problem was understood.</p>
+          <div class="qa-callout">
+            <strong>What they actually want to see</strong>
+            Show the moment your assumption broke. "I expected X — but users did Y instead, which meant the original direction was solving the wrong problem. So we reframed to Z." That's the signal they're looking for.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <span class="qa-num">04</span>
+      <div class="qa-content">
+        <p class="qa-q">What's the difference between defining the problem and restating the brief?</p>
+        <div class="qa-a">
+          <div class="vs-block">
+            <div class="vs-bad">
+              <span class="vs-label">Restating the brief</span>
+              "We need to improve the onboarding experience and reduce drop-off."
+            </div>
+            <div class="vs-good">
+              <span class="vs-label">Defining the problem</span>
+              "Users drop off at step 3 because they hit a permissions prompt before seeing enough value to justify granting access — they don't yet trust the app."
+            </div>
+          </div>
+          <p>The brief is a symptom described by the business. The problem definition is the specific, causally grounded root cause that design can actually act on. A well-defined problem already constrains the solution space — you know you need to push the permission ask <em>after</em> the value moment, not just redesign the screen it sits on.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <span class="qa-num">05</span>
+      <div class="qa-content">
+        <p class="qa-q">How do you structure a design take-home when the prompt is intentionally vague?</p>
+        <div class="qa-a">
+          <p>Vague prompts test whether you can scope. Trying to solve everything reveals poor judgment. Here's the structure that works:</p>
+          <p style="margin-top: 16px;"><strong>1. Narrow the scope explicitly.</strong> Pick one user segment and one core task — and state why you chose them.<br/>
+          <strong>2. Surface your assumptions.</strong> List what you're assuming and flag which ones are most likely to be wrong.<br/>
+          <strong>3. Define success in measurable terms.</strong> What metric would tell you the design worked?<br/>
+          <strong>4. Design for that.</strong> Not everything. That.<br/>
+          <strong>5. Acknowledge what you didn't solve.</strong> And explain why you deprioritised it.</p>
+          <div class="qa-callout">
+            <strong>The principle</strong>
+            Vagueness is an invitation to demonstrate judgment, not a challenge to cover every edge case. The designer who scopes intelligently and goes deep beats the designer who covers everything at shallow depth.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <span class="qa-num">06</span>
+      <div class="qa-content">
+        <p class="qa-q">How do you show design thinking when you have no prior work in that domain?</p>
+        <div class="qa-a">
+          <p>Prior domain experience is never the point. What interviewers actually want: <strong>Can you break down a new problem? Can you identify who the user is and what they actually need? Can you make informed assumptions when data is absent?</strong></p>
+          <p style="margin-top: 16px;">The move: frame your domain ignorance as a research question, not a weakness. "I've never designed for logistics software — so the first thing I'd do is shadow a dispatcher for half a day to understand the mental model they're already using." That answer demonstrates more than a polished mock from someone who already knows the domain.</p>
+          <div class="qa-callout">
+            <strong>For designers from agency or studio backgrounds</strong>
+            Your superpower is breadth — you've solved problems across industries without the luxury of deep domain time. Name that explicitly. "I've designed across six different sectors in two years, which means I've learned to ask the right questions faster than most."
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <span class="qa-num">07</span>
+      <div class="qa-content">
+        <p class="qa-q">What's the difference between a portfolio that gets shortlisted and one that gets ignored?</p>
+        <div class="qa-a">
+          <p>The shortlisted portfolio shows a designer <em>thinking</em>. The ignored one shows <em>output</em>.</p>
+          <div class="vs-block">
+            <div class="vs-bad">
+              <span class="vs-label">Gets ignored</span>
+              Before/after screens. "I redesigned this app." Visual-first. No problem statement. No process. No outcome.
+            </div>
+            <div class="vs-good">
+              <span class="vs-label">Gets shortlisted</span>
+              Starts with the problem. Shows the messy middle. Explains what didn't work. Connects decisions to outcomes. Honest about constraints.
+            </div>
+          </div>
+          <p>Depth on two well-narrated projects beats breadth on ten polished portfolios. A recruiter can't assess your thinking from screens alone — your case studies have to do the narrating your presence would do in a room.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <span class="qa-num">08</span>
+      <div class="qa-content">
+        <p class="qa-q">How do you talk about a project where the final design wasn't your idea?</p>
+        <div class="qa-a">
+          <p>Talk about your role in the <em>process</em>, not the authorship of the artifact. What options did you put on the table? What was the tradeoff discussion? What did you advocate for — and what reasoning led the team to a different direction?</p>
+          <p style="margin-top: 16px;">Interviewers aren't testing whether you win every design argument. They're testing whether you <strong>understand tradeoffs, can collaborate without losing your perspective, and can execute on a direction even when it wasn't yours.</strong> Designers who can only talk about work they personally authored reveal a blind spot — most real product work is collaborative and contested.</p>
+          <div class="qa-callout">
+            <strong>Example framing</strong>
+            "I pushed for the single-page approach because of the data we had on user context-switching. The team chose the tab structure instead — largely for technical reasons in that sprint. I think either could have worked, but I learned something about how to bring the technical constraint earlier into the design process."
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <span class="qa-num">09</span>
+      <div class="qa-content">
+        <p class="qa-q">How do you present tradeoffs without sounding indecisive?</p>
+        <div class="qa-a">
+          <p>Indecisive is when you list options and stop. Decisive is when you commit to a rationale.</p>
+          <div class="vs-block">
+            <div class="vs-bad">
+              <span class="vs-label">Sounds indecisive</span>
+              "We could have done X or Y — both had pros and cons, so it really depended on what the team valued."
+            </div>
+            <div class="vs-good">
+              <span class="vs-label">Sounds decisive</span>
+              "X would've solved the immediate problem faster, but it created technical debt that would've hurt us at scale. Y required longer build time, but it was the right long-term call given where the product was going. We chose Y."
+            </div>
+          </div>
+          <p>You can hold uncertainty <em>and</em> have a point of view. Acknowledging complexity doesn't make you wishy-washy — refusing to land anywhere does. The key is: after the tradeoff, <strong>you chose something, and you can explain why.</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <span class="qa-num">10</span>
+      <div class="qa-content">
+        <p class="qa-q">What's the difference between impact you drove and impact that just happened around you?</p>
+        <div class="qa-a">
+          <p><em>Impact you drove</em>: You can describe the before state, the specific decision you made, and the after state — with a clear causal link between your action and the result. If you hadn't done that specific thing, the result wouldn't have happened.</p>
+          <p style="margin-top: 16px;"><em>Ambient impact</em>: Revenue grew after the redesign. Downloads increased. Retention improved. But you can't say what specific design decision caused it, or what would have been different without your contribution.</p>
+          <div class="qa-callout">
+            <strong>The test</strong>
+            Ask yourself: "What would NOT have happened if I hadn't been on this project?" If the answer is vague, you're describing ambient impact. Be honest — "I contributed to X by doing Y, though I can't isolate my impact from the team's work" is stronger than overclaiming sole ownership of a metric.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- SECTION 2 -->
+<div id="section-2">
+  <div class="section-header">
+    <span class="section-number">Section 02 / 03</span>
+    <h2 class="section-title">Interview Behaviour You Must <span>Understand</span></h2>
+  </div>
+
+  <div class="qa-block">
+
+    <div class="qa-item">
+      <span class="qa-num">01</span>
+      <div class="qa-content">
+        <p class="qa-q">How do you handle a design critique where the interviewer keeps challenging every decision?</p>
+        <div class="qa-a">
+          <p>Don't defend. Engage. Persistent challenge is usually a deliberate test of two things: <strong>whether you collapse under pressure</strong>, and <strong>whether you have real conviction or just rehearsed answers.</strong></p>
+          <p style="margin-top: 16px;">Address each challenge specifically. If they're right, acknowledge it — "That's a fair point, and in hindsight I'd reconsider the hierarchy there." If you stand behind your decision, hold it — "I hear the concern, and I made that tradeoff because of X. I'm open to being wrong about that, but here's the reasoning."</p>
+          <div class="qa-callout">
+            <strong>What kills you</strong>
+            Becoming defensive ("but I already explained that"), vague ("it was more of a feel thing"), or capitulating to every challenge just to end the discomfort. That last one is the most dangerous — it signals you'll fold under stakeholder pressure too.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <span class="qa-num">02</span>
+      <div class="qa-content">
+        <p class="qa-q">What do you do when you genuinely don't know the answer to a question?</p>
+        <div class="qa-a">
+          <p>Say you don't know. Then show how you'd find out.</p>
+          <p style="margin-top: 16px;">"I'm not certain about that — my instinct is X, and I'd validate it by doing Y." That's a complete answer. It's honest, it shows self-awareness, and it demonstrates your process even in the absence of knowledge.</p>
+          <div class="vs-block">
+            <div class="vs-bad">
+              <span class="vs-label">Never do this</span>
+              Fabricate a confident answer. Experienced interviewers identify it immediately — and the trust damage is irreversible.
+            </div>
+            <div class="vs-good">
+              <span class="vs-label">Do this</span>
+              "I haven't worked with that metric specifically — but based on how I'd approach similar problems, I'd start by [specific method]."
+            </div>
+          </div>
+          <p>Not knowing something is never a disqualifier in a good interview. Pretending to know is.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <span class="qa-num">03</span>
+      <div class="qa-content">
+        <p class="qa-q">How do you talk about failure without killing your chances?</p>
+        <div class="qa-a">
+          <p>A failure story has one job: demonstrate self-awareness and real learning. The structure that works:</p>
+          <p style="margin-top: 16px;"><strong>What you expected to happen →</strong> <em>what actually happened →</em> <strong>what you misunderstood →</strong> <em>what you did differently after.</em></p>
+          <p style="margin-top: 16px;">The failure itself is irrelevant. What matters is whether you can be honest about your role in it and extract a lesson that's genuinely transferable.</p>
+          <div class="qa-callout">
+            <strong>Common mistakes</strong>
+            Blaming external factors ("the timeline was impossible"). Disguising a failure as a success ("it was challenging but we delivered"). Pivoting away from the failure mid-story when you feel uncomfortable. All of these read as low self-awareness — which is more disqualifying than the failure itself.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <span class="qa-num">04</span>
+      <div class="qa-content">
+        <p class="qa-q">What do you do when the assignment brief contradicts itself?</p>
+        <div class="qa-a">
+          <p>Document the contradiction. State your interpretation. Proceed with one version. Then name it explicitly in your submission.</p>
+          <div class="qa-callout">
+            <strong>Example response</strong>
+            "I noticed section 1 asks for a frictionless first-time flow, and section 3 requires collecting detailed profile data upfront — these are in direct tension because the data collection creates exactly the friction the first section wants to eliminate. I chose to prioritise the low-friction entry and defer the profile completion to after the first value moment, because I believe early retention matters more than completeness of Day 1 data."
+          </div>
+          <p style="margin-top: 16px;">This demonstrates three things at once: thoroughness (you read the brief carefully), judgment (you can navigate ambiguity without being paralysed by it), and communication (you don't silently pick one interpretation and hope nobody notices).</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <span class="qa-num">05</span>
+      <div class="qa-content">
+        <p class="qa-q">How do you stand out when every candidate is showing the same Figma screens?</p>
+        <div class="qa-a">
+          <p>Most candidates show the final state. Show the evolution: the bad first attempt, the assumption that broke, the pivot, the version you shipped versus the version you wanted to ship.</p>
+          <p style="margin-top: 16px;">Most candidates present their work. <strong>Narrate yours.</strong> The screens are table stakes at a certain skill level — every strong candidate has polished screens. The thinking that produced them is the differentiator, and most people never show it.</p>
+          <div class="vs-block">
+            <div class="vs-bad">
+              <span class="vs-label">What everyone does</span>
+              "Here's the final design. It improved engagement by 23%."
+            </div>
+            <div class="vs-good">
+              <span class="vs-label">What stands out</span>
+              "Here's the first version — it was wrong because we misunderstood the mental model. Here's what the research surfaced. Here's what changed and why. Here's what I'd still change if we had another sprint."
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- SECTION 3 -->
+<div id="section-3">
+  <div class="section-header">
+    <span class="section-number">Section 03 / 03</span>
+    <h2 class="section-title">Business &amp; Product Sense You Must <span>Have</span></h2>
+  </div>
+
+  <div class="qa-block">
+
+    <div class="qa-item">
+      <span class="qa-num">01</span>
+      <div class="qa-content">
+        <p class="qa-q">Why do interviewers at product companies care more about your thinking than your visuals?</p>
+        <div class="qa-a">
+          <p>Because the visual can be polished in a week. The thinking is who you are as a designer.</p>
+          <p style="margin-top: 16px;">At a product company, design is embedded in a system — roadmaps, constraints, data, stakeholder pushback, quarterly targets. Visuals that aren't grounded in real problems get rebuilt constantly. <strong>Thinking that's grounded in user reality and business tradeoffs scales.</strong> They're hiring for ten years of decisions, not your first mockup.</p>
+          <div class="qa-callout">
+            <strong>What this means for agency designers moving to product</strong>
+            The client relationship rewarded delivery. Product design rewards judgment. Shift your case study framing from "here's what we delivered" to "here's the problem we were actually solving, here's how our understanding of it changed, and here's what we'd do differently."
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <span class="qa-num">02</span>
+      <div class="qa-content">
+        <p class="qa-q">What does it mean to design for retention versus designing for acquisition?</p>
+        <div class="qa-a">
+          <p><strong>Acquisition design:</strong> Make the first impression count. Communicate value fast. Remove friction from signup. The metric is conversion rate — the percentage of visitors who become users.</p>
+          <p style="margin-top: 16px;"><strong>Retention design:</strong> Make the core value repeatable and reliable. Build the habit loop. The metric is whether users come back next week — and the week after — and why.</p>
+          <p style="margin-top: 16px;">The tensions: acquisition wants simplicity and broad appeal. Retention wants depth and specificity for existing users. An onboarding that works for acquisition (frictionless, fast) sometimes undermines retention (users didn't set up the product properly). A designer who can name and navigate this tension can make better prioritisation calls when resources force a choice.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <span class="qa-num">03</span>
+      <div class="qa-content">
+        <p class="qa-q">How do you show product sense when you've only worked at service or agency companies?</p>
+        <div class="qa-a">
+          <p>Two moves:</p>
+          <p style="margin-top: 16px;"><strong>Move 1 — Deconstruct products you use as a user.</strong> Not "I love Notion" — but "Notion trades initial learnability for long-term flexibility. The blank canvas is a retention mechanic for power users, but it's a conversion killer for new users who need opinionated defaults. That tradeoff explains why they keep adding templates." That level of analysis signals product thinking without requiring product experience.</p>
+          <p style="margin-top: 16px;"><strong>Move 2 — Reframe your agency work in product terms.</strong> The client was the product manager. The deliverables had user outcomes. The constraints were real business constraints. What changed between brief and shipped? What would you have measured if you'd had a month post-launch?</p>
+          <div class="qa-callout">
+            <strong>The reframe</strong>
+            Every agency project is a product problem with a shorter timeline and an external PM. The design thinking is identical — you just didn't own the roadmap.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <span class="qa-num">04</span>
+      <div class="qa-content">
+        <p class="qa-q">Why does a beautiful portfolio sometimes lose to a simpler, clearer one?</p>
+        <div class="qa-a">
+          <p>Because beautiful is a surface signal and clarity is a signal of thinking.</p>
+          <div class="vs-block">
+            <div class="vs-bad">
+              <span class="vs-label">Beautiful but loses</span>
+              Stunning visuals, no problem statement, no process visible, no outcome data. Reads as: "I can execute when told what to do."
+            </div>
+            <div class="vs-good">
+              <span class="vs-label">Simpler but wins</span>
+              Clear problem framing, explicit decisions with rationale, honest about what didn't work, outcomes connected to actions. Reads as: "I understand what I'm solving and why."
+            </div>
+          </div>
+          <p>Interviewers at senior levels are hiring for the second type. Your portfolio is a proxy for how you'll work — not an art exhibition. If it doesn't show your thinking, it doesn't matter how polished the execution is.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <span class="qa-num">05</span>
+      <div class="qa-content">
+        <p class="qa-q">What should you do in the first 10 minutes of a design interview to set the tone?</p>
+        <div class="qa-a">
+          <p>Set the frame yourself. Don't wait to be directed into it.</p>
+          <p style="margin-top: 16px;">Tell them: what role you're there for, what you're most proud of showing them, and what you want them to walk away understanding about how you work. Then ask one genuine question about the team or the product problem — not a performative question designed to look curious, but something you actually want to know.</p>
+          <div class="qa-callout">
+            <strong>Why this works</strong>
+            It signals that you're a peer in a conversation, not a candidate in a transaction. Most candidates wait to be asked before they speak. Taking ownership of the frame in the first 10 minutes tells the interviewer: this person leads rooms, not just follows prompts.
+          </div>
+          <p style="margin-top: 16px;">The first 10 minutes also establish whether you're in broadcast mode (presenting at them) or conversation mode (engaging with them). Interviewers are future teammates — they're imagining what every weekly sync would feel like. Conversation mode wins, every time.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <div class="doc-footer-brand">Dam Craft</div>
+  <div class="doc-footer-note">damcraft.com · Design Interview Mastery Guide · 20 Q&amp;A</div>
+</div>
+
+</body>
+</html>
