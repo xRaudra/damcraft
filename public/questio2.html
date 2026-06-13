@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interview Feedback — How to Improve · Damcraft</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --forge: #FF5300;
+    --ember: #FF8D60;
+    --chalk: #FAFAF8;
+    --ivory: #F3EBE1;
+    --walnut: #4A3530;
+    --pitch: #1A0E08;
+    --pitch-mid: #2a1610;
+    --green: #2ECC7A;
+    --red: #FF4545;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--pitch);
+    color: var(--chalk);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── COVER ─── */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 64px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 55% at 85% 15%, rgba(255,83,0,0.11) 0%, transparent 65%),
+                radial-gradient(ellipse 40% 40% at 15% 85%, rgba(46,204,122,0.05) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .cover-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--forge);
+    text-transform: uppercase;
+    opacity: 0.8;
+    margin-bottom: 28px;
+  }
+
+  .cover h1 {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 800;
+    font-size: clamp(42px, 6.5vw, 88px);
+    line-height: 1.0;
+    color: var(--chalk);
+    max-width: 860px;
+    margin-bottom: 28px;
+  }
+
+  .cover h1 span { color: var(--forge); }
+
+  .cover-sub {
+    font-size: 17px;
+    color: rgba(243,235,225,0.5);
+    max-width: 520px;
+    line-height: 1.75;
+  }
+
+  .cover-pills {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 56px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,83,0,0.1);
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .pill-strength {
+    background: rgba(46,204,122,0.08);
+    border: 1px solid rgba(46,204,122,0.18);
+    color: var(--green);
+  }
+
+  .pill-gap {
+    background: rgba(255,83,0,0.08);
+    border: 1px solid rgba(255,83,0,0.2);
+    color: var(--forge);
+  }
+
+  .pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .pill-strength .pill-dot { background: var(--green); }
+  .pill-gap .pill-dot { background: var(--forge); }
+
+  /* ─── TOC ─── */
+  .toc {
+    background: var(--pitch-mid);
+    padding: 72px 48px;
+    border-top: 1px solid rgba(255,83,0,0.08);
+  }
+
+  .toc-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--forge);
+    opacity: 0.55;
+    margin-bottom: 36px;
+  }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .toc-card {
+    border-radius: 12px;
+    padding: 24px 28px;
+    text-decoration: none;
+    display: block;
+    transition: opacity 0.2s;
+  }
+
+  .toc-card:hover { opacity: 0.85; }
+
+  .toc-card-strength {
+    background: rgba(46,204,122,0.06);
+    border: 1px solid rgba(46,204,122,0.14);
+  }
+
+  .toc-card-gap {
+    background: rgba(255,83,0,0.05);
+    border: 1px solid rgba(255,83,0,0.12);
+  }
+
+  .toc-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .toc-card-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  .badge-strength { background: rgba(46,204,122,0.12); color: var(--green); }
+  .badge-gap { background: rgba(255,83,0,0.1); color: var(--forge); }
+
+  .toc-card-title {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--chalk);
+    line-height: 1.35;
+  }
+
+  /* ─── SECTION ─── */
+  .section {
+    padding: 88px 48px 0;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    margin-bottom: 0;
+  }
+
+  .section-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 6px;
+    font-size: 18px;
+  }
+
+  .icon-strength { background: rgba(46,204,122,0.1); border: 1px solid rgba(46,204,122,0.18); }
+  .icon-gap { background: rgba(255,83,0,0.1); border: 1px solid rgba(255,83,0,0.18); }
+
+  .section-header-text {}
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .label-strength { color: var(--green); }
+  .label-gap { color: var(--forge); }
+
+  .section-title {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 800;
+    font-size: clamp(26px, 3.5vw, 44px);
+    color: var(--chalk);
+    line-height: 1.1;
+  }
+
+  .section-title span { color: var(--forge); }
+  .section-title .green { color: var(--green); }
+
+  /* ─── ITEMS ─── */
+  .items-block {
+    padding-bottom: 80px;
+  }
+
+  .item {
+    padding: 52px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+
+  .item:last-child { border-bottom: none; }
+
+  .item-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    opacity: 0.35;
+    padding-top: 5px;
+    flex-shrink: 0;
+  }
+
+  .num-strength { color: var(--green); }
+  .num-gap { color: var(--forge); }
+
+  .item-body {}
+
+  .item-title {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    font-size: clamp(17px, 2vw, 22px);
+    color: var(--chalk);
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  .item-original {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 24px;
+    line-height: 1.6;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 6px;
+    border-left: 2px solid rgba(255,255,255,0.06);
+  }
+
+  .item-text {
+    font-size: 16px;
+    color: rgba(243,235,225,0.68);
+    line-height: 1.85;
+  }
+
+  .item-text p + p { margin-top: 16px; }
+
+  .item-text strong { color: var(--chalk); font-weight: 600; }
+
+  .item-text em { color: var(--forge); font-style: normal; font-weight: 500; }
+
+  .item-text .green-em { color: var(--green); font-style: normal; font-weight: 500; }
+
+  /* ─── CALLOUT ─── */
+  .callout {
+    border-radius: 0 10px 10px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 15px;
+    line-height: 1.75;
+    color: rgba(243,235,225,0.78);
+  }
+
+  .callout-forge { background: rgba(255,83,0,0.06); border-left: 3px solid var(--forge); }
+  .callout-green { background: rgba(46,204,122,0.06); border-left: 3px solid var(--green); }
+
+  .callout-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+    opacity: 0.6;
+  }
+
+  .callout-forge .callout-label { color: var(--forge); }
+  .callout-green .callout-label { color: var(--green); }
+
+  /* ─── BEFORE / AFTER ─── */
+  .ba-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+
+  .ba-before, .ba-after {
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .ba-before {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    color: rgba(243,235,225,0.4);
+  }
+
+  .ba-after {
+    background: rgba(255,83,0,0.07);
+    border: 1px solid rgba(255,83,0,0.16);
+    color: rgba(243,235,225,0.85);
+  }
+
+  .ba-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .ba-before .ba-label { color: rgba(255,255,255,0.3); }
+  .ba-after .ba-label { color: var(--forge); }
+
+  /* ─── CHECKLIST ─── */
+  .checklist {
+    list-style: none;
+    margin: 16px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .checklist li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    color: rgba(243,235,225,0.72);
+    line-height: 1.65;
+  }
+
+  .check-icon {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    background: rgba(255,83,0,0.1);
+    border: 1px solid rgba(255,83,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    font-size: 10px;
+    color: var(--forge);
+  }
+
+  /* ─── META FIX ─── */
+  .meta-fix {
+    margin: 48px 48px 80px;
+    background: linear-gradient(135deg, rgba(255,83,0,0.08) 0%, rgba(255,83,0,0.03) 100%);
+    border: 1px solid rgba(255,83,0,0.16);
+    border-radius: 16px;
+    padding: 40px 48px;
+  }
+
+  .meta-fix-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--forge);
+    opacity: 0.7;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .meta-fix h2 {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 800;
+    font-size: clamp(22px, 3vw, 36px);
+    color: var(--chalk);
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+
+  .meta-fix h2 span { color: var(--forge); }
+
+  .meta-fix p {
+    font-size: 16px;
+    color: rgba(243,235,225,0.65);
+    line-height: 1.85;
+    max-width: 680px;
+  }
+
+  .meta-fix p strong { color: var(--chalk); font-weight: 600; }
+
+  .meta-fix .example {
+    margin-top: 24px;
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 20px 24px;
+    font-size: 15px;
+    color: rgba(243,235,225,0.75);
+    line-height: 1.75;
+    font-style: italic;
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    height: 1px;
+    background: rgba(255,83,0,0.07);
+    margin: 0 48px;
+  }
+
+  /* ─── FOOTER ─── */
+  .doc-footer {
+    padding: 56px 48px;
+    border-top: 1px solid rgba(255,83,0,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .doc-footer-brand {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    color: var(--forge);
+  }
+
+  .doc-footer-note {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.18);
+    letter-spacing: 0.1em;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 640px) {
+    .cover, .toc, .section, .meta-fix, .doc-footer { padding-left: 20px; padding-right: 20px; }
+    .meta-fix { margin-left: 20px; margin-right: 20px; }
+    .divider { margin-left: 20px; margin-right: 20px; }
+    .item { grid-template-columns: 28px 1fr; gap: 14px; }
+    .ba-block { grid-template-columns: 1fr; }
+    .section-header { gap: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <p class="cover-eyebrow">Damcraft · Interview Debrief Series</p>
+  <h1>Feedback<br /><span>Improvement Plan</span></h1>
+  <p class="cover-sub">A detailed breakdown of how to sharpen what's already working and close every gap the interviewers flagged — so the next answer lands harder.</p>
+  <div class="cover-pills">
+    <div class="pill pill-strength"><span class="pill-dot"></span>3 Strengths to Elevate</div>
+    <div class="pill pill-gap"><span class="pill-dot"></span>3 Gaps to Close</div>
+    <div class="pill pill-gap"><span class="pill-dot"></span>1 Meta Fix</div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <p class="toc-eyebrow">Contents</p>
+  <div class="toc-grid">
+    <a href="#strengths" class="toc-card toc-card-strength">
+      <div class="toc-card-meta"><span class="toc-card-badge badge-strength">Strength</span></div>
+      <div class="toc-card-title">Elevating What's Already Working</div>
+    </a>
+    <a href="#gap-1" class="toc-card toc-card-gap">
+      <div class="toc-card-meta"><span class="toc-card-badge badge-gap">Gap 1</span></div>
+      <div class="toc-card-title">UX Artifacts, KPIs &amp; Research Methods</div>
+    </a>
+    <a href="#gap-2" class="toc-card toc-card-gap">
+      <div class="toc-card-meta"><span class="toc-card-badge badge-gap">Gap 2</span></div>
+      <div class="toc-card-title">Figma Handoff Specifics</div>
+    </a>
+    <a href="#gap-3" class="toc-card toc-card-gap">
+      <div class="toc-card-meta"><span class="toc-card-badge badge-gap">Gap 3</span></div>
+      <div class="toc-card-title">Visual Specs, Motion &amp; Anchor Positioning</div>
+    </a>
+    <a href="#meta" class="toc-card toc-card-gap">
+      <div class="toc-card-meta"><span class="toc-card-badge badge-gap">Meta Fix</span></div>
+      <div class="toc-card-title">The One Habit That Closes All Three Gaps</div>
+    </a>
+  </div>
+</div>
+
+<!-- STRENGTHS SECTION -->
+<div id="strengths" class="section">
+  <div class="section-header">
+    <div class="section-icon icon-strength">✦</div>
+    <div class="section-header-text">
+      <span class="section-label label-strength">Part 01 — Strengths</span>
+      <h2 class="section-title">Elevating What's <span class="green">Already Working</span></h2>
+    </div>
+  </div>
+
+  <div class="items-block">
+
+    <div class="item">
+      <span class="item-num num-strength">01</span>
+      <div class="item-body">
+        <p class="item-title">UI/UX Workflow — Requirements → Wireframes → Iteration</p>
+        <p class="item-original">Feedback: "Strong foundation in UI/UX design workflows — clarifying requirements, wireframes, iterating with stakeholders."</p>
+        <div class="item-text">
+          <p>You described the process well. The next level is showing what happens <strong>when the process breaks down</strong> — that turns a process answer into a judgment answer, which is what senior interviewers actually listen for.</p>
+          <p>Add one sentence about how you handle conflicting requirements or stakeholder disagreement mid-iteration. That signals you've operated in messy real conditions, not just ideal ones.</p>
+          <div class="callout callout-green">
+            <span class="callout-label">Say this next time</span>
+            "When stakeholder feedback contradicts user research, I frame the decision around the specific risk on the table — 'if we go this direction, we're betting that X.' Then I let the team decide with that tradeoff made explicit. It takes the argument out of taste and puts it into consequence."
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-num num-strength">02</span>
+      <div class="item-body">
+        <p class="item-title">Figma — Wireframing, Prototyping, Design Specs</p>
+        <p class="item-original">Feedback: "Practical knowledge of in-file documentation, structured pages, and component variants."</p>
+        <div class="item-text">
+          <p>You're clearly strong here. Elevate it by naming the <strong>why</strong> behind your Figma choices — not just the what. The what is table stakes. The why signals design systems thinking.</p>
+          <div class="ba-block">
+            <div class="ba-before">
+              <span class="ba-label">What you said</span>
+              "I use component variants and structured pages for handoff."
+            </div>
+            <div class="ba-after">
+              <span class="ba-label">What lands harder</span>
+              "I name every component state explicitly — default, hover, disabled, error — so engineers don't have to infer edge case behaviour. It reduces back-and-forth by 40–50% in my experience."
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-num num-strength">03</span>
+      <div class="item-body">
+        <p class="item-title">Design System Thinking — Auto-layout, Typography, Shared Libraries</p>
+        <p class="item-original">Feedback: "Focus on maintaining visual consistency and responsive design across web interfaces."</p>
+        <div class="item-text">
+          <p>Add one concrete example of a decision the <em>system</em> made for you — a moment where the system caught an inconsistency you would have missed, or where a constraint in the system guided you toward a better solution. That's the difference between someone who uses a design system and someone who thinks in systems.</p>
+          <div class="callout callout-green">
+            <span class="callout-label">Example angle</span>
+            "One moment that stood out — a new component I was designing broke the 4px grid I'd established in the shared library. The system flagged it before it reached developers. That's when I realised the library wasn't just documentation, it was a QA layer."
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- GAP 1 -->
+<div id="gap-1" class="section">
+  <div class="section-header">
+    <div class="section-icon icon-gap">◈</div>
+    <div class="section-header-text">
+      <span class="section-label label-gap">Gap 01 — Close This</span>
+      <h2 class="section-title">UX Artifacts, KPIs &amp; <span>Research Methods</span></h2>
+    </div>
+  </div>
+
+  <div class="items-block">
+
+    <div class="item">
+      <span class="item-num num-gap">—</span>
+      <div class="item-body">
+        <p class="item-title">Personas — Stop Describing Demographics, Start Describing the Tension</p>
+        <p class="item-original">Feedback: "Could have provided more detailed explanations about artifacts like personas and user journeys."</p>
+        <div class="item-text">
+          <p>Interviewers don't want a demographic profile. They want to hear the <strong>goal-frustration pair</strong> — what the user is trying to accomplish, and what specifically prevents them from doing it today. That's where the design work lives.</p>
+          <div class="ba-block">
+            <div class="ba-before">
+              <span class="ba-label">Weak persona answer</span>
+              "We created personas based on age, occupation, and tech comfort. Our primary user was a 28–35 year old professional."
+            </div>
+            <div class="ba-after">
+              <span class="ba-label">Strong persona answer</span>
+              "Our primary persona was time-constrained and making decisions on mobile in under 90 seconds. That single constraint shaped every layout decision — density, tap target size, information hierarchy. Demographics didn't drive the design; the constraint did."
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-num num-gap">—</span>
+      <div class="item-body">
+        <p class="item-title">User Journeys — Frame as Emotional Arcs, Not Task Lists</p>
+        <div class="item-text">
+          <p>A journey map that lists steps is a flowchart. What interviewers want: <strong>where does the user feel confused, frustrated, or relieved?</strong> That's where design decisions live — not in the steps, but in the emotional gaps between them.</p>
+          <div class="callout callout-forge">
+            <span class="callout-label">How to describe it</span>
+            "In the journey map, the biggest drop in confidence happened right after signup — users had committed but didn't know what to do next. That moment of uncertainty became the design problem we focused on. Everything else was secondary."
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-num num-gap">—</span>
+      <div class="item-body">
+        <p class="item-title">KPIs — Connect Design Decisions to Specific Metrics</p>
+        <p class="item-original">Feedback: "Tying KPIs directly to business goals, referencing additional research and analytics methods."</p>
+        <div class="item-text">
+          <p>Every design decision has a measurable proxy. Learn these pairings and use them fluently:</p>
+          <ul class="checklist">
+            <li><span class="check-icon">→</span>Onboarding redesign → <strong>Activation rate</strong> (% of users who complete the first key action)</li>
+            <li><span class="check-icon">→</span>Navigation restructure → <strong>Task completion rate</strong> + time-on-task</li>
+            <li><span class="check-icon">→</span>Visual consistency work → <strong>NPS</strong> + qualitative sentiment in user interviews</li>
+            <li><span class="check-icon">→</span>Reducing friction → <strong>Drop-off rate</strong> at specific funnel steps</li>
+            <li><span class="check-icon">→</span>Feature discoverability → <strong>Feature adoption rate</strong> over 30/60/90 days</li>
+          </ul>
+          <div class="callout callout-forge">
+            <span class="callout-label">If you don't have real metrics from client work</span>
+            Use hypothetical ones framed as what you'd measure: "We didn't have instrumentation on that project, but the metric I'd have tracked is task completion rate on mobile — because that was the behaviour the redesign was specifically trying to change."
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- GAP 2 -->
+<div id="gap-2" class="section">
+  <div class="section-header">
+    <div class="section-icon icon-gap">◈</div>
+    <div class="section-header-text">
+      <span class="section-label label-gap">Gap 02 — Close This</span>
+      <h2 class="section-title">Figma Handoff <span>Specifics</span></h2>
+    </div>
+  </div>
+
+  <div class="items-block">
+
+    <div class="item">
+      <span class="item-num num-gap">—</span>
+      <div class="item-body">
+        <p class="item-title">Tokens, Measurements, Responsive Rules, Interaction Notes</p>
+        <p class="item-original">Feedback: "Could have benefited from explicitly mentioning specific spec conventions — tokens, measurements, responsive rules, and interaction notes — along with a detailed handoff checklist."</p>
+        <div class="item-text">
+          <p>The interviewer wanted to hear that your handoff is systematic, not ad-hoc. Here's the full vocabulary to use, and what each term means in practice:</p>
+          <ul class="checklist">
+            <li><span class="check-icon">T</span><strong>Tokens</strong> — Named values for spacing, colour, typography, and border radius. Instead of a raw <em>16px</em>, it's <em>--spacing-4</em> or <em>--color-forge</em>. Engineers reference the token; the token can be changed globally without touching every component.</li>
+            <li><span class="check-icon">⬡</span><strong>Measurements</strong> — Document min and max widths, not just fixed values. State which measurements are responsive and which are fixed. If a card is min-width 240px and max-width 360px, that needs to be explicit.</li>
+            <li><span class="check-icon">↔</span><strong>Responsive rules</strong> — Specify breakpoints (375, 768, 1280, 1440) and show how components reflow at each. Don't leave this to engineering interpretation.</li>
+            <li><span class="check-icon">↻</span><strong>Interaction notes</strong> — Any non-obvious interaction (hover, transition duration, easing curve, trigger delay) gets a written annotation in the Figma frame, not just a prototype link.</li>
+          </ul>
+          <div class="callout callout-forge">
+            <span class="callout-label">The handoff answer that lands</span>
+            "My handoff includes: named components with all states documented, a token reference sheet, per-breakpoint layout specs, motion notes for every animated element, and a one-page interaction summary for anything with conditional logic. I also do a 30-minute walkthrough with the lead engineer before dev starts — that single meeting catches 80% of edge-case questions before they become Slack interruptions."
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- GAP 3 -->
+<div id="gap-3" class="section">
+  <div class="section-header">
+    <div class="section-icon icon-gap">◈</div>
+    <div class="section-header-text">
+      <span class="section-label label-gap">Gap 03 — Close This</span>
+      <h2 class="section-title">Visual Specs, Motion &amp; <span>Anchor Positioning</span></h2>
+    </div>
+  </div>
+
+  <div class="items-block">
+
+    <div class="item">
+      <span class="item-num num-gap">—</span>
+      <div class="item-body">
+        <p class="item-title">Spacing Tokens, Width Limits, Viewport Edge Behaviour</p>
+        <p class="item-original">Feedback: "Needed clearer and more concrete specs on spacing tokens, width limits, and viewport edge behavior."</p>
+        <div class="item-text">
+          <p>Use and explain the <strong>4px base grid</strong>. All spacing — padding, margin, gap — should be multiples of 4. This aligns to most device pixel ratios and creates natural visual rhythm that's easy to scale. When interviewers hear you say "4px grid," they know you've thought about consistency at a system level, not just visual taste.</p>
+          <ul class="checklist">
+            <li><span class="check-icon">→</span><strong>Fixed vs. fluid widths</strong> — Know the difference and state it. "This container is max-width 1200px, centred with auto margins, with 48px horizontal padding at desktop collapsing to 24px at mobile."</li>
+            <li><span class="check-icon">→</span><strong>Viewport edge behaviour</strong> — Content should never touch the viewport edge without intent. State your minimum edge margin explicitly. "I set a minimum 20px safe zone on all sides at every breakpoint."</li>
+            <li><span class="check-icon">→</span><strong>Width limits on text</strong> — Long-form text should have a max-width of around 65–75 characters per line (roughly 640–720px) for readability. State this in your specs.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-num num-gap">—</span>
+      <div class="item-body">
+        <p class="item-title">Anchor-Based Positioning &amp; Collision Handling</p>
+        <p class="item-original">Feedback: "More detail on anchor-based positioning and collision handling."</p>
+        <div class="item-text">
+          <p>Anchor-based positioning applies to any element that positions itself relative to a trigger — tooltips, dropdowns, popovers, context menus. Here's exactly what to spec and say:</p>
+          <ul class="checklist">
+            <li><span class="check-icon">1</span><strong>Primary anchor point</strong> — Where does the element prefer to appear? (e.g. below-left of the trigger button)</li>
+            <li><span class="check-icon">2</span><strong>Fallback positions in priority order</strong> — If below-left overflows, try below-right, then above-left, then above-right.</li>
+            <li><span class="check-icon">3</span><strong>Flip threshold</strong> — How close to the viewport edge before the position flips? (e.g. 12px minimum clearance before flip triggers)</li>
+          </ul>
+          <div class="callout callout-forge">
+            <span class="callout-label">Say this next time</span>
+            "For any anchored UI — tooltips, dropdowns — I specify the primary anchor point, fallback positions in priority order, and the minimum viewport clearance before a flip triggers. Without that, engineers make inconsistent choices at edge cases, and the result looks broken on small viewports or near screen edges."
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-num num-gap">—</span>
+      <div class="item-body">
+        <p class="item-title">Motion Specs &amp; 3D / Interactive Animation</p>
+        <p class="item-original">Feedback: "Elaborate more on motion and 3D/interactive animation scenarios."</p>
+        <div class="item-text">
+          <p>Motion has four properties. Specify all four for every animated element — this is what separates a designer who thinks about motion from one who prototypes it and hopes for the best:</p>
+          <ul class="checklist">
+            <li><span class="check-icon">↑</span><strong>Duration</strong> — In milliseconds. Micro-interactions: 100–200ms. Page transitions: 250–400ms. Never leave this unspecified.</li>
+            <li><span class="check-icon">~</span><strong>Easing curve</strong> — <em>ease-out</em> for elements entering the screen (fast start, slow finish — feels natural). <em>ease-in</em> for elements leaving (slow start, fast finish). <em>ease-in-out</em> for repositioning. Never use linear for UI motion — it looks mechanical.</li>
+            <li><span class="check-icon">⏱</span><strong>Delay</strong> — Intentional delay for staggered lists or sequential reveals. Always document if non-zero.</li>
+            <li><span class="check-icon">↻</span><strong>Trigger</strong> — Scroll, hover, load, click, or state change. The trigger must be documented alongside the animation.</li>
+          </ul>
+          <p style="margin-top: 16px;">For <strong>3D and interactive animation</strong> specifically: specify the axis of rotation or translation (X, Y, Z), the transform origin (where in the element the transformation radiates from), and whether the animation responds to user input (mouse position, scroll progress) or runs automatically.</p>
+          <div class="callout callout-forge">
+            <span class="callout-label">Always add this line</span>
+            "I document whether the motion respects <em>prefers-reduced-motion</em> — and what the static fallback is. Motion should never be required to understand the UI."
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- META FIX -->
+<div id="meta" class="meta-fix">
+  <span class="meta-fix-eyebrow">Meta Fix — The Root Cause</span>
+  <h2>The One Habit That Closes <span>All Three Gaps</span></h2>
+  <p>Every weak point in the feedback shares the same root cause: you described <strong>what you do</strong> without describing <strong>why you do it and what the exact output looks like</strong>. The process was there. The artifact — the concrete, specific, tangible thing that came out of that process — was missing.</p>
+  <p style="margin-top: 16px;">Next interview, for every process answer, finish the sentence with: <strong>"…and the concrete output of that is [specific artifact, deliverable, or metric]."</strong> One habit. Closes all three gaps simultaneously.</p>
+  <div class="example">
+    Instead of: "I run user research at the start of every project."<br/><br/>
+    Say: "I run user research at the start of every project — the concrete output is a two-page problem definition document that specifies the exact user action we're designing for, the friction causing the drop-off, and the metric we'll use to know the design worked. That doc is what every subsequent decision gets checked against."
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <div class="doc-footer-brand">Dam Craft</div>
+  <div class="doc-footer-note">damcraft.com · Interview Feedback Improvement Plan</div>
+</div>
+
+</body>
+</html>
