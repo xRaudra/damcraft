@@ -12,8 +12,8 @@ const nextConfig: NextConfig = {
         destination: "/question.html",
       },
       {
-        source: "/questio2",
-        destination: "/questio2.html",
+        source: "/question2",
+        destination: "/question2.html",
       },
     ];
   },
