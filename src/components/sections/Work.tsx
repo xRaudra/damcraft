@@ -1,4 +1,7 @@
 "use client";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const projects = [
   {
@@ -34,11 +37,39 @@ const projects = [
 ];
 
 export default function Work() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      gsap.from(".work-header", {
+        scrollTrigger: { trigger: ".work-header", start: "top 85%" },
+        opacity: 0,
+        y: 28,
+        duration: 0.7,
+        ease: "power2.out",
+      });
+
+      gsap.utils.toArray<HTMLElement>(".work-card").forEach((el, i) => {
+        gsap.from(el, {
+          scrollTrigger: { trigger: el, start: "top 88%" },
+          opacity: 0,
+          y: 50,
+          duration: 0.7,
+          delay: i * 0.12,
+          ease: "power3.out",
+        });
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="work" style={{ background: "#1A0E08", padding: "100px 0" }}>
+    <section ref={sectionRef} id="work" style={{ background: "#1A0E08", padding: "100px 0" }}>
       <div className="wrap">
-        {/* Header */}
-        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "24px", marginBottom: "56px" }}>
+        <div className="work-header" style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "24px", marginBottom: "56px" }}>
           <div>
             <p style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "11px", letterSpacing: "0.16em", color: "#FF5300", textTransform: "uppercase", marginBottom: "16px" }}>
               03 — Work
@@ -50,32 +81,24 @@ export default function Work() {
           <a
             href="mailto:hello@damcraft.com"
             style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 500, fontSize: "14px", color: "#FF5300", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "6px", paddingBottom: "3px", borderBottom: "1px solid rgba(255,83,0,0.4)", transition: "border-color 0.2s, gap 0.2s" }}
-            onMouseEnter={(e) => {
-              const el = e.currentTarget as HTMLElement;
-              el.style.borderColor = "#FF5300";
-              el.style.gap = "10px";
-            }}
-            onMouseLeave={(e) => {
-              const el = e.currentTarget as HTMLElement;
-              el.style.borderColor = "rgba(255,83,0,0.4)";
-              el.style.gap = "6px";
-            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "#FF5300"; (e.currentTarget as HTMLElement).style.gap = "12px"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,83,0,0.4)"; (e.currentTarget as HTMLElement).style.gap = "6px"; }}
           >
             Start a Project →
           </a>
         </div>
 
-        {/* Project cards */}
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
           {projects.map((p) => (
             <div
               key={p.num}
+              className="work-card"
               style={{
                 background: p.bg,
                 borderRadius: "20px",
                 padding: "clamp(32px, 4vw, 52px)",
                 border: `1px solid ${p.accent}18`,
-                transition: "transform 0.25s, box-shadow 0.25s",
+                transition: "transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s",
                 cursor: "pointer",
                 display: "flex",
                 flexDirection: "column",
@@ -83,12 +106,12 @@ export default function Work() {
               }}
               onMouseEnter={(e) => {
                 const el = e.currentTarget as HTMLElement;
-                el.style.transform = "translateY(-3px)";
-                el.style.boxShadow = `0 24px 64px rgba(0,0,0,0.2)`;
+                el.style.transform = "translateY(-4px) scale(1.005)";
+                el.style.boxShadow = "0 32px 72px rgba(0,0,0,0.25)";
               }}
               onMouseLeave={(e) => {
                 const el = e.currentTarget as HTMLElement;
-                el.style.transform = "translateY(0)";
+                el.style.transform = "translateY(0) scale(1)";
                 el.style.boxShadow = "none";
               }}
             >
@@ -106,26 +129,14 @@ export default function Work() {
                     {p.desc}
                   </p>
                 </div>
-                <div style={{ width: "44px", height: "44px", borderRadius: "50%", border: `1.5px solid ${p.accent}30`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <div style={{ width: "44px", height: "44px", borderRadius: "50%", border: `1.5px solid ${p.accent}30`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "border-color 0.2s" }}>
                   <span style={{ fontSize: "16px", color: p.accent, opacity: 0.5 }}>↗</span>
                 </div>
               </div>
 
               <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
                 {p.tags.map((t) => (
-                  <span
-                    key={t}
-                    style={{
-                      fontFamily: "JetBrains Mono, monospace",
-                      fontSize: "11px",
-                      letterSpacing: "0.06em",
-                      color: p.accent,
-                      opacity: 0.55,
-                      padding: "5px 12px",
-                      borderRadius: "4px",
-                      border: `1px solid ${p.accent}28`,
-                    }}
-                  >
+                  <span key={t} style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "11px", letterSpacing: "0.06em", color: p.accent, opacity: 0.55, padding: "5px 12px", borderRadius: "4px", border: `1px solid ${p.accent}28` }}>
                     {t}
                   </span>
                 ))}

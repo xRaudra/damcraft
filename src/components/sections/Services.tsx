@@ -1,4 +1,7 @@
 "use client";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const services = [
   {
@@ -28,11 +31,39 @@ const services = [
 ];
 
 export default function Services() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      gsap.from(".svc-header", {
+        scrollTrigger: { trigger: ".svc-header", start: "top 85%" },
+        opacity: 0,
+        y: 28,
+        duration: 0.7,
+        ease: "power2.out",
+      });
+
+      gsap.utils.toArray<HTMLElement>(".svc-card").forEach((el, i) => {
+        gsap.from(el, {
+          scrollTrigger: { trigger: el, start: "top 88%" },
+          opacity: 0,
+          y: 40,
+          duration: 0.65,
+          delay: i * 0.1,
+          ease: "power2.out",
+        });
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="services" style={{ background: "#FAFAF8", padding: "100px 0" }}>
+    <section ref={sectionRef} id="services" style={{ background: "#FAFAF8", padding: "100px 0" }}>
       <div className="wrap">
-        {/* Header */}
-        <div style={{ marginBottom: "64px" }}>
+        <div className="svc-header" style={{ marginBottom: "64px" }}>
           <p style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "11px", letterSpacing: "0.16em", color: "#FF5300", textTransform: "uppercase", marginBottom: "16px" }}>
             02 — Services
           </p>
@@ -41,40 +72,43 @@ export default function Services() {
           </h2>
         </div>
 
-        {/* Cards grid */}
         <div className="grid-2">
           {services.map((s) => (
             <div
               key={s.num}
+              className="svc-card"
               style={{
                 background: "#F3EBE1",
                 borderRadius: "16px",
                 padding: "40px",
                 border: "1px solid rgba(74,53,48,0.08)",
-                transition: "transform 0.25s, box-shadow 0.25s, border-color 0.25s",
+                transition: "transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s, border-color 0.3s",
                 cursor: "default",
                 position: "relative",
                 overflow: "hidden",
               }}
               onMouseEnter={(e) => {
                 const el = e.currentTarget as HTMLElement;
-                el.style.transform = "translateY(-5px)";
-                el.style.boxShadow = "0 24px 56px rgba(26,14,8,0.12)";
-                el.style.borderColor = "rgba(255,83,0,0.2)";
+                el.style.transform = "translateY(-6px) scale(1.01)";
+                el.style.boxShadow = "0 28px 60px rgba(26,14,8,0.13)";
+                el.style.borderColor = "rgba(255,83,0,0.22)";
+                const bar = el.querySelector(".svc-accent-bar") as HTMLElement | null;
+                if (bar) bar.style.opacity = "1";
               }}
               onMouseLeave={(e) => {
                 const el = e.currentTarget as HTMLElement;
-                el.style.transform = "translateY(0)";
+                el.style.transform = "translateY(0) scale(1)";
                 el.style.boxShadow = "none";
                 el.style.borderColor = "rgba(74,53,48,0.08)";
+                const bar = el.querySelector(".svc-accent-bar") as HTMLElement | null;
+                if (bar) bar.style.opacity = "0";
               }}
             >
-              {/* Top accent bar */}
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "3px", background: "linear-gradient(90deg, #FF5300, transparent)", opacity: 0, transition: "opacity 0.25s" }} />
+              <div className="svc-accent-bar" style={{ position: "absolute", top: 0, left: 0, right: 0, height: "3px", background: "linear-gradient(90deg, #FF5300, transparent)", opacity: 0, transition: "opacity 0.3s" }} />
 
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "28px" }}>
                 <span style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "11px", color: "#FF5300", letterSpacing: "0.1em", background: "rgba(255,83,0,0.08)", padding: "5px 10px", borderRadius: "4px" }}>{s.num}</span>
-                <span style={{ fontSize: "18px", color: "#1A0E08", opacity: 0.2 }}>↗</span>
+                <span style={{ fontSize: "18px", color: "#1A0E08", opacity: 0.2, transition: "opacity 0.2s" }}>↗</span>
               </div>
 
               <h3 style={{ fontFamily: "Raleway, sans-serif", fontWeight: 800, fontSize: "22px", color: "#1A0E08", marginBottom: "14px", lineHeight: 1.25 }}>
