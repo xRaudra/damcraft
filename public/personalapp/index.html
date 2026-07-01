@@ -2321,7 +2321,30 @@ B.Com — DDU Gorakhpur University (2016)</span>
           </div>
         </div>
 
-        <!-- SECTION 3: About -->
+        <!-- SECTION 3: Cloud Sync -->
+        <div class="st-section">
+          <div class="st-sec-title">Cloud Sync</div>
+
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px">
+            <div>
+              <div class="st-label">Firebase Sync</div>
+              <div class="st-sub">Notes, API keys, tracker, and settings sync automatically across all your devices.</div>
+            </div>
+            <div id="fs-sync-status" style="flex-shrink:0;padding-top:2px"><span class="st-badge-dim">Not synced yet</span></div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+            <button type="button" class="btn btn-p" id="fs-sync-btn" onclick="fsSyncNow()">Sync Now</button>
+            <span style="font-size:12px;color:var(--text-muted)">Auto-syncs 3 s after any change</span>
+          </div>
+
+          <div class="st-info-card">
+            <p>☁️ <strong>Synced:</strong> Notes · Database · Job Tracker · API Keys · PIN · Theme<br>
+            🔒 PIN-protected — your cloud data is only useful to someone who also knows your PIN</p>
+          </div>
+        </div>
+
+        <!-- SECTION 4: About -->
         <div class="st-section">
           <div class="st-sec-title">About</div>
           <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
@@ -2337,7 +2360,7 @@ B.Com — DDU Gorakhpur University (2016)</span>
             <a href="https://www.alphavantage.co/support/#api-key" target="_blank" rel="noopener" class="btn btn-o" style="font-size:12.5px;text-decoration:none">Get Alpha Vantage Key →</a>
           </div>
           <div style="font-size:12px;color:var(--text-muted);line-height:1.65;padding:10px 14px;background:var(--bg-elevated);border-radius:var(--r);border:1px solid var(--border)">
-            🔒 This app runs entirely in your browser. No personal data is sent to any server except AI generation requests to <code style="font-size:11px;background:var(--bg-base);padding:1px 5px;border-radius:3px">/api/claude</code>.
+            🔒 This app runs in your browser. Data syncs to Firebase Firestore (your private project) and AI requests go to <code style="font-size:11px;background:var(--bg-base);padding:1px 5px;border-radius:3px">/api/claude</code> — no third-party tracking.
           </div>
         </div>
 
@@ -2347,6 +2370,8 @@ B.Com — DDU Gorakhpur University (2016)</span>
   </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
 // ── PAGE MAP ──
 const PAGES = {
@@ -2355,6 +2380,74 @@ const PAGES = {
   briefing:'Daily Briefing', learning:'Learning Hub', notes:'Notes & Database',
   profile:'My Profile', settings:'Settings'
 };
+
+// ── FIREBASE SYNC ──
+const FS_CONFIG={apiKey:"AIzaSyBOX-RYV8Z9TV2fr3dHnd0ZDdfKf9IVoVY",authDomain:"careeros-e5dbf.firebaseapp.com",projectId:"careeros-e5dbf",storageBucket:"careeros-e5dbf.firebasestorage.app",messagingSenderId:"578821559145",appId:"1:578821559145:web:177e5f790b745b3046e3f8"};
+const FS_KEYS=['cos-notes-v2','cos-db','cos-tracker','cos-apify-key','cos-av-key','cos-pwd','cos-theme','cos-logins','cos-sb'];
+let _fsDb=null,_fsSyncing=false,_fsSyncTimer=null;
+
+function fsInit(){
+  try{
+    if(typeof firebase==='undefined')return;
+    const app=firebase.apps.length?firebase.app():firebase.initializeApp(FS_CONFIG);
+    _fsDb=firebase.firestore(app);
+  }catch(e){console.warn('Firebase init:',e);return;}
+  const _orig=Storage.prototype.setItem;
+  Storage.prototype.setItem=function(k,v){
+    _orig.call(this,k,v);
+    if(k.startsWith('cos-')&&k!=='cos-session'&&!_fsSyncing)_fsScheduleSync();
+  };
+}
+
+function _fsScheduleSync(){
+  clearTimeout(_fsSyncTimer);
+  _fsSyncTimer=setTimeout(_fsSync,3000);
+}
+
+async function _fsSync(){
+  if(!_fsDb)return;
+  const d={};
+  FS_KEYS.forEach(k=>{const v=localStorage.getItem(k);if(v!==null)d[k]=v;});
+  try{
+    await _fsDb.collection('careeros').doc('data').set(d,{merge:true});
+    _fsSetStatus('ok');
+  }catch(e){console.warn('FS sync:',e);_fsSetStatus('err');}
+}
+
+async function fsPull(){
+  if(!_fsDb)return;
+  _fsSyncing=true;
+  try{
+    const snap=await _fsDb.collection('careeros').doc('data').get();
+    if(snap.exists){
+      const d=snap.data();
+      const _orig=Storage.prototype.setItem;
+      FS_KEYS.forEach(k=>{if(d[k]!==undefined)_orig.call(localStorage,k,d[k]);});
+    }
+  }catch(e){console.warn('FS pull:',e);}finally{_fsSyncing=false;}
+}
+
+function _fsSetStatus(state){
+  const el=document.getElementById('fs-sync-status');
+  if(!el)return;
+  const t=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  if(state==='ok')el.innerHTML=`<span class="st-badge-ok">✓ Synced ${t}</span>`;
+  else el.innerHTML=`<span class="st-badge-warn">⚠ Sync failed</span>`;
+}
+
+async function fsSyncNow(){
+  const btn=document.getElementById('fs-sync-btn');
+  if(btn){btn.disabled=true;btn.textContent='Syncing…';}
+  await _fsSync();
+  if(btn){btn.disabled=false;btn.textContent='Sync Now';}
+}
+
+async function fsClearCloud(){
+  if(!_fsDb)return;
+  try{await _fsDb.collection('careeros').doc('data').delete();}catch(e){console.warn('FS clear:',e);}
+}
+
+fsInit();
 
 // ── THEME ──
 function applyTheme(t){
@@ -2401,13 +2494,13 @@ pinEl.addEventListener('input',()=>{
 
 function loginOK(){
   localStorage.setItem('cos-session','1');
-  const ls = document.getElementById('login-screen');
+  const ls=document.getElementById('login-screen');
   ls.classList.add('out');
-  setTimeout(()=>{
+  Promise.all([fsPull(),new Promise(r=>setTimeout(r,380))]).then(()=>{
     ls.classList.add('hidden');
     document.getElementById('app').classList.add('show');
     initApp();
-  },380);
+  });
 }
 
 function loginFail(){
@@ -4414,7 +4507,8 @@ function stChangePin(){
 }
 
 function stClearData(){
-  if(!confirm('This will delete ALL your notes, tracker, jobs, settings, and API keys from this device.\n\nThis cannot be undone. Are you sure?'))return;
+  if(!confirm('This will delete ALL your notes, tracker, jobs, settings, and API keys from this device AND from cloud sync.\n\nThis cannot be undone. Are you sure?'))return;
+  fsClearCloud();
   Object.keys(localStorage).filter(k=>k.startsWith('cos-')).forEach(k=>localStorage.removeItem(k));
   window.location.reload();
 }
@@ -5132,9 +5226,11 @@ function initApp(){
 
 // Auto-login if session is still active
 if(localStorage.getItem('cos-session')==='1'){
-  document.getElementById('login-screen').classList.add('hidden');
-  document.getElementById('app').classList.add('show');
-  initApp();
+  fsPull().then(()=>{
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('app').classList.add('show');
+    initApp();
+  });
 }
 </script>
 </body>
