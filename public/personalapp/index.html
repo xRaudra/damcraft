@@ -398,7 +398,16 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
 }
 .ntx:focus{border-color:var(--accent)}
 .ntx::placeholder{color:var(--text-muted)}
-.nsaved{font-size:11px;color:var(--text-muted);text-align:right;height:14px}
+.nsaved{font-size:11px;color:var(--text-muted);flex:1}
+.qn-foot{display:flex;align-items:center;gap:8px;margin-top:6px}
+/* profile reference card */
+.pf-list{display:flex;flex-direction:column;gap:0}
+.pf-row{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)}
+.pf-row:last-child{border-bottom:none}
+.pf-lbl{font-size:11px;color:var(--text-muted);min-width:66px;flex-shrink:0;padding-top:2px;text-transform:uppercase;letter-spacing:.3px}
+.pf-val{font-size:12px;color:var(--text-primary);flex:1;word-break:break-all;line-height:1.5}
+.pf-copy{background:none;border:1px solid var(--border);border-radius:4px;cursor:pointer;color:var(--text-muted);font-size:11px;padding:1px 6px;flex-shrink:0;transition:color .15s,border-color .15s;line-height:1.5}
+.pf-copy:hover{color:var(--accent);border-color:var(--accent)}
 
 /* quick access */
 .qg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -1155,6 +1164,26 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
               </div>
             </div>
 
+            <!-- My Profile Reference -->
+            <div class="c">
+              <div class="ch">
+                <div class="ct">My Profile</div>
+                <button type="button" class="btn btn-o" onclick="pfCopyAll()" style="font-size:11px;padding:4px 10px">Copy All</button>
+              </div>
+              <div class="pf-list">
+                <div class="pf-row"><span class="pf-lbl">Name</span><span class="pf-val" id="pf-name">Saurabh Pandey</span><button class="pf-copy" onclick="pfCopy('pf-name')">copy</button></div>
+                <div class="pf-row"><span class="pf-lbl">Email</span><span class="pf-val" id="pf-email">sp.echobox@gmail.com</span><button class="pf-copy" onclick="pfCopy('pf-email')">copy</button></div>
+                <div class="pf-row"><span class="pf-lbl">Phone</span><span class="pf-val" id="pf-phone">+91 93353 55931</span><button class="pf-copy" onclick="pfCopy('pf-phone')">copy</button></div>
+                <div class="pf-row"><span class="pf-lbl">Location</span><span class="pf-val" id="pf-loc">Noida, Uttar Pradesh, India</span><button class="pf-copy" onclick="pfCopy('pf-loc')">copy</button></div>
+                <div class="pf-row"><span class="pf-lbl">LinkedIn</span><span class="pf-val" id="pf-li">linkedin.com/in/spenigma</span><button class="pf-copy" onclick="pfCopy('pf-li')">copy</button></div>
+                <div class="pf-row"><span class="pf-lbl">Portfolio</span><span class="pf-val" id="pf-port">saurabhwork.framer.website</span><button class="pf-copy" onclick="pfCopy('pf-port')">copy</button></div>
+                <div class="pf-row"><span class="pf-lbl">GitHub</span><span class="pf-val" id="pf-gh">github.com/xRaudra</span><button class="pf-copy" onclick="pfCopy('pf-gh')">copy</button></div>
+                <div class="pf-row"><span class="pf-lbl">Behance</span><span class="pf-val" id="pf-be">behance.net/raudra</span><button class="pf-copy" onclick="pfCopy('pf-be')">copy</button></div>
+                <div class="pf-row"><span class="pf-lbl">Title</span><span class="pf-val" id="pf-ttl">Lead UX Designer · 8 Years</span><button class="pf-copy" onclick="pfCopy('pf-ttl')">copy</button></div>
+                <div class="pf-row"><span class="pf-lbl">Skills</span><span class="pf-val" id="pf-sk">UX Design, Product Design, Mobile UX, Product Strategy, AI-Augmented Design, Design Leadership, Figma, Adobe CC, Framer, Miro, HTML/CSS</span><button class="pf-copy" onclick="pfCopy('pf-sk')">copy</button></div>
+              </div>
+            </div>
+
             <!-- Daily Concept -->
             <div class="c">
               <div class="cbadge">Daily Concept</div>
@@ -1169,8 +1198,11 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
                 <div class="ct">Quick Notes</div>
                 <a class="cl" onclick="go('notes')">Open Notes →</a>
               </div>
-              <textarea class="ntx" id="qnotes" placeholder="Jot something down…"></textarea>
-              <div class="nsaved" id="nsaved"></div>
+              <textarea class="ntx" id="qnotes" placeholder="First line becomes the title — rest is the note body…" style="margin-bottom:0"></textarea>
+              <div class="qn-foot">
+                <div class="nsaved" id="nsaved"></div>
+                <button type="button" class="btn btn-p" onclick="qnSaveToNotes()" style="font-size:12px;padding:5px 14px;flex-shrink:0">Save to Notes</button>
+              </div>
             </div>
 
             <!-- Quick Access -->
@@ -4388,6 +4420,52 @@ function ndSyncQnotes(){
   if(!ndNotes.length){ta.value='';return;}
   const recent=[...ndNotes].sort((a,b)=>new Date(b.edited)-new Date(a.edited))[0];
   ta.value=(recent.title?recent.title+'\n\n':'')+recent.content;
+}
+
+// ── QUICK NOTES SAVE ──
+function qnSaveToNotes(){
+  const ta=document.getElementById('qnotes');
+  const si=document.getElementById('nsaved');
+  const text=(ta?ta.value:'').trim();
+  if(!text){if(si){si.textContent='Nothing to save';setTimeout(()=>si.textContent='',2000);}return;}
+  const lines=text.split('\n');
+  const first=lines[0].trim();
+  const now=new Date();
+  const ds=now.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+  const ts=now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  const title=(first.length>0&&first.length<=80)?first:('Quick Note — '+ds+' '+ts);
+  const body=(first.length<=80&&lines.length>1)?lines.slice(1).join('\n').trim():text;
+  const iso=now.toISOString();
+  const note={id:ndUID(),title,content:body,created:iso,edited:iso};
+  ndNotes.unshift(note);
+  ndActiveId=note.id;
+  ndSaveNotes();
+  if(ta)ta.value='';
+  if(si){si.textContent='Saved ✓ — "'+title.slice(0,30)+(title.length>30?'…':'')+'"';setTimeout(()=>si.textContent='',3000);}
+}
+
+// ── PROFILE COPY ──
+function pfCopy(id){
+  const el=document.getElementById(id);if(!el)return;
+  navigator.clipboard.writeText(el.textContent.trim()).then(()=>{
+    const btn=el.nextElementSibling;
+    if(btn){const o=btn.textContent;btn.textContent='✓';setTimeout(()=>btn.textContent=o,1500);}
+  }).catch(()=>{});
+}
+function pfCopyAll(){
+  const text=[
+    'Name: '+PROFILE.name,
+    'Email: '+PROFILE.email,
+    'Phone: '+PROFILE.phone,
+    'Location: '+PROFILE.location,
+    'LinkedIn: '+PROFILE.linkedin,
+    'Portfolio: '+PROFILE.portfolio,
+    'GitHub: '+PROFILE.github,
+    'Behance: '+PROFILE.behance,
+    'Title: '+PROFILE.title,
+    'Skills: '+PROFILE.skills
+  ].join('\n');
+  navigator.clipboard.writeText(text).catch(()=>{});
 }
 
 // Override initNotes to wire qnotes to new system
