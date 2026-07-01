@@ -4148,34 +4148,22 @@ async function dbRefreshAll(){
 }
 
 async function dbFetchBriefing(){
-  const apifyKey=localStorage.getItem('cos-apify-key');
   document.getElementById('db-brief-content').innerHTML=`<div class="db-loading"><div class="rb-spinner"></div><span>Fetching headlines…</span></div>`;
   document.getElementById('db-news-feed').innerHTML=`<div class="db-loading"><div class="rb-spinner"></div><span>Loading news…</span></div>`;
   document.getElementById('db-news-count').textContent='';
 
-  if(!apifyKey){
-    document.getElementById('db-brief-content').innerHTML=`<div class="db-empty"><div style="font-size:28px;margin-bottom:8px">🌅</div><div>No Apify token found.</div><div style="margin-top:4px">Go to <strong>Settings</strong> → add your Apify token for a live morning briefing.</div></div>`;
-    dbRenderNewsFeed(DB_FALLBACK_NEWS);
-    dbNewsCache=DB_FALLBACK_NEWS;
-    dbUpdateDashHighlights(DB_FALLBACK_NEWS);
-    return;
-  }
-
   let newsItems=[];
   try{
-    const res=await fetch(`https://api.apify.com/v2/acts/apify~google-news-scraper/run-sync-get-dataset-items?token=${apifyKey}&timeout=60`,{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({queries:['UX design startup AI technology India fintech IPO 2026'],maxNewsArticlesPerQuery:20,proxyConfiguration:{useApifyProxy:true}})
-    });
+    const res=await fetch('/api/news');
     if(res.ok){
-      const raw=await res.json();
-      if(Array.isArray(raw)){
-        newsItems=raw.slice(0,20).map(it=>({
-          title:it.title||it.headline||it.text||'',
-          source:it.source||it.publisher||it.website||'',
-          time:dbTimeAgo(it.date||it.pubDate||it.publishedAt||''),
-          url:it.url||it.link||'',
-          cat:dbCategorize(it.title||it.headline||'')
+      const data=await res.json();
+      if(Array.isArray(data.items)){
+        newsItems=data.items.map(it=>({
+          title:it.title||'',
+          source:it.source||'',
+          time:dbTimeAgo(it.pubDate||''),
+          url:it.link||'',
+          cat:dbCategorize(it.title||'')
         })).filter(it=>it.title.length>10);
       }
     }
@@ -4183,7 +4171,7 @@ async function dbFetchBriefing(){
 
   if(!newsItems.length){
     newsItems=[...DB_FALLBACK_NEWS];
-    document.getElementById('db-brief-content').innerHTML=`<div class="db-error"><div class="db-error-txt">Could not fetch live headlines. Check your Apify token or retry.</div><button type="button" class="btn btn-o" onclick="dbFetchBriefing()">Retry</button></div>`;
+    document.getElementById('db-brief-content').innerHTML=`<div class="db-error"><div class="db-error-txt">Could not fetch live headlines. Please retry.</div><button type="button" class="btn btn-o" onclick="dbFetchBriefing()">Retry</button></div>`;
     dbRenderNewsFeed(newsItems);
     dbNewsCache=newsItems;
     dbUpdateDashHighlights(newsItems);
