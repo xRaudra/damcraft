@@ -1909,7 +1909,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
             <div class="db-card">
               <div class="db-card-hdr">
                 <div class="db-card-title">₹ Commodities</div>
-                <button type="button" class="btn btn-o" style="padding:4px 10px;font-size:12px" onclick="dbRefreshFinance(true)">↻ Refresh</button>
+                <span id="db-fin-updated" style="font-size:11px;color:var(--text-muted)">Updates 3:30 PM</span>
               </div>
               <div class="db-fin-row"><div><div class="db-fin-name">Gold (24K)</div><div class="db-fin-sub">MCX · per 10g</div></div><div class="db-fin-right"><div class="db-fin-val db-neutral" id="db-gold-val">--</div><div class="db-fin-chg db-neutral" id="db-gold-chg"></div></div></div>
               <div class="db-fin-row"><div><div class="db-fin-name">Silver</div><div class="db-fin-sub">MCX · per kg</div></div><div class="db-fin-right"><div class="db-fin-val db-neutral" id="db-silver-val">--</div><div class="db-fin-chg db-neutral" id="db-silver-chg"></div></div></div>
@@ -1970,7 +1970,21 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
             </div>
 
           </div>
+
         </div>
+
+        <!-- Market Pulse — full width -->
+        <div class="db-card" style="margin-top:16px">
+          <div class="db-card-hdr" style="margin-bottom:14px">
+            <div>
+              <div class="db-card-title">🧠 Market Pulse</div>
+              <div class="db-card-sub">AI picks from CNBC, Economic Times, MoneyControl & top analysts</div>
+            </div>
+            <button type="button" id="db-pulse-btn" class="btn btn-p" style="padding:6px 16px;font-size:12.5px" onclick="dbFetchMarketPulse()">⚡ Fetch Trending</button>
+          </div>
+          <div id="db-market-pulse"><div class="db-empty" style="padding:20px 0">Click "Fetch Trending" to get AI-curated buy/sell/hold picks on trending Indian stocks &amp; IPOs from top financial news sources.</div></div>
+        </div>
+
       </section>
 
       <section id="page-learning" class="page">
@@ -4125,17 +4139,17 @@ function dbInit(){
   if(el)el.textContent=d.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   dbLoadIPOs();
   dbLoadStocks();
+  dbScheduleFinanceAutoRefresh();
 }
 
 function dbPageLoad(){
   if(dbNewsFetched)return;
   dbNewsFetched=true;
-  const apifyKey=localStorage.getItem('cos-apify-key');
   const avKey=localStorage.getItem('cos-av-key');
   if(!avKey) document.getElementById('db-av-nokey').classList.remove('hidden');
   else document.getElementById('db-av-nokey').classList.add('hidden');
   dbFetchBriefing();
-  if(avKey) dbRefreshFinance(false);
+  dbLoadFinanceCache();
 }
 
 async function dbRefreshAll(){
@@ -4144,7 +4158,6 @@ async function dbRefreshAll(){
   if(!avKey) document.getElementById('db-av-nokey').classList.remove('hidden');
   else document.getElementById('db-av-nokey').classList.add('hidden');
   dbFetchBriefing();
-  if(avKey) dbRefreshFinance(true);
 }
 
 async function dbFetchBriefing(){
@@ -4260,23 +4273,43 @@ function dbUpdateDashHighlights(items){
 function dbLoadFinanceCache(){
   try{
     const raw=localStorage.getItem('cos-fin-cache');
-    const ts=parseInt(localStorage.getItem('cos-fin-cache-ts')||'0');
-    if(!raw||!ts)return false;
+    if(!raw)return false;
     const cache=JSON.parse(raw);
     Object.values(cache).forEach(({vid,cid,val,chgPct,did})=>{
       dbSetCell(vid,cid,val,chgPct);
       if(did==='nifty'||did==='sensex'||did==='gold')dbSyncDashFinance(did,val,chgPct);
     });
+    const ts=parseInt(localStorage.getItem('cos-fin-cache-ts')||'0');
+    const el=document.getElementById('db-fin-updated');
+    if(el&&ts){const d=new Date(ts);el.textContent='Updated '+d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});}
     return true;
   }catch(_){return false;}
+}
+
+function dbScheduleFinanceAutoRefresh(){
+  const avKey=localStorage.getItem('cos-av-key');
+  if(!avKey)return;
+  // 3:30 PM IST = 10:00 AM UTC
+  const now=new Date();
+  const todayRefreshUTC=new Date(now);
+  todayRefreshUTC.setUTCHours(10,0,0,0);
+  const cacheTs=parseInt(localStorage.getItem('cos-fin-cache-ts')||'0');
+  // If past 10:00 UTC today and cache is older than today's 10:00 UTC → fetch now
+  if(now>=todayRefreshUTC&&cacheTs<todayRefreshUTC.getTime()){
+    dbRefreshFinance(true);
+    return;
+  }
+  // Schedule next refresh
+  const next=new Date(todayRefreshUTC);
+  if(now>=todayRefreshUTC)next.setUTCDate(next.getUTCDate()+1);
+  setTimeout(()=>{dbRefreshFinance(true);dbScheduleFinanceAutoRefresh();},next.getTime()-now.getTime());
 }
 
 async function dbRefreshFinance(force=false){
   const avKey=localStorage.getItem('cos-av-key');
   if(!avKey)return;
-  // Use cache if less than 4 hours old and not forced
-  const cacheTs=parseInt(localStorage.getItem('cos-fin-cache-ts')||'0');
-  if(!force&&cacheTs&&(Date.now()-cacheTs)<4*60*60*1000){dbLoadFinanceCache();return;}
+  // Use cache if not forced and cache exists
+  if(!force&&dbLoadFinanceCache())return;
   // Fetch with 13s delays to respect AV free-tier rate limit (5/min = 1 per 12s)
   const finCache={};
   const CALLS=[
@@ -4334,6 +4367,57 @@ function dbSyncDashFinance(id,val,chgPct){
   const v=document.getElementById(base+'-val'),c=document.getElementById(base+'-chg');
   if(v){v.textContent=val;v.classList.remove('fv-dim');}
   if(c&&chgPct!==null){c.textContent=(chgPct>=0?'▲ +':'▼ ')+Math.abs(chgPct).toFixed(2)+'%';c.className='fc '+(chgPct>=0?'fup':'fdn');}
+}
+
+// ── MARKET PULSE ──
+async function dbFetchMarketPulse(){
+  const btn=document.getElementById('db-pulse-btn');
+  const el=document.getElementById('db-market-pulse');
+  if(btn){btn.disabled=true;btn.textContent='Fetching…';}
+  el.innerHTML=`<div class="db-loading"><div class="rb-spinner"></div><span>Fetching market news from CNBC, ET, MoneyControl…</span></div>`;
+
+  let articles=[];
+  try{
+    const res=await fetch('/api/news?type=market');
+    if(res.ok){const data=await res.json();articles=data.items||[];}
+  }catch(_){}
+
+  if(!articles.length){
+    el.innerHTML=`<div class="db-error"><div class="db-error-txt">Could not fetch market data. Please retry.</div><button type="button" class="btn btn-o" onclick="dbFetchMarketPulse()">Retry</button></div>`;
+    if(btn){btn.disabled=false;btn.textContent='⚡ Fetch Trending';}
+    return;
+  }
+
+  el.innerHTML=`<div class="db-loading"><div class="rb-spinner"></div><span>Claude is analyzing trending stocks &amp; IPOs…</span></div>`;
+  const headlines=articles.slice(0,20).map(it=>`- ${it.title}${it.source?' ('+it.source+')':''}`).join('\n');
+
+  try{
+    const raw=await callClaude(`You are a sharp Indian stock market analyst. Here are recent market news headlines from CNBC, Economic Times, and MoneyControl:\n\n${headlines}\n\nAnalyze these and extract the top 6 most discussed Indian stocks or IPOs. For each provide:\n1. Company/IPO name\n2. NSE or BSE symbol if determinable (else leave blank)\n3. What analysts and media are saying (1 sentence)\n4. Recommendation: BUY / SELL / HOLD / WATCH\n5. Confidence: High / Medium / Low\n6. One-line reasoning\n\nReturn ONLY a valid JSON array, no markdown, no explanation:\n[{"name":"...","symbol":"...","sentiment":"...","action":"BUY","confidence":"High","reason":"..."}]`);
+
+    let picks=[];
+    try{picks=JSON.parse(raw.trim());}catch(_){const m=raw.match(/\[[\s\S]*?\]/);if(m)try{picks=JSON.parse(m[0]);}catch(_){}}
+
+    if(!picks||!picks.length)throw new Error('no picks');
+
+    const col={BUY:'var(--success)',SELL:'var(--danger)',HOLD:'#f59e0b',WATCH:'var(--accent)'};
+    const bg={BUY:'var(--success-dim)',SELL:'var(--danger-dim)',HOLD:'rgba(245,158,11,.1)',WATCH:'var(--accent-dim)'};
+
+    el.innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px">
+      ${picks.map(p=>`<div style="background:var(--bg-surface);border:1.5px solid var(--border);border-left:3px solid ${col[p.action]||'var(--border)'};border-radius:var(--r-lg);padding:14px 16px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px">
+          <div><div style="font-size:13.5px;font-weight:700">${p.name}</div>${p.symbol?`<div style="font-size:11px;color:var(--text-muted);margin-top:1px">${p.symbol}</div>`:''}</div>
+          <span style="font-size:11px;font-weight:800;background:${bg[p.action]||'var(--bg-elevated)'};color:${col[p.action]||'var(--text-muted)'};padding:3px 10px;border-radius:20px;flex-shrink:0">${p.action}</span>
+        </div>
+        <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.55;margin-bottom:8px">${p.sentiment}</div>
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.5;border-top:1px solid var(--border-light);padding-top:8px">${p.reason}</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:6px">Confidence: <strong style="color:var(--text-secondary)">${p.confidence}</strong></div>
+      </div>`).join('')}
+    </div>
+    <div style="font-size:11.5px;color:var(--text-muted);margin-top:14px;padding-top:10px;border-top:1px solid var(--border-light)">⚠️ AI-generated analysis for informational purposes only. Not financial advice. Always do your own research before investing.</div>`;
+  }catch(e){
+    el.innerHTML=`<div class="db-error"><div class="db-error-txt">Could not generate analysis — Claude AI credits needed for this feature.</div></div>`;
+  }
+  if(btn){btn.disabled=false;btn.textContent='⚡ Fetch Trending';}
 }
 
 // IPO Watchlist

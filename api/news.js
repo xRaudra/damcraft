@@ -1,15 +1,17 @@
-export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') return res.status(200).end();
+const GENERAL_QUERIES = [
+  'startup India tech AI 2026',
+  'UX design product fintech India',
+  'IPO market business India 2026'
+];
 
-  const queries = [
-    'startup India tech AI 2026',
-    'UX design product fintech India',
-    'IPO market business India 2026'
-  ];
+const MARKET_QUERIES = [
+  'NSE BSE India stock market buy sell recommendation 2026',
+  'IPO India 2026 subscribe grey market premium GMP',
+  'Nifty Sensex market outlook analyst Economic Times',
+  'India stock market CNBC Moneycontrol top picks'
+];
 
+async function fetchRSS(queries) {
   const allItems = [];
   const seen = new Set();
 
@@ -29,7 +31,6 @@ export default async function handler(req, res) {
         const pubDate = /<pubDate>(.*?)<\/pubDate>/.exec(block)?.[1] || '';
         const sourceName = /<source[^>]*>(.*?)<\/source>/.exec(block)?.[1] || '';
 
-        // Google News titles are "Headline - Source Name"
         const parts = titleRaw.split(' - ');
         const title = parts.length > 1 ? parts.slice(0, -1).join(' - ') : titleRaw;
         const source = sourceName || (parts.length > 1 ? parts[parts.length - 1] : '');
@@ -45,5 +46,18 @@ export default async function handler(req, res) {
     } catch (_) {}
   }
 
-  return res.status(200).json({ items: allItems.slice(0, 25) });
+  return allItems;
+}
+
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+
+  const type = req.query.type || 'general';
+  const queries = type === 'market' ? MARKET_QUERIES : GENERAL_QUERIES;
+  const items = await fetchRSS(queries);
+
+  return res.status(200).json({ items: items.slice(0, 25) });
 }
