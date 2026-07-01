@@ -411,9 +411,13 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
 .pf-row{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border)}
 .pf-row:last-child{border-bottom:none}
 .pf-lbl{font-size:11px;color:var(--text-muted);min-width:70px;flex-shrink:0;padding-top:2px;text-transform:uppercase;letter-spacing:.3px}
-.pf-val{font-size:13px;color:var(--text-primary);flex:1;word-break:break-word;line-height:1.5}
-.pf-copy{background:none;border:1px solid var(--border);border-radius:4px;cursor:pointer;color:var(--text-muted);font-size:11px;padding:2px 7px;flex-shrink:0;transition:color .15s,border-color .15s;font-family:var(--font)}
-.pf-copy:hover{color:var(--accent);border-color:var(--accent)}
+.pf-val{font-size:13px;color:var(--text-primary);flex:1;word-break:break-word;line-height:1.5;cursor:pointer;border-radius:5px;padding:2px 6px;margin:-2px -6px;transition:background .15s}
+.pf-val:hover{background:var(--bg-hover)}
+.pf-val.pf-flash{background:var(--accent)!important;color:#fff;transition:none}
+.pf-skills{display:flex;flex-wrap:wrap;gap:6px;flex:1}
+.pf-skill{display:inline-flex;align-items:center;background:var(--bg-base);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--text-primary);cursor:pointer;transition:background .15s,border-color .15s,color .15s;user-select:none;font-family:var(--font)}
+.pf-skill:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.pf-skill.pf-flash{background:var(--success,#22c55e)!important;border-color:var(--success,#22c55e)!important;color:#fff!important;transition:none}
 
 /* quick access */
 .qg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -2112,7 +2116,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
           <div class="pf-page-hdr">
             <div>
               <div class="pf-page-title">My Profile</div>
-              <div class="pf-page-sub">Your reference card — copy any field or the whole profile</div>
+              <div class="pf-page-sub">Click any field or skill to copy it</div>
             </div>
             <button type="button" class="btn btn-p" onclick="pfCopyAll()">Copy All</button>
           </div>
@@ -2121,15 +2125,15 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
           <div class="pf-section">
             <div class="pf-sec-title">Contact &amp; Links</div>
             <div class="pf-list">
-              <div class="pf-row"><span class="pf-lbl">Name</span><span class="pf-val" id="pf-name">Saurabh Pandey</span><button class="pf-copy" onclick="pfCopy('pf-name')">copy</button></div>
-              <div class="pf-row"><span class="pf-lbl">Title</span><span class="pf-val" id="pf-ttl">Lead UX Designer · 8 Years</span><button class="pf-copy" onclick="pfCopy('pf-ttl')">copy</button></div>
-              <div class="pf-row"><span class="pf-lbl">Email</span><span class="pf-val" id="pf-email">sp.echobox@gmail.com</span><button class="pf-copy" onclick="pfCopy('pf-email')">copy</button></div>
-              <div class="pf-row"><span class="pf-lbl">Phone</span><span class="pf-val" id="pf-phone">+91 93353 55931</span><button class="pf-copy" onclick="pfCopy('pf-phone')">copy</button></div>
-              <div class="pf-row"><span class="pf-lbl">Location</span><span class="pf-val" id="pf-loc">Noida, Uttar Pradesh, India</span><button class="pf-copy" onclick="pfCopy('pf-loc')">copy</button></div>
-              <div class="pf-row"><span class="pf-lbl">LinkedIn</span><span class="pf-val" id="pf-li">linkedin.com/in/spenigma</span><button class="pf-copy" onclick="pfCopy('pf-li')">copy</button></div>
-              <div class="pf-row"><span class="pf-lbl">Portfolio</span><span class="pf-val" id="pf-port">saurabhwork.framer.website</span><button class="pf-copy" onclick="pfCopy('pf-port')">copy</button></div>
-              <div class="pf-row"><span class="pf-lbl">GitHub</span><span class="pf-val" id="pf-gh">github.com/xRaudra</span><button class="pf-copy" onclick="pfCopy('pf-gh')">copy</button></div>
-              <div class="pf-row"><span class="pf-lbl">Behance</span><span class="pf-val" id="pf-be">behance.net/raudra</span><button class="pf-copy" onclick="pfCopy('pf-be')">copy</button></div>
+              <div class="pf-row"><span class="pf-lbl">Name</span><span class="pf-val" id="pf-name" onclick="pfCopyEl(this)" title="Click to copy">Saurabh Pandey</span></div>
+              <div class="pf-row"><span class="pf-lbl">Title</span><span class="pf-val" id="pf-ttl" onclick="pfCopyEl(this)" title="Click to copy">Lead UX Designer · 8 Years</span></div>
+              <div class="pf-row"><span class="pf-lbl">Email</span><span class="pf-val" id="pf-email" onclick="pfCopyEl(this)" title="Click to copy">sp.echobox@gmail.com</span></div>
+              <div class="pf-row"><span class="pf-lbl">Phone</span><span class="pf-val" id="pf-phone" onclick="pfCopyEl(this)" title="Click to copy">+91 93353 55931</span></div>
+              <div class="pf-row"><span class="pf-lbl">Location</span><span class="pf-val" id="pf-loc" onclick="pfCopyEl(this)" title="Click to copy">Noida, Uttar Pradesh, India</span></div>
+              <div class="pf-row"><span class="pf-lbl">LinkedIn</span><span class="pf-val" id="pf-li" onclick="pfCopyEl(this)" title="Click to copy">linkedin.com/in/spenigma</span></div>
+              <div class="pf-row"><span class="pf-lbl">Portfolio</span><span class="pf-val" id="pf-port" onclick="pfCopyEl(this)" title="Click to copy">saurabhwork.framer.website</span></div>
+              <div class="pf-row"><span class="pf-lbl">GitHub</span><span class="pf-val" id="pf-gh" onclick="pfCopyEl(this)" title="Click to copy">github.com/xRaudra</span></div>
+              <div class="pf-row"><span class="pf-lbl">Behance</span><span class="pf-val" id="pf-be" onclick="pfCopyEl(this)" title="Click to copy">behance.net/raudra</span></div>
             </div>
           </div>
 
@@ -2137,17 +2141,32 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
           <div class="pf-section">
             <div class="pf-sec-title">About</div>
             <div class="pf-list">
-              <div class="pf-row"><span class="pf-lbl">Languages</span><span class="pf-val" id="pf-lang">English (Expert) · Hindi (Expert)</span><button class="pf-copy" onclick="pfCopy('pf-lang')">copy</button></div>
-              <div class="pf-row" style="align-items:flex-start"><span class="pf-lbl" style="padding-top:2px">Skills</span><span class="pf-val" id="pf-sk">UX Design, Product Design, Mobile UX, Product Strategy, AI-Augmented Design, Design Leadership, Figma, Adobe Creative Cloud, Framer, Miro, HTML/CSS</span><button class="pf-copy" onclick="pfCopy('pf-sk')">copy</button></div>
+              <div class="pf-row"><span class="pf-lbl">Languages</span><span class="pf-val" id="pf-lang" onclick="pfCopyEl(this)" title="Click to copy">English (Expert) · Hindi (Expert)</span></div>
+              <div class="pf-row" style="align-items:center">
+                <span class="pf-lbl">Skills</span>
+                <div class="pf-skills">
+                  <span class="pf-skill" onclick="pfCopyText(this,'UX Design')">UX Design</span>
+                  <span class="pf-skill" onclick="pfCopyText(this,'Product Design')">Product Design</span>
+                  <span class="pf-skill" onclick="pfCopyText(this,'Mobile UX')">Mobile UX</span>
+                  <span class="pf-skill" onclick="pfCopyText(this,'Product Strategy')">Product Strategy</span>
+                  <span class="pf-skill" onclick="pfCopyText(this,'AI-Augmented Design')">AI-Augmented Design</span>
+                  <span class="pf-skill" onclick="pfCopyText(this,'Design Leadership')">Design Leadership</span>
+                  <span class="pf-skill" onclick="pfCopyText(this,'Figma')">Figma</span>
+                  <span class="pf-skill" onclick="pfCopyText(this,'Adobe Creative Cloud')">Adobe Creative Cloud</span>
+                  <span class="pf-skill" onclick="pfCopyText(this,'Framer')">Framer</span>
+                  <span class="pf-skill" onclick="pfCopyText(this,'Miro')">Miro</span>
+                  <span class="pf-skill" onclick="pfCopyText(this,'HTML/CSS')">HTML/CSS</span>
+                </div>
+              </div>
             </div>
           </div>
 
           <!-- Experience -->
           <div class="pf-section">
-            <div class="pf-sec-title">Work Experience <button class="pf-copy" onclick="pfCopy('pf-exp')" style="margin-left:8px">copy all</button></div>
+            <div class="pf-sec-title">Work Experience</div>
             <div class="pf-list">
               <div class="pf-row" style="align-items:flex-start">
-                <span class="pf-val" id="pf-exp" style="white-space:pre-line;font-size:13px;line-height:1.7">Lead UI/UX Designer — Seiva Networks Solutions Pvt. Ltd.
+                <span class="pf-val" id="pf-exp" onclick="pfCopyEl(this)" title="Click to copy all experience" style="white-space:pre-line;font-size:13px;line-height:1.8">Lead UI/UX Designer — Seiva Networks Solutions Pvt. Ltd.
 May 2023 – May 2026 · Remote · Thiruvananthapuram, Kerala
 
 UI/UX Designer — Mach1 Digital Pvt. Ltd.
@@ -2167,43 +2186,39 @@ Sep 2018 – Feb 2020</span>
 
           <!-- Education -->
           <div class="pf-section">
-            <div class="pf-sec-title">Education <button class="pf-copy" onclick="pfCopy('pf-edu')" style="margin-left:8px">copy all</button></div>
+            <div class="pf-sec-title">Education</div>
             <div class="pf-list">
               <div class="pf-row" style="align-items:flex-start">
-                <span class="pf-val" id="pf-edu" style="white-space:pre-line;font-size:13px;line-height:1.7">M.Com — DDU Gorakhpur University (2018, 2nd Division)
-B.Com — DDU Gorakhpur University (2016, 2nd Division)</span>
+                <span class="pf-val" id="pf-edu" onclick="pfCopyEl(this)" title="Click to copy" style="white-space:pre-line;font-size:13px;line-height:1.8">M.Com — DDU Gorakhpur University (2018)
+B.Com — DDU Gorakhpur University (2016)</span>
               </div>
             </div>
           </div>
 
           <!-- Certifications -->
           <div class="pf-section">
-            <div class="pf-sec-title">Certifications <button class="pf-copy" onclick="pfCopy('pf-certs')" style="margin-left:8px">copy all</button></div>
+            <div class="pf-sec-title">Certifications</div>
             <div class="pf-list">
-              <div class="pf-row" style="align-items:flex-start">
-                <span class="pf-val" id="pf-certs" style="white-space:pre-line;font-size:13px;line-height:1.7">UX Design for Augmented Reality — IxDF (Jan 2026)
-AI for Designers — IxDF (Jan 2026)
-Human-Computer Interaction: Foundations of UX — IxDF (Dec 2025)
-Conduct UX Research &amp; Test Early Concepts — Coursera / Google (Apr 2023)
-Build Wireframes &amp; Low-Fidelity Prototypes — Coursera / Google (Apr 2023)
-Start UX Design Process: Empathize, Define, Ideate — Coursera / Google (Apr 2023)
-Foundations of UX Design — Coursera / Google (Mar 2023)
-Project Management Tips — LinkedIn Learning (Apr 2023)
-100 Days of Code: Python Pro Bootcamp — Udemy (Sep 2021)</span>
-              </div>
+              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'UX Design for Augmented Reality — IxDF (Jan 2026)')" title="Click to copy">UX Design for Augmented Reality — IxDF (Jan 2026)</span></div>
+              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'AI for Designers — IxDF (Jan 2026)')" title="Click to copy">AI for Designers — IxDF (Jan 2026)</span></div>
+              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'Human-Computer Interaction: Foundations of UX — IxDF (Dec 2025)')" title="Click to copy">Human-Computer Interaction: Foundations of UX — IxDF (Dec 2025)</span></div>
+              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'Conduct UX Research & Test Early Concepts — Coursera / Google (Apr 2023)')" title="Click to copy">Conduct UX Research &amp; Test Early Concepts — Coursera / Google (Apr 2023)</span></div>
+              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'Build Wireframes & Low-Fidelity Prototypes — Coursera / Google (Apr 2023)')" title="Click to copy">Build Wireframes &amp; Low-Fidelity Prototypes — Coursera / Google (Apr 2023)</span></div>
+              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'Start UX Design Process: Empathize, Define, Ideate — Coursera / Google (Apr 2023)')" title="Click to copy">Start UX Design Process: Empathize, Define, Ideate — Coursera / Google (Apr 2023)</span></div>
+              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'Foundations of UX Design — Coursera / Google (Mar 2023)')" title="Click to copy">Foundations of UX Design — Coursera / Google (Mar 2023)</span></div>
+              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'Project Management Tips — LinkedIn Learning (Apr 2023)')" title="Click to copy">Project Management Tips — LinkedIn Learning (Apr 2023)</span></div>
+              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'100 Days of Code: Python Pro Bootcamp — Udemy (Sep 2021)')" title="Click to copy">100 Days of Code: Python Pro Bootcamp — Udemy (Sep 2021)</span></div>
             </div>
           </div>
 
           <!-- Projects -->
           <div class="pf-section">
-            <div class="pf-sec-title">Projects <button class="pf-copy" onclick="pfCopy('pf-proj')" style="margin-left:8px">copy all</button></div>
+            <div class="pf-sec-title">Projects</div>
             <div class="pf-list">
-              <div class="pf-row" style="align-items:flex-start">
-                <span class="pf-val" id="pf-proj" style="white-space:pre-line;font-size:13px;line-height:1.7">MedGlobal360 — Healthcare Consumer Platform · Product Designer (2026)
-Geode Fit — AI-Assisted Fitness Platform · 0-to-1 Product Designer · Live: geodefit.in (2026)
-Damcraft — Brand &amp; Web Experience · 0-to-1 · Live: damcraft.com (2026)
-Amritpex 2023 — Event App for India Post · PM Modi event, Pragati Maidan (Jan 2023)</span>
-              </div>
+              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'MedGlobal360 — Healthcare Consumer Platform · Product Designer (2026)')" title="Click to copy">MedGlobal360 — Healthcare Consumer Platform · Product Designer (2026)</span></div>
+              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'Geode Fit — AI-Assisted Fitness Platform · 0-to-1 Product Designer · Live: geodefit.in (2026)')" title="Click to copy">Geode Fit — AI-Assisted Fitness Platform · 0-to-1 Product Designer · Live: geodefit.in (2026)</span></div>
+              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'Damcraft — Brand & Web Experience · 0-to-1 · Live: damcraft.com (2026)')" title="Click to copy">Damcraft — Brand &amp; Web Experience · 0-to-1 · Live: damcraft.com (2026)</span></div>
+              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'Amritpex 2023 — Event App for India Post · PM Modi event, Pragati Maidan (Jan 2023)')" title="Click to copy">Amritpex 2023 — Event App for India Post · PM Modi event, Pragati Maidan (Jan 2023)</span></div>
             </div>
           </div>
 
@@ -4547,16 +4562,21 @@ function qnSaveToNotes(){
 }
 
 // ── PROFILE COPY ──
-function pfCopy(id){
-  const el=document.getElementById(id);if(!el)return;
-  navigator.clipboard.writeText(el.textContent.trim()).then(()=>{
-    const btn=el.nextElementSibling;
-    if(btn){const o=btn.textContent;btn.textContent='✓';setTimeout(()=>btn.textContent=o,1500);}
-  }).catch(()=>{
+function pfFlash(el){
+  el.classList.add('pf-flash');
+  setTimeout(()=>el.classList.remove('pf-flash'),700);
+}
+function pfCopyEl(el){
+  const text=el.textContent.trim();
+  navigator.clipboard.writeText(text).then(()=>pfFlash(el)).catch(()=>{
     const r=document.createRange();r.selectNode(el);
     window.getSelection().removeAllRanges();window.getSelection().addRange(r);
     document.execCommand('copy');window.getSelection().removeAllRanges();
+    pfFlash(el);
   });
+}
+function pfCopyText(el,text){
+  navigator.clipboard.writeText(text).then(()=>pfFlash(el)).catch(()=>pfFlash(el));
 }
 function pfCopyAll(){
   const text=[
