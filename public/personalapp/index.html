@@ -4707,6 +4707,7 @@ function initNotes(){
   const ta=document.getElementById('qnotes');
   const si=document.getElementById('nsaved');
   if(!ta)return;
+  ta.value='';
   ta.addEventListener('input',()=>{
     if(!ndNotes.length){
       const now=new Date().toISOString();
