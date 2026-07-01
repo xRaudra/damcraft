@@ -4272,7 +4272,7 @@ function dbUpdateDashHighlights(items){
 async function dbRefreshFinance(){
   const avKey=localStorage.getItem('cos-av-key');
   if(!avKey)return;
-  // Fetch with 1.2s delays to respect AV free-tier rate limit (5/min)
+  // Fetch with 13s delays to respect AV free-tier rate limit (5/min = 1 per 12s)
   const CALLS=[
     {sym:'NSEI',type:'q',vid:'db-nifty-val',cid:'db-nifty-chg',fmt:v=>Number(v).toLocaleString('en-IN',{maximumFractionDigits:2}),did:'nifty'},
     {sym:'BSE:SENSEX',type:'q',vid:'db-sensex-val',cid:'db-sensex-chg',fmt:v=>Number(v).toLocaleString('en-IN',{maximumFractionDigits:2}),did:'sensex'},
@@ -4284,7 +4284,7 @@ async function dbRefreshFinance(){
   ];
   for(let i=0;i<CALLS.length;i++){
     const c=CALLS[i];
-    if(i>0)await new Promise(r=>setTimeout(r,1300));
+    if(i>0)await new Promise(r=>setTimeout(r,13000));
     try{
       let price=null,chgPct=null;
       if(c.type==='q'){
