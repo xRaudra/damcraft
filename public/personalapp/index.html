@@ -1909,7 +1909,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
             <div class="db-card">
               <div class="db-card-hdr">
                 <div class="db-card-title">₹ Commodities</div>
-                <button type="button" class="btn btn-o" style="padding:4px 10px;font-size:12px" onclick="dbRefreshFinance()">↻ Refresh</button>
+                <button type="button" class="btn btn-o" style="padding:4px 10px;font-size:12px" onclick="dbRefreshFinance(true)">↻ Refresh</button>
               </div>
               <div class="db-fin-row"><div><div class="db-fin-name">Gold (24K)</div><div class="db-fin-sub">MCX · per 10g</div></div><div class="db-fin-right"><div class="db-fin-val db-neutral" id="db-gold-val">--</div><div class="db-fin-chg db-neutral" id="db-gold-chg"></div></div></div>
               <div class="db-fin-row"><div><div class="db-fin-name">Silver</div><div class="db-fin-sub">MCX · per kg</div></div><div class="db-fin-right"><div class="db-fin-val db-neutral" id="db-silver-val">--</div><div class="db-fin-chg db-neutral" id="db-silver-chg"></div></div></div>
@@ -4135,7 +4135,7 @@ function dbPageLoad(){
   if(!avKey) document.getElementById('db-av-nokey').classList.remove('hidden');
   else document.getElementById('db-av-nokey').classList.add('hidden');
   dbFetchBriefing();
-  if(avKey) dbRefreshFinance();
+  if(avKey) dbRefreshFinance(false);
 }
 
 async function dbRefreshAll(){
@@ -4144,7 +4144,7 @@ async function dbRefreshAll(){
   if(!avKey) document.getElementById('db-av-nokey').classList.remove('hidden');
   else document.getElementById('db-av-nokey').classList.add('hidden');
   dbFetchBriefing();
-  if(avKey) dbRefreshFinance();
+  if(avKey) dbRefreshFinance(true);
 }
 
 async function dbFetchBriefing(){
@@ -4257,10 +4257,28 @@ function dbUpdateDashHighlights(items){
 }
 
 // ── FINANCE ──
-async function dbRefreshFinance(){
+function dbLoadFinanceCache(){
+  try{
+    const raw=localStorage.getItem('cos-fin-cache');
+    const ts=parseInt(localStorage.getItem('cos-fin-cache-ts')||'0');
+    if(!raw||!ts)return false;
+    const cache=JSON.parse(raw);
+    Object.values(cache).forEach(({vid,cid,val,chgPct,did})=>{
+      dbSetCell(vid,cid,val,chgPct);
+      if(did==='nifty'||did==='sensex'||did==='gold')dbSyncDashFinance(did,val,chgPct);
+    });
+    return true;
+  }catch(_){return false;}
+}
+
+async function dbRefreshFinance(force=false){
   const avKey=localStorage.getItem('cos-av-key');
   if(!avKey)return;
+  // Use cache if less than 4 hours old and not forced
+  const cacheTs=parseInt(localStorage.getItem('cos-fin-cache-ts')||'0');
+  if(!force&&cacheTs&&(Date.now()-cacheTs)<4*60*60*1000){dbLoadFinanceCache();return;}
   // Fetch with 13s delays to respect AV free-tier rate limit (5/min = 1 per 12s)
+  const finCache={};
   const CALLS=[
     {sym:'NSEI',type:'q',vid:'db-nifty-val',cid:'db-nifty-chg',fmt:v=>Number(v).toLocaleString('en-IN',{maximumFractionDigits:2}),did:'nifty'},
     {sym:'BSE:SENSEX',type:'q',vid:'db-sensex-val',cid:'db-sensex-chg',fmt:v=>Number(v).toLocaleString('en-IN',{maximumFractionDigits:2}),did:'sensex'},
@@ -4289,10 +4307,16 @@ async function dbRefreshFinance(){
         if(cr&&cr['5. Exchange Rate']){price=cr['5. Exchange Rate'];}
       }
       if(price!==null){
-        dbSetCell(c.vid,c.cid,c.fmt(price),chgPct);
-        if(c.did==='nifty'||c.did==='sensex'||c.did==='gold') dbSyncDashFinance(c.did,c.fmt(price),chgPct);
+        const fmtVal=c.fmt(price);
+        dbSetCell(c.vid,c.cid,fmtVal,chgPct);
+        if(c.did==='nifty'||c.did==='sensex'||c.did==='gold') dbSyncDashFinance(c.did,fmtVal,chgPct);
+        finCache[c.did]={vid:c.vid,cid:c.cid,val:fmtVal,chgPct,did:c.did};
       }
     }catch(_){dbSetCell(c.vid,c.cid,'--',null);}
+  }
+  if(Object.keys(finCache).length){
+    localStorage.setItem('cos-fin-cache',JSON.stringify(finCache));
+    localStorage.setItem('cos-fin-cache-ts',Date.now().toString());
   }
   dbRefreshStocks();
 }
