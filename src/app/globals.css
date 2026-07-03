@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design Tokens ─────────────────────────────────────── */
+:root {
+  --color-bg-dark: #000000;
+  --color-bg-light: #ebebeb;
+  --color-text-white: #ffffff;
+  --color-text-muted: #707070;
+  --color-glass-nav: rgba(36, 36, 36, 0.5);
+  --color-glass-cta: rgba(255, 255, 255, 0.7);
+
+  --font-display: var(--font-dm-sans), sans-serif;
+  --font-ui: var(--font-inter), system-ui, sans-serif;
+
+  --size-hero: clamp(26px, 3.0vw, 46.1px);
+  --lh-hero: clamp(40px, 4.5vw, 69.12px);
+  --size-label: 15.4px;
+  --size-nav: 13.8px;
+
+  --radius-card: 15.36px;
+  --radius-btn: 7.68px;
+  --radius-nav: 15.36px;
+  --radius-nav-link: 9.22px;
+
+  --blur-glass: blur(46px);
+  --margin-page: clamp(24px, 5vw, 76.8px);
+
+  --nav-pill-height: 51.45px;
+  --nav-top: 15.35px;
+}
+
+/* ─── Base Reset ─────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: auto; /* Lenis handles smooth scroll */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--color-bg-dark);
+  color: var(--color-text-white);
+  font-family: var(--font-ui);
+  overflow-x: hidden;
+}
+
+/* ─── GSAP masked text reveal ────────────────────────────── */
+.mst__inner {
+  display: block;
+  will-change: transform;
+}
+
+/* ─── Glass pill ─────────────────────────────────────────── */
+.glass-pill {
+  background: var(--color-glass-nav);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+  border-radius: var(--radius-nav);
+  height: var(--nav-pill-height);
+  display: flex;
+  align-items: center;
+}
+
+/* ─── Selection ──────────────────────────────────────────── */
+::selection {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #000;
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 2px;
+}
