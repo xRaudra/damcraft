@@ -4,7 +4,14 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [],
   },
-  // Personal app lives at /personalapp — handled by Vercel routing rules separately
+  async rewrites() {
+    return [
+      {
+        source: '/personalapp',
+        destination: '/personalapp/index.html',
+      },
+    ]
+  },
 }
 
 export default nextConfig
