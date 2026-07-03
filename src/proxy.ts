@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 const PASSWORD = process.env.PERSONAL_APP_PASSWORD ?? 'dam-private-2024'
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const authHeader = request.headers.get('authorization')
 
   if (authHeader?.startsWith('Basic ')) {
