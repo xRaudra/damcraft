@@ -31,6 +31,8 @@ export default function Button({ children, variant = 'glass', onClick, className
       backdropFilter: 'blur(8px)',
       WebkitBackdropFilter: 'blur(8px)',
       color: '#000',
+      // silver spotlight — white would vanish on the light glass
+      ['--shine-spot' as string]: 'rgba(140, 140, 140, 0.28)',
     },
     dark: {
       background: '#000',
@@ -42,6 +44,7 @@ export default function Button({ children, variant = 'glass', onClick, className
 
   return (
     <button
+      type="button"
       style={{ ...base, ...variants[variant] }}
       onClick={onClick}
       className={`group cta-shine ${className}`}

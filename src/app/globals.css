@@ -171,12 +171,32 @@ body {
   align-items: center;
 }
 
-/* ─── CTA shine sweep ────────────────────────────────────────
-   Specular highlight that sweeps across buttons / icon links on
-   hover — white core fading to silver, skewed like a light streak. */
+/* ─── CTA shine ──────────────────────────────────────────────
+   Two-layer living highlight on buttons / icon links:
+   1. ::before — silver spotlight that follows the cursor
+      (--mx / --my set by ShineTracker on pointermove)
+   2. ::after  — white-to-silver streak sweeping on a loop
+      while hovered, like light passing over brushed metal. */
 .cta-shine {
   position: relative;
   overflow: hidden;
+}
+.cta-shine::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    110px circle at var(--mx, 50%) var(--my, 50%),
+    var(--shine-spot, rgba(255, 255, 255, 0.35)) 0%,
+    rgba(192, 192, 192, 0.12) 45%,
+    transparent 72%
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.cta-shine:hover::before {
+  opacity: 1;
 }
 .cta-shine::after {
   content: '';
@@ -198,15 +218,19 @@ body {
   will-change: transform, opacity;
 }
 .cta-shine:hover::after {
-  animation: cta-shine-sweep 0.85s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  animation: cta-shine-sweep 2.4s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
 }
 @keyframes cta-shine-sweep {
   0% {
     transform: translateX(0) skewX(-20deg);
     opacity: 0;
   }
-  12% {
+  5% {
     opacity: 1;
+  }
+  38% {
+    transform: translateX(380%) skewX(-20deg);
+    opacity: 0;
   }
   100% {
     transform: translateX(380%) skewX(-20deg);
@@ -216,6 +240,9 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .cta-shine:hover::after {
     animation: none;
+  }
+  .cta-shine::before {
+    transition: none;
   }
 }
 
