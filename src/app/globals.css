@@ -246,6 +246,26 @@ body {
   }
 }
 
+/* ─── Scroll indicator bounce ────────────────────────────── */
+.scroll-bounce {
+  display: inline-flex;
+  animation: scroll-bounce 1.6s ease-in-out infinite;
+}
+@keyframes scroll-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-bounce {
+    animation: none;
+  }
+}
+
 /* ─── Selection ──────────────────────────────────────────── */
 ::selection {
   background: rgba(255, 255, 255, 0.15);

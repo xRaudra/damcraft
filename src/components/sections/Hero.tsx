@@ -177,7 +177,9 @@ export default function Hero() {
         >
           Scroll
         </span>
-        <ArrowDownPixel color="#fff" />
+        <span className="scroll-bounce">
+          <ArrowDownPixel color="#fff" />
+        </span>
       </div>
     </section>
   )
