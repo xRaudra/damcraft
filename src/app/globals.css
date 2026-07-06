@@ -261,13 +261,6 @@ body {
 .service-card:hover .card-tag:nth-child(4) { transition-delay: 0.15s; }
 .service-card:hover .card-tag:nth-child(5) { transition-delay: 0.2s; }
 .service-card:hover .card-tag:nth-child(6) { transition-delay: 0.25s; }
-/* touch devices have no hover — keep tags visible */
-@media (hover: none) {
-  .card-tag {
-    opacity: 1;
-    transform: none;
-  }
-}
 @media (prefers-reduced-motion: reduce) {
   .card-tag {
     transition: none;
