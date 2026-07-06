@@ -82,17 +82,8 @@ export default function ServiceCard({ service }: ServiceCardProps) {
 
       {/* Content */}
       <div className="absolute inset-0 flex flex-col justify-between p-6">
-        {/* Header — frosted strip across the top so the title reads over any photo */}
-        <div
-          className="flex items-start justify-between gap-2"
-          style={{
-            margin: '-24px -24px 0',
-            padding: '16px 24px 14px',
-            background: 'rgba(0, 0, 0, 0.1)',
-            backdropFilter: 'blur(14px)',
-            WebkitBackdropFilter: 'blur(14px)',
-          }}
-        >
+        {/* Header */}
+        <div className="flex items-start justify-between gap-2">
           <span
             style={{
               fontFamily: 'var(--font-ui)',
