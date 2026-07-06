@@ -33,7 +33,8 @@ export default function ServiceCard({ service }: ServiceCardProps) {
     const r = el.getBoundingClientRect()
     const px = (e.clientX - r.left) / r.width - 0.5 // -0.5 … 0.5
     const py = (e.clientY - r.top) / r.height - 0.5
-    el.style.transform = `perspective(900px) rotateX(${(-py * TILT_MAX).toFixed(2)}deg) rotateY(${(px * TILT_MAX).toFixed(2)}deg) scale(1.02)`
+    // lean toward the cursor — hovered side rises to meet the pointer
+    el.style.transform = `perspective(900px) rotateX(${(py * TILT_MAX).toFixed(2)}deg) rotateY(${(-px * TILT_MAX).toFixed(2)}deg) scale(1.02)`
   }
 
   const handleLeave = () => {
@@ -66,6 +67,9 @@ export default function ServiceCard({ service }: ServiceCardProps) {
           backgroundImage: `url(/services/${service.id}.jpg)`,
           transform: hovered ? 'scale(1.06)' : 'scale(1)',
           transition: 'transform 0.7s cubic-bezier(0.25, 0.1, 0.25, 1)',
+          // rounded on the layer itself — 3D transforms break parent
+          // overflow clipping in Chrome, exposing square corners
+          borderRadius: 'inherit',
         }}
       />
 
@@ -75,6 +79,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         style={{
           background:
             'linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.45) 45%, rgba(0,0,0,0.12) 70%, rgba(0,0,0,0.05) 100%)',
+          borderRadius: 'inherit',
         }}
       />
 
