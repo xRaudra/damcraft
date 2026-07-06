@@ -90,26 +90,31 @@ export function EmailPixel({ className = '', color = 'currentColor' }: IconProps
 
 // ─── Service arch icons ─────────────────────────────────────
 // The Damcraft arch (brand shape) drawn as a dot matrix, with a
-// service-specific pictogram set inside. Grid: 13 cols × 11 rows.
+// service-specific pictogram set inside. Grid: 17 cols × 13 rows —
+// high enough resolution for the dome to read as a true semicircle.
 
-// Arch outline: flat base, vertical sides, domed top
+// Arch outline: semicircular dome (radius 8, dots computed on the
+// circle), straight sides, flat base — matching the brand shape.
 const ARCH_OUTLINE: [number, number][] = [
   // dome crown
-  [4, 0], [5, 0], [6, 0], [7, 0], [8, 0],
-  // dome shoulders
-  [3, 1], [9, 1],
-  [2, 2], [10, 2],
-  [1, 3], [11, 3],
-  // sides
-  [0, 4], [12, 4],
-  [0, 5], [12, 5],
-  [0, 6], [12, 6],
-  [0, 7], [12, 7],
-  [0, 8], [12, 8],
-  [0, 9], [12, 9],
+  [6, 0], [7, 0], [8, 0], [9, 0], [10, 0],
+  // dome curve — two dots per row keeps the arc round
+  [4, 1], [5, 1], [11, 1], [12, 1],
+  [3, 2], [13, 2],
+  [2, 3], [14, 3],
+  [1, 4], [15, 4],
+  [1, 5], [15, 5],
+  // straight sides
+  [0, 6], [16, 6],
+  [0, 7], [16, 7],
+  [0, 8], [16, 8],
+  [0, 9], [16, 9],
+  [0, 10], [16, 10],
+  [0, 11], [16, 11],
   // base
-  [0, 10], [1, 10], [2, 10], [3, 10], [4, 10], [5, 10], [6, 10],
-  [7, 10], [8, 10], [9, 10], [10, 10], [11, 10], [12, 10],
+  [0, 12], [1, 12], [2, 12], [3, 12], [4, 12], [5, 12], [6, 12],
+  [7, 12], [8, 12], [9, 12], [10, 12], [11, 12], [12, 12],
+  [13, 12], [14, 12], [15, 12], [16, 12],
 ]
 
 // One pictogram per service, drawn inside the arch
@@ -174,11 +179,16 @@ interface ServiceArchIconProps extends IconProps {
 }
 
 export function ServiceArchIcon({ serviceId, className = '', color = 'rgba(255,255,255,0.9)' }: ServiceArchIconProps) {
-  const size = 3
-  const gap = 3.75
-  const w = 12 * gap + size
-  const h = 10 * gap + size
-  const dots = [...ARCH_OUTLINE, ...(SERVICE_GLYPHS[serviceId] ?? [])]
+  const size = 2.6
+  const gap = 3.3
+  const w = 16 * gap + size
+  const h = 12 * gap + size
+  // glyphs are authored on the old 13×11 grid — shift into the
+  // center of the larger arch (+2 cols, +1 row)
+  const glyph = (SERVICE_GLYPHS[serviceId] ?? []).map(
+    ([x, y]) => [x + 2, y + 1] as [number, number],
+  )
+  const dots = [...ARCH_OUTLINE, ...glyph]
   return (
     <svg
       width={w}
