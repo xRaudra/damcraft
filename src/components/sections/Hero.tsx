@@ -167,17 +167,17 @@ export default function Hero() {
         }}
         aria-hidden="true"
       >
-        <span
-          style={{
-            fontFamily: 'var(--font-ui)',
-            fontSize: 'var(--size-label)',
-            lineHeight: '23px',
-            color: '#fff',
-          }}
-        >
-          Scroll
-        </span>
-        <span className="scroll-bounce">
+        <span className="scroll-bounce" style={{ alignItems: 'center', gap: '8px' }}>
+          <span
+            style={{
+              fontFamily: 'var(--font-ui)',
+              fontSize: 'var(--size-label)',
+              lineHeight: '23px',
+              color: '#fff',
+            }}
+          >
+            Scroll
+          </span>
           <ArrowDownPixel color="#fff" />
         </span>
       </div>
