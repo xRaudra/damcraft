@@ -93,9 +93,6 @@ export default function Services() {
       <div
         className="services-grid"
         style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: '15.35px',
           margin: `15.36px var(--margin-page) 0`,
         }}
       >

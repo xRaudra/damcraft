@@ -29,6 +29,103 @@
 
   --nav-pill-height: 51.45px;
   --nav-top: 15.35px;
+
+  --card-h: 460.8px;
+}
+
+/* ─── Responsive token overrides ─────────────────────────── */
+@media (max-width: 640px) {
+  :root {
+    --size-hero: clamp(15px, 4.6vw, 26px);
+    --lh-hero: clamp(23px, 7vw, 40px);
+    --margin-page: 20px;
+    --card-h: 420px;
+  }
+}
+
+/* ─── Nav responsive ─────────────────────────────────────── */
+.nav-desktop {
+  display: flex;
+}
+.nav-burger {
+  display: none;
+}
+@media (max-width: 1023px) {
+  .nav-desktop {
+    display: none;
+  }
+  .nav-burger {
+    display: flex;
+  }
+}
+
+/* Mobile menu overlay */
+.nav-mobile-menu {
+  position: fixed;
+  top: calc(var(--nav-top) + var(--nav-pill-height) + 10px);
+  left: 15.35px;
+  right: 15.35px;
+  z-index: 99;
+  background: rgba(20, 20, 20, 0.92);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+  border-radius: var(--radius-nav);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.nav-mobile-menu.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.nav-mobile-link {
+  display: flex;
+  align-items: center;
+  height: 52px;
+  padding: 0 18px;
+  border-radius: var(--radius-nav-link);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  color: #fff;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+.nav-mobile-link:active,
+.nav-mobile-link.active {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* ─── Services grid responsive ───────────────────────────── */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15.35px;
+}
+@media (max-width: 1199px) {
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 639px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Hero text block responsive ─────────────────────────── */
+.hero-text-block {
+  max-width: min(780px, 78vw);
+}
+@media (max-width: 640px) {
+  .hero-text-block {
+    max-width: 88vw;
+  }
 }
 
 /* ─── Base Reset ─────────────────────────────────────────── */

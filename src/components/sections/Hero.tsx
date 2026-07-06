@@ -106,11 +106,10 @@ export default function Hero() {
 
       {/* ── Main text block — lower left ─────────────────── */}
       <div
-        className="absolute"
+        className="hero-text-block absolute"
         style={{
           left: 'var(--margin-page)',
           bottom: 'clamp(64px, 10vh, 140px)',
-          maxWidth: 'min(780px, 78vw)',
         }}
       >
         {/* Eyebrow */}

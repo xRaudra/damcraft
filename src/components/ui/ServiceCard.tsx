@@ -14,7 +14,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
     <div
       className="service-card relative overflow-hidden"
       style={{
-        height: '460.8px',
+        height: 'var(--card-h)',
         borderRadius: 'var(--radius-card)',
         background: service.gradient,
         cursor: 'default',
