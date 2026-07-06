@@ -101,10 +101,12 @@ export default function ServiceCard({ service }: ServiceCardProps) {
           {/* See More */}
           <div className="flex justify-end">
             <button
+              className="cta-shine"
               style={{
                 fontFamily: 'var(--font-ui)',
                 fontSize: '12px',
                 lineHeight: '18px',
+                padding: '2px 8px',
                 color: hovered ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.45)',
                 textDecoration: 'underline',
                 textUnderlineOffset: '3px',

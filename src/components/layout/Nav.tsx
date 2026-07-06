@@ -50,6 +50,7 @@ export default function Nav() {
       >
         {/* ── Logo pill ─────────────────────────────────── */}
         <div
+          className="cta-shine"
           style={{ ...PILL_STYLE, width: '55px', justifyContent: 'center', pointerEvents: 'auto' }}
         >
           <Link
@@ -116,6 +117,7 @@ export default function Nav() {
         {/* ── Right group: email pill + burger pill ─────── */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <div
+            className="cta-shine"
             style={{ ...PILL_STYLE, width: '55.29px', justifyContent: 'center', pointerEvents: 'auto' }}
           >
             <Link

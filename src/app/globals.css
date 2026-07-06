@@ -171,6 +171,54 @@ body {
   align-items: center;
 }
 
+/* ─── CTA shine sweep ────────────────────────────────────────
+   Specular highlight that sweeps across buttons / icon links on
+   hover — white core fading to silver, skewed like a light streak. */
+.cta-shine {
+  position: relative;
+  overflow: hidden;
+}
+.cta-shine::after {
+  content: '';
+  position: absolute;
+  top: -25%;
+  bottom: -25%;
+  left: -70%;
+  width: 55%;
+  background: linear-gradient(
+    105deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.95) 38%,
+    rgba(192, 192, 192, 0.55) 62%,
+    rgba(192, 192, 192, 0) 100%
+  );
+  transform: translateX(0) skewX(-20deg);
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.cta-shine:hover::after {
+  animation: cta-shine-sweep 0.85s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+@keyframes cta-shine-sweep {
+  0% {
+    transform: translateX(0) skewX(-20deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(380%) skewX(-20deg);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cta-shine:hover::after {
+    animation: none;
+  }
+}
+
 /* ─── Selection ──────────────────────────────────────────── */
 ::selection {
   background: rgba(255, 255, 255, 0.15);

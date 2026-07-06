@@ -44,7 +44,7 @@ export default function Button({ children, variant = 'glass', onClick, className
     <button
       style={{ ...base, ...variants[variant] }}
       onClick={onClick}
-      className={`group ${className}`}
+      className={`group cta-shine ${className}`}
     >
       {children}
       <ArrowRightPixel color={variant === 'dark' ? '#fff' : '#000'} />
