@@ -88,28 +88,32 @@ export function EmailPixel({ className = '', color = 'currentColor' }: IconProps
   )
 }
 
-// Damcraft wordmark "D" — clean geometric lettermark for the logo pill
-export function DamcraftLogoMark({ className = '' }: IconProps) {
+// Damcraft logo mark — official brand SVG
+export function DamcraftLogoMark({ className = '', color = '#fff' }: IconProps) {
   return (
     <svg
-      width="28"
-      height="31"
-      viewBox="0 0 28 31"
+      width="32"
+      height="32"
+      viewBox="0 0 400 400"
       fill="none"
       className={className}
       aria-hidden="true"
     >
-      {/* Geometric "D" lettermark */}
-      <path
-        d="M2 2H10C18.837 2 26 8.163 26 15.5C26 22.837 18.837 29 10 29H2V2Z"
-        stroke="white"
-        strokeWidth="2.5"
-        fill="none"
-        strokeLinejoin="round"
+      <polygon
+        points="117.5 309.88 139.93 309.88 143.31 309.88 130.56 271.33 117.5 309.88"
+        fill={color}
+      />
+      <polygon
+        points="219.29 286.36 219.29 309.88 222.47 309.88 231.01 309.88 219.29 286.36"
+        fill={color}
+      />
+      <polygon
+        points="280.14 309.88 280.14 286.36 268.42 309.88 280.14 309.88"
+        fill={color}
       />
       <path
-        d="M7 8H10C15.523 8 20 11.358 20 15.5C20 19.642 15.523 23 10 23H7V8Z"
-        fill="white"
+        d="M204.62,90.12h-9.24c-71.33,0-129.15,57.82-129.15,129.15v90.61h28.41l24.55-67.29h22.74l24.55,67.29h27.61v-67.31h27.35l28.27,57.01,28.43-57.01h27.2v67.31h28.42v-90.61c0-71.33-57.82-129.15-129.15-129.15Z"
+        fill={color}
       />
     </svg>
   )

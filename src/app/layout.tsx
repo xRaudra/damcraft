@@ -35,6 +35,9 @@ export const metadata: Metadata = {
     locale: 'en_US',
     siteName: 'Damcraft',
   },
+  icons: {
+    icon: '/logo.svg',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
