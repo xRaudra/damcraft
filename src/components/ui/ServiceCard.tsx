@@ -53,6 +53,9 @@ export default function ServiceCard({ service }: ServiceCardProps) {
       style={{
         height: 'var(--card-h)',
         borderRadius: 'var(--radius-card)',
+        // clip-path keeps corners rounded even mid-3D-transform,
+        // where overflow:hidden clipping breaks in Chrome
+        clipPath: 'inset(0 round var(--radius-card))',
         background: service.gradient,
         cursor: 'default',
         willChange: 'transform',
@@ -67,7 +70,10 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         style={{
           backgroundImage: `url(/services/${service.id}.jpg)`,
           transform: hovered ? 'scale(1.06)' : 'scale(1)',
-          transition: 'transform 0.7s cubic-bezier(0.25, 0.1, 0.25, 1)',
+          // blur + dim the photo on hover so the frosted pills read clearly
+          filter: hovered ? 'blur(9px) brightness(0.75)' : 'none',
+          transition:
+            'transform 0.7s cubic-bezier(0.25, 0.1, 0.25, 1), filter 0.5s ease',
           // rounded on the layer itself — 3D transforms break parent
           // overflow clipping in Chrome, exposing square corners
           borderRadius: 'inherit',
