@@ -92,8 +92,8 @@ export function EmailPixel({ className = '', color = 'currentColor' }: IconProps
 export function DamcraftLogoMark({ className = '', color = '#fff' }: IconProps) {
   return (
     <svg
-      width="42"
-      height="34.5"
+      width="35"
+      height="28.7"
       viewBox="66 90 268 220"
       fill="none"
       className={className}

@@ -50,7 +50,7 @@ export default function Nav() {
       >
         {/* ── Logo pill ─────────────────────────────────── */}
         <div
-          style={{ ...PILL_STYLE, width: '62px', justifyContent: 'center', pointerEvents: 'auto' }}
+          style={{ ...PILL_STYLE, width: '55px', justifyContent: 'center', pointerEvents: 'auto' }}
         >
           <Link
             href="/"
