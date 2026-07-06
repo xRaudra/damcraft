@@ -80,16 +80,6 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         }}
       />
 
-      {/* Gradient overlays */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            'linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.45) 45%, rgba(0,0,0,0.12) 70%, rgba(0,0,0,0.05) 100%)',
-          borderRadius: 'inherit',
-        }}
-      />
-
       {/* Content */}
       <div className="absolute inset-0 flex flex-col justify-between p-6">
         {/* Header */}
