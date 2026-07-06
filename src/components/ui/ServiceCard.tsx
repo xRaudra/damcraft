@@ -88,7 +88,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
           style={{
             margin: '-24px -24px 0',
             padding: '16px 24px 14px',
-            background: 'rgba(0, 0, 0, 0.12)',
+            background: 'rgba(0, 0, 0, 0.1)',
             backdropFilter: 'blur(14px)',
             WebkitBackdropFilter: 'blur(14px)',
           }}
