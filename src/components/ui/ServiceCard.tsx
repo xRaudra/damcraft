@@ -2,13 +2,13 @@
 
 import { useRef, useState } from 'react'
 import type { Service } from '@/types'
-import { ServiceArchIcon } from '@/components/ui/Icons'
+import { ServicePixelIcon } from '@/components/ui/Icons'
 
 interface ServiceCardProps {
   service: Service
 }
 
-const TILT_MAX = 5 // degrees
+const TILT_MAX = 10 // degrees
 
 export default function ServiceCard({ service }: ServiceCardProps) {
   const [hovered, setHovered] = useState(false)
@@ -82,8 +82,17 @@ export default function ServiceCard({ service }: ServiceCardProps) {
 
       {/* Content */}
       <div className="absolute inset-0 flex flex-col justify-between p-6">
-        {/* Header */}
-        <div className="flex items-start justify-between gap-2">
+        {/* Header — frosted strip across the top so the title reads over any photo */}
+        <div
+          className="flex items-start justify-between gap-2"
+          style={{
+            margin: '-24px -24px 0',
+            padding: '16px 24px 14px',
+            background: 'rgba(0, 0, 0, 0.12)',
+            backdropFilter: 'blur(14px)',
+            WebkitBackdropFilter: 'blur(14px)',
+          }}
+        >
           <span
             style={{
               fontFamily: 'var(--font-ui)',
@@ -135,9 +144,9 @@ export default function ServiceCard({ service }: ServiceCardProps) {
             ))}
           </div>
 
-          {/* Bottom row — service icon left, See More right */}
+          {/* Bottom row — service icon left, See More right (revealed on hover) */}
           <div className="flex items-end justify-between">
-            <ServiceArchIcon serviceId={service.id} />
+            <ServicePixelIcon serviceId={service.id} />
             <button
               type="button"
               className="cta-shine"
@@ -146,13 +155,15 @@ export default function ServiceCard({ service }: ServiceCardProps) {
                 fontSize: '12px',
                 lineHeight: '18px',
                 padding: '2px 8px',
-                color: hovered ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.45)',
+                color: 'rgba(255,255,255,0.85)',
                 textDecoration: 'underline',
                 textUnderlineOffset: '3px',
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
-                transition: 'color 0.2s ease',
+                opacity: hovered ? 1 : 0,
+                transform: hovered ? 'translateY(0)' : 'translateY(6px)',
+                transition: 'opacity 0.35s ease, transform 0.35s ease',
               }}
             >
               See More

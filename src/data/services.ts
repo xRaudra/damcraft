@@ -4,7 +4,7 @@ export const SERVICES: Service[] = [
   {
     id: 'brand-strategy',
     title: 'Brand Strategy',
-    count: '76 projects',
+    count: '6 projects',
     gradient: 'linear-gradient(160deg, #1c1812 0%, #2d2419 60%, #1a1410 100%)',
     tags: [
       'Brand Positioning',
@@ -18,7 +18,7 @@ export const SERVICES: Service[] = [
   {
     id: 'brand-identity',
     title: 'Brand Identity',
-    count: '75 projects',
+    count: '5 projects',
     gradient: 'linear-gradient(160deg, #111118 0%, #1a1a28 60%, #0f0f18 100%)',
     tags: [
       'Brand Identity Design',
@@ -31,7 +31,7 @@ export const SERVICES: Service[] = [
   {
     id: 'user-experience-design',
     title: 'User Experience Design',
-    count: '47 projects',
+    count: '6 projects',
     gradient: 'linear-gradient(160deg, #0c1220 0%, #162030 60%, #0a1018 100%)',
     tags: [
       'UX / UI Design',
@@ -45,7 +45,7 @@ export const SERVICES: Service[] = [
   {
     id: 'visual-content',
     title: 'Visual Content',
-    count: '43 projects',
+    count: '3 services',
     gradient: 'linear-gradient(160deg, #1e1410 0%, #2e1f18 60%, #1a1208 100%)',
     tags: [
       'Product Photography',
@@ -56,7 +56,7 @@ export const SERVICES: Service[] = [
   {
     id: 'web-development',
     title: 'Web Development',
-    count: '17 projects',
+    count: '7 services',
     gradient: 'linear-gradient(160deg, #0c1a0c 0%, #182a18 60%, #0a1608 100%)',
     tags: [
       'Website Development',
@@ -71,7 +71,7 @@ export const SERVICES: Service[] = [
   {
     id: 'ecommerce',
     title: 'eCommerce',
-    count: '27 projects',
+    count: '7 services',
     gradient: 'linear-gradient(160deg, #14101e 0%, #201828 60%, #100e1a 100%)',
     tags: [
       'Shopify Stores',
@@ -86,7 +86,7 @@ export const SERVICES: Service[] = [
   {
     id: 'web-mobile-applications',
     title: 'Web & Mobile Applications',
-    count: '15 projects',
+    count: '6 services',
     gradient: 'linear-gradient(160deg, #0d1520 0%, #1a2335 60%, #0b1220 100%)',
     tags: [
       'iOS & Android Apps',
@@ -98,9 +98,9 @@ export const SERVICES: Service[] = [
     ],
   },
   {
-    id: 'ai-workflow',
-    title: 'AI Work Flow',
-    count: '3 projects',
+    id: 'embedded-hardware',
+    title: 'Embedded & Hardware',
+    count: '5 services',
     gradient: 'linear-gradient(160deg, #0a1518 0%, #152028 60%, #081218 100%)',
     tags: [
       'Consumer Electronics UI',
