@@ -45,17 +45,21 @@
 
 /* ─── Nav responsive ─────────────────────────────────────── */
 .nav-desktop {
-  display: flex;
+  display: flex !important;
+  align-items: center;
 }
 .nav-burger {
-  display: none;
+  display: none !important;
 }
 @media (max-width: 1023px) {
   .nav-desktop {
-    display: none;
+    display: none !important;
   }
   .nav-burger {
-    display: flex;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
   }
 }
 

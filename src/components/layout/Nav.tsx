@@ -66,6 +66,7 @@ export default function Nav() {
           className="nav-desktop"
           style={{
             ...PILL_STYLE,
+            display: undefined, // CSS class controls visibility per breakpoint
             padding: '7.68px',
             pointerEvents: 'auto',
           }}
@@ -135,6 +136,7 @@ export default function Nav() {
             aria-expanded={menuOpen}
             style={{
               ...PILL_STYLE,
+              display: undefined, // CSS class controls visibility per breakpoint
               width: '55.29px',
               justifyContent: 'center',
               pointerEvents: 'auto',
