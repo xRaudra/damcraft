@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     siteName: 'Damcraft',
   },
   icons: {
-    icon: '/logo.svg',
+    icon: '/favicon.svg',
   },
 }
 
