@@ -97,7 +97,7 @@ export default function Hero() {
       <div
         className="hero-cta absolute"
         style={{
-          top: 'clamp(100px, 11.5vh, 161px)',
+          bottom: 'clamp(64px, 10vh, 140px)',
           right: 'var(--margin-page)',
         }}
       >
