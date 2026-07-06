@@ -75,7 +75,7 @@ export default function Hero() {
     <section
       ref={sectionRef}
       className="relative w-full overflow-hidden bg-black"
-      style={{ height: '100svh', minHeight: '640px' }}
+      style={{ height: '80svh', minHeight: '520px' }}
       aria-label="Hero"
     >
       {/* ── Background image ── place /public/hero-bg.jpg ── */}
@@ -109,7 +109,7 @@ export default function Hero() {
         className="absolute"
         style={{
           left: 'var(--margin-page)',
-          bottom: 'clamp(80px, 14vh, 200px)',
+          bottom: 'clamp(64px, 10vh, 140px)',
           maxWidth: 'min(780px, 78vw)',
         }}
       >
