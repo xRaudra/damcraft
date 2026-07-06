@@ -88,6 +88,120 @@ export function EmailPixel({ className = '', color = 'currentColor' }: IconProps
   )
 }
 
+// ─── Service arch icons ─────────────────────────────────────
+// The Damcraft arch (brand shape) drawn as a dot matrix, with a
+// service-specific pictogram set inside. Grid: 13 cols × 11 rows.
+
+// Arch outline: flat base, vertical sides, domed top
+const ARCH_OUTLINE: [number, number][] = [
+  // dome crown
+  [4, 0], [5, 0], [6, 0], [7, 0], [8, 0],
+  // dome shoulders
+  [3, 1], [9, 1],
+  [2, 2], [10, 2],
+  [1, 3], [11, 3],
+  // sides
+  [0, 4], [12, 4],
+  [0, 5], [12, 5],
+  [0, 6], [12, 6],
+  [0, 7], [12, 7],
+  [0, 8], [12, 8],
+  [0, 9], [12, 9],
+  // base
+  [0, 10], [1, 10], [2, 10], [3, 10], [4, 10], [5, 10], [6, 10],
+  [7, 10], [8, 10], [9, 10], [10, 10], [11, 10], [12, 10],
+]
+
+// One pictogram per service, drawn inside the arch
+const SERVICE_GLYPHS: Record<string, [number, number][]> = {
+  // crosshair / compass — positioning and direction
+  'brand-strategy': [
+    [6, 3], [6, 5], [6, 6], [6, 7], [6, 9],
+    [3, 6], [5, 6], [7, 6], [9, 6],
+  ],
+  // gem / diamond — the crafted mark
+  'brand-identity': [
+    [6, 4], [5, 5], [7, 5], [4, 6], [8, 6], [5, 7], [7, 7], [6, 8],
+  ],
+  // wireframe layout — header, content blocks, footer
+  'user-experience-design': [
+    [4, 4], [5, 4], [6, 4], [7, 4], [8, 4],
+    [4, 6], [5, 6], [7, 6], [8, 6],
+    [4, 8], [5, 8], [6, 8], [7, 8], [8, 8],
+  ],
+  // camera — photography and campaign shoots
+  'visual-content': [
+    [5, 4], [6, 4],
+    [4, 5], [5, 5], [6, 5], [7, 5], [8, 5],
+    [4, 6], [6, 6], [8, 6],
+    [4, 7], [8, 7],
+    [4, 8], [5, 8], [6, 8], [7, 8], [8, 8],
+  ],
+  // code brackets < >
+  'web-development': [
+    [5, 4], [4, 5], [3, 6], [4, 7], [5, 8],
+    [7, 4], [8, 5], [9, 6], [8, 7], [7, 8],
+  ],
+  // shopping bag
+  ecommerce: [
+    [6, 3], [5, 4], [7, 4],
+    [4, 5], [5, 5], [6, 5], [7, 5], [8, 5],
+    [4, 6], [8, 6],
+    [4, 7], [8, 7],
+    [4, 8], [5, 8], [6, 8], [7, 8], [8, 8],
+  ],
+  // phone with home button
+  'web-mobile-applications': [
+    [5, 3], [6, 3], [7, 3],
+    [5, 4], [7, 4],
+    [5, 5], [7, 5],
+    [5, 6], [7, 6],
+    [5, 7], [6, 7], [7, 7],
+    [5, 8], [6, 8], [7, 8],
+  ],
+  // neural nodes — connected intelligence
+  'ai-workflow': [
+    [4, 4], [8, 4],
+    [5, 5], [7, 5],
+    [6, 6],
+    [5, 7], [7, 7],
+    [4, 8], [8, 8],
+  ],
+}
+
+interface ServiceArchIconProps extends IconProps {
+  serviceId: string
+}
+
+export function ServiceArchIcon({ serviceId, className = '', color = 'rgba(255,255,255,0.9)' }: ServiceArchIconProps) {
+  const size = 3
+  const gap = 3.75
+  const w = 12 * gap + size
+  const h = 10 * gap + size
+  const dots = [...ARCH_OUTLINE, ...(SERVICE_GLYPHS[serviceId] ?? [])]
+  return (
+    <svg
+      width={w}
+      height={h}
+      viewBox={`0 0 ${w} ${h}`}
+      fill="none"
+      className={className}
+      aria-hidden="true"
+    >
+      {dots.map(([col, row], i) => (
+        <rect
+          key={i}
+          x={col * gap}
+          y={row * gap}
+          width={size}
+          height={size}
+          fill={color}
+        />
+      ))}
+    </svg>
+  )
+}
+
 // Damcraft logo mark — official brand SVG
 export function DamcraftLogoMark({ className = '', color = '#fff' }: IconProps) {
   return (

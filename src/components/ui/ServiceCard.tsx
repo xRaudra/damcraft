@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react'
 import type { Service } from '@/types'
+import { ServiceArchIcon } from '@/components/ui/Icons'
 
 interface ServiceCardProps {
   service: Service
@@ -138,8 +139,9 @@ export default function ServiceCard({ service }: ServiceCardProps) {
             ))}
           </div>
 
-          {/* See More */}
-          <div className="flex justify-end">
+          {/* Bottom row — service icon left, See More right */}
+          <div className="flex items-end justify-between">
+            <ServiceArchIcon serviceId={service.id} />
             <button
               type="button"
               className="cta-shine"
