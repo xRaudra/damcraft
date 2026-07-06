@@ -79,6 +79,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
             {service.tags.map((tag, i) => (
               <span
                 key={i}
+                className="card-tag"
                 style={{
                   fontFamily: 'var(--font-ui)',
                   fontSize: '11.5px',
@@ -90,7 +91,6 @@ export default function ServiceCard({ service }: ServiceCardProps) {
                   borderRadius: '5px',
                   padding: '4px 10px',
                   border: '1px solid rgba(255,255,255,0.07)',
-                  transition: 'background 0.2s ease',
                 }}
               >
                 {tag}
