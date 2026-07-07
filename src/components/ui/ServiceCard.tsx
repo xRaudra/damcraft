@@ -64,11 +64,12 @@ export default function ServiceCard({ service }: ServiceCardProps) {
       onMouseMove={handleMove}
       onMouseLeave={handleLeave}
     >
-      {/* Background image — drop service photos into public/services/<id>.webp */}
+      {/* Background image — set imagePath in services data, or drop
+          a photo at public/services/<id>.webp */}
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage: `url(/services/${service.id}.webp)`,
+          backgroundImage: `url(${service.imagePath ?? `/services/${service.id}.webp`})`,
           transform: hovered ? 'scale(1.06)' : 'scale(1)',
           // blur + dim the photo on hover so the frosted pills read clearly
           filter: hovered ? 'blur(9px) brightness(0.75)' : 'none',

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 27.5.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 240.945 153.071" style="enable-background:new 0 0 240.945 153.071;" xml:space="preserve">
+<g id="PRINT_2">
+	<g>
+		<rect x="-8.504" y="-8.504" style="fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;" width="257.953" height="170.079"/>
+		<g>
+			
+				<ellipse transform="matrix(0.2289 -0.9734 0.9734 0.2289 28.8755 227.8566)" style="fill-rule:evenodd;clip-rule:evenodd;fill:#010101;" cx="158.27" cy="95.701" rx="8.19" ry="8.19"/>
+			
+				<text transform="matrix(1 0 0 1 152.1088 99.2115)" style="fill:#FFFFFF; font-family:'Metropolis-Black'; font-size:12.9434px;">m</text>
+		</g>
+		<g>
+			<g>
+				
+					<text transform="matrix(1 0 0 1 150.0804 115.7819)" style="fill:#010101; font-family:'Metropolis-Regular'; font-size:6.5305px;">+555 321 567890</text>
+			</g>
+			<g>
+				
+					<text transform="matrix(1 0 0 1 150.0804 125.6872)" style="fill:#010101; font-family:'Metropolis-Regular'; font-size:6.5305px;">marksmith@email.com</text>
+			</g>
+			<g>
+				
+					<text transform="matrix(1 0 0 1 150.0804 135.5934)" style="fill:#010101; font-family:'Metropolis-Regular'; font-size:6.5305px;">210 Arizona St. NY USA</text>
+			</g>
+		</g>
+		<g>
+			<defs>
+				<rect id="SVGID_1_" x="-8.504" y="-8.504" width="257.953" height="170.079"/>
+			</defs>
+			<clipPath id="SVGID_00000044177648675686143090000012401067916181182598_">
+				<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
+			</clipPath>
+			<g style="clip-path:url(#SVGID_00000044177648675686143090000012401067916181182598_);">
+				<text transform="matrix(1 0 0 1 32.4358 12.0192)"><tspan x="0" y="0" style="fill:#010101; font-family:'Metropolis-Black'; font-size:28.9463px;">smith</tspan><tspan x="0" y="48.245" style="fill:#010101; font-family:'Metropolis-Black'; font-size:28.9463px;">mark</tspan><tspan x="0" y="96.491" style="fill:#010101; font-family:'Metropolis-Black'; font-size:28.9463px;">smith</tspan><tspan x="0" y="144.736" style="fill:#010101; font-family:'Metropolis-Black'; font-size:28.9463px;">mark</tspan></text>
+			</g>
+		</g>
+		<g>
+			<rect x="11.185" y="130.662" style="fill-rule:evenodd;clip-rule:evenodd;fill:#010101;" width="6.5" height="14.818"/>
+			<rect x="223.26" y="7.591" style="fill-rule:evenodd;clip-rule:evenodd;fill:#010101;" width="6.5" height="14.818"/>
+		</g>
+	</g>
+</g>
+<g id="PRINT_1">
+	<g>
+		<g>
+			<defs>
+				
+					<rect id="SVGID_00000115491701211137087920000015964258383572690052_" x="-8.504" y="-188.817" width="257.953" height="170.079"/>
+			</defs>
+			<clipPath id="SVGID_00000061431146143849336740000003051287081513538742_">
+				<use xlink:href="#SVGID_00000115491701211137087920000015964258383572690052_"  style="overflow:visible;"/>
+			</clipPath>
+			<g style="clip-path:url(#SVGID_00000061431146143849336740000003051287081513538742_);">
+				
+					<text transform="matrix(1 0 0 1 28.806 1.507813e-04)" style="fill:#FFFFFF; font-family:'Metropolis-Black'; font-size:74.5269px;">hello</text>
+			</g>
+		</g>
+	</g>
+</g>
+</svg>
