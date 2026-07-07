@@ -5,7 +5,7 @@ export const SERVICES: Service[] = [
     id: 'brand-strategy',
     title: 'Brand Strategy',
     count: '6 projects',
-    imagePath: '/services/brand-strategy.svg',
+    imagePath: '/services/brand-strategy.jpg',
     gradient: 'linear-gradient(160deg, #1c1812 0%, #2d2419 60%, #1a1410 100%)',
     tags: [
       'Brand Positioning',
