@@ -14,8 +14,8 @@
   --font-display: var(--font-dm-sans), sans-serif;
   --font-ui: var(--font-inter), system-ui, sans-serif;
 
-  --size-hero: clamp(26px, 3.0vw, 46.1px);
-  --lh-hero: clamp(40px, 4.5vw, 69.12px);
+  --size-hero: clamp(26px, 3.0vw, 42px);
+  --lh-hero: clamp(40px, 4.5vw, 63px);
   --size-label: 15.4px;
   --size-nav: 13.8px;
 
