@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react'
 import { gsap, ScrollTrigger } from '@/lib/gsap'
 import { ArrowDownPixel } from '@/components/ui/Icons'
 import Button from '@/components/ui/Button'
+import HeroParticles from '@/components/sections/HeroParticles'
 
 // Each line is a list of segments so the bright→dim transition can
 // happen mid-line, exactly like the reference.
@@ -60,6 +61,9 @@ export default function Hero() {
         '-=0.4',
       )
 
+      // Star-particle logo assembles behind everything
+      tl.to('.hero-particles', { opacity: 1, duration: 1.4, ease: 'power2.out' }, 0.2)
+
       // Parallax on the background image as we scroll past the hero
       gsap.to('.hero-bg-img', {
         yPercent: 18,
@@ -97,6 +101,9 @@ export default function Hero() {
             'linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.28) 55%, rgba(0,0,0,0.15) 100%)',
         }}
       />
+
+      {/* ── Star-particle logo — hero center ─────────────── */}
+      <HeroParticles />
 
       {/* ── CTA Button — upper right ──────────────────────── */}
       <div
