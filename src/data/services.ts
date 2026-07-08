@@ -100,7 +100,7 @@ export const SERVICES: Service[] = [
   },
   {
     id: 'embedded-hardware',
-    title: 'Embedded & Hardware',
+    title: 'AI Automation',
     count: '5 services',
     gradient: 'linear-gradient(160deg, #0a1518 0%, #152028 60%, #081218 100%)',
     tags: [
