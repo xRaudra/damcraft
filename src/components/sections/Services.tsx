@@ -106,7 +106,8 @@ export default function Services() {
         className="services-cta"
         style={{
           display: 'flex',
-          justifyContent: 'center',
+          justifyContent: 'flex-start',
+          paddingLeft: 'var(--margin-page)',
           marginTop: '46px',
         }}
       >
