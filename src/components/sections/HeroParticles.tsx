@@ -257,8 +257,8 @@ export default function HeroParticles() {
         left: '50%',
         top: '42%',
         transform: 'translate(-50%, -50%)',
-        width: 'clamp(320px, 56vh, 580px)',
-        height: 'clamp(320px, 56vh, 580px)',
+        // width/height live in globals.css (.hero-particles) so the
+        // mobile breakpoint can shrink them
         pointerEvents: 'none',
         opacity: 0, // GSAP fades it in with the hero timeline
       }}

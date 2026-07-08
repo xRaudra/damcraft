@@ -122,6 +122,18 @@
   }
 }
 
+/* ─── Hero particle logo sizing ──────────────────────────── */
+.hero-particles {
+  width: clamp(320px, 56vh, 580px);
+  height: clamp(320px, 56vh, 580px);
+}
+@media (max-width: 640px) {
+  .hero-particles {
+    width: clamp(170px, 54vw, 240px);
+    height: clamp(170px, 54vw, 240px);
+  }
+}
+
 /* ─── Hero text block responsive ─────────────────────────── */
 .hero-text-block {
   max-width: min(780px, 78vw);
