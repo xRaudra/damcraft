@@ -37,8 +37,8 @@
 /* ─── Responsive token overrides ─────────────────────────── */
 @media (max-width: 640px) {
   :root {
-    --size-hero: clamp(15px, 4.6vw, 26px);
-    --lh-hero: clamp(18px, 5.4vw, 30px);
+    --size-hero: clamp(19px, 5.6vw, 30px);
+    --lh-hero: clamp(24px, 6.9vw, 37px);
     --size-eyebrow: 11px;
     --margin-page: 20px;
     --card-h: 420px;
