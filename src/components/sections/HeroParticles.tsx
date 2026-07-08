@@ -16,6 +16,8 @@ const ART_Y = 90.12
 const ART_W = 267.54
 const ART_H = 219.76
 
+type SpriteKind = 0 | 1 | 2 // 0 = glow orb, 1 = pixel square, 2 = sparkle star
+
 interface Particle {
   x: number
   y: number
@@ -25,7 +27,66 @@ interface Particle {
   ty: number
   size: number
   phase: number
+  twinkleSpeed: number
   spring: number
+  kind: SpriteKind
+}
+
+// ── Sprite factory — pre-rendered so the rAF loop is pure drawImage ──
+function makeGlowOrb(): HTMLCanvasElement {
+  const s = 32
+  const c = document.createElement('canvas')
+  c.width = s
+  c.height = s
+  const g = c.getContext('2d')!
+  const grad = g.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2)
+  grad.addColorStop(0, 'rgba(255,255,255,1)')
+  grad.addColorStop(0.35, 'rgba(255,255,255,0.7)')
+  grad.addColorStop(1, 'rgba(255,255,255,0)')
+  g.fillStyle = grad
+  g.fillRect(0, 0, s, s)
+  return c
+}
+
+function makePixel(): HTMLCanvasElement {
+  const s = 8
+  const c = document.createElement('canvas')
+  c.width = s
+  c.height = s
+  const g = c.getContext('2d')!
+  g.fillStyle = '#fff'
+  g.fillRect(1, 1, s - 2, s - 2)
+  return c
+}
+
+function makeSparkleStar(): HTMLCanvasElement {
+  const s = 48
+  const c = document.createElement('canvas')
+  c.width = s
+  c.height = s
+  const g = c.getContext('2d')!
+  const cx = s / 2
+  const cy = s / 2
+  const R = s / 2 - 1 // long point
+  const r = s / 9 // waist
+  // soft halo behind the star
+  const halo = g.createRadialGradient(cx, cy, 0, cx, cy, R)
+  halo.addColorStop(0, 'rgba(255,255,255,0.55)')
+  halo.addColorStop(0.5, 'rgba(220,220,220,0.18)')
+  halo.addColorStop(1, 'rgba(255,255,255,0)')
+  g.fillStyle = halo
+  g.fillRect(0, 0, s, s)
+  // 4-point star with concave waists
+  g.beginPath()
+  g.moveTo(cx, cy - R)
+  g.quadraticCurveTo(cx + r * 0.4, cy - r * 0.4, cx + R, cy)
+  g.quadraticCurveTo(cx + r * 0.4, cy + r * 0.4, cx, cy + R)
+  g.quadraticCurveTo(cx - r * 0.4, cy + r * 0.4, cx - R, cy)
+  g.quadraticCurveTo(cx - r * 0.4, cy - r * 0.4, cx, cy - R)
+  g.closePath()
+  g.fillStyle = '#fff'
+  g.fill()
+  return c
 }
 
 export default function HeroParticles() {
@@ -38,6 +99,7 @@ export default function HeroParticles() {
     if (!ctx) return
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const sprites = [makeGlowOrb(), makePixel(), makeSparkleStar()]
     let raf = 0
     let particles: Particle[] = []
     const mouse = { x: -9999, y: -9999 }
@@ -80,6 +142,10 @@ export default function HeroParticles() {
       for (let y = 0; y < S; y += gap) {
         for (let x = 0; x < S; x += gap) {
           if (data[(y * S + x) * 4 + 3] > 128) {
+            // species mix: 62% glow orbs, 28% pixels, 10% sparkle stars
+            const roll = Math.random()
+            const kind: SpriteKind = roll < 0.62 ? 0 : roll < 0.9 ? 1 : 2
+            const base = kind === 2 ? 7 + Math.random() * 6 : kind === 0 ? 3.5 + Math.random() * 3 : 2 + Math.random() * 1.8
             particles.push({
               x: Math.random() * W,
               y: Math.random() * H,
@@ -87,21 +153,22 @@ export default function HeroParticles() {
               vy: 0,
               tx: (x / S) * W,
               ty: (y / S) * H,
-              size: 1 + Math.random() * 1.7,
+              size: base,
               phase: Math.random() * Math.PI * 2,
+              twinkleSpeed: 1.4 + Math.random() * 1.8,
               spring: 0.016 + Math.random() * 0.014,
+              kind,
             })
           }
         }
       }
 
       if (reducedMotion) {
-        // static mark, gentle alpha variation, no animation loop
         ctx.clearRect(0, 0, W, H)
-        ctx.fillStyle = '#fff'
         for (const p of particles) {
           ctx.globalAlpha = 0.5 + Math.random() * 0.5
-          ctx.fillRect(p.tx, p.ty, p.size, p.size)
+          const sp = sprites[p.kind]
+          ctx.drawImage(sp, p.tx - p.size / 2, p.ty - p.size / 2, p.size, p.size)
         }
         ctx.globalAlpha = 1
       }
@@ -114,18 +181,19 @@ export default function HeroParticles() {
       const H = rect.height
       t += 0.016
       ctx.clearRect(0, 0, W, H)
-      ctx.fillStyle = '#fff'
       for (const p of particles) {
         // spring toward home position in the mark
         p.vx += (p.tx - p.x) * p.spring
         p.vy += (p.ty - p.y) * p.spring
-        // scatter away from the cursor
+        // cursor interaction — scatter, brighten, and swell nearby
         const dx = p.x - mouse.x
         const dy = p.y - mouse.y
         const d2 = dx * dx + dy * dy
-        if (d2 < 7200) {
+        let near = 0
+        if (d2 < 10000) {
           const d = Math.sqrt(d2) || 1
-          const f = ((85 - d) / 85) * 2.4
+          near = (100 - d) / 100
+          const f = near * 2.6
           p.vx += (dx / d) * f
           p.vy += (dy / d) * f
         }
@@ -133,9 +201,14 @@ export default function HeroParticles() {
         p.vy *= 0.88
         p.x += p.vx
         p.y += p.vy
-        // starlike twinkle
-        ctx.globalAlpha = (0.5 + 0.5 * Math.sin(t * 2.2 + p.phase)) * 0.85 + 0.1
-        ctx.fillRect(p.x, p.y, p.size, p.size)
+
+        // starlike twinkle; sparkle stars also pulse in scale
+        const tw = 0.5 + 0.5 * Math.sin(t * p.twinkleSpeed + p.phase)
+        let s = p.size
+        if (p.kind === 2) s *= 0.8 + 0.45 * tw
+        s *= 1 + near * 0.9 // swell near the cursor
+        ctx.globalAlpha = Math.min(1, (0.35 + 0.65 * tw) * 0.9 + near * 0.6)
+        ctx.drawImage(sprites[p.kind], p.x - s / 2, p.y - s / 2, s, s)
       }
       ctx.globalAlpha = 1
       raf = requestAnimationFrame(tick)
@@ -184,8 +257,8 @@ export default function HeroParticles() {
         left: '50%',
         top: '42%',
         transform: 'translate(-50%, -50%)',
-        width: 'clamp(280px, 46vh, 480px)',
-        height: 'clamp(280px, 46vh, 480px)',
+        width: 'clamp(320px, 56vh, 580px)',
+        height: 'clamp(320px, 56vh, 580px)',
         pointerEvents: 'none',
         opacity: 0, // GSAP fades it in with the hero timeline
       }}
