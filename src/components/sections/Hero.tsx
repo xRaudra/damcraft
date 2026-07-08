@@ -5,11 +5,16 @@ import { gsap, ScrollTrigger } from '@/lib/gsap'
 import { ArrowDownPixel } from '@/components/ui/Icons'
 import Button from '@/components/ui/Button'
 
-const HEADLINE_LINES = [
-  { text: 'Damcraft is a design and technology', dim: false },
-  { text: 'studio based in Italy. We deliver',   dim: false },
-  { text: 'holistic brand identity & digital',   dim: true  },
-  { text: 'experiences.',                         dim: true  },
+// Each line is a list of segments so the bright→dim transition can
+// happen mid-line, exactly like the reference.
+const HEADLINE_LINES: { text: string; dim: boolean }[][] = [
+  [{ text: 'Damcraft is a design and technology', dim: false }],
+  [
+    { text: 'studio based in Italy. ', dim: false },
+    { text: 'We deliver', dim: true },
+  ],
+  [{ text: 'holistic brand identity & digital', dim: true }],
+  [{ text: 'experiences.', dim: true }],
 ]
 
 export default function Hero() {
@@ -129,7 +134,7 @@ export default function Hero() {
 
         {/* Headline — each line wrapped in overflow:hidden for the masked reveal */}
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          {HEADLINE_LINES.map((line, i) => (
+          {HEADLINE_LINES.map((segments, i) => (
             <div
               key={i}
               style={{
@@ -144,12 +149,18 @@ export default function Hero() {
                   fontSize: 'var(--size-hero)',
                   lineHeight: 'var(--lh-hero)',
                   fontWeight: 500,
-                  color: '#fff',
-                  opacity: line.dim ? 0.2 : 1,
                   letterSpacing: '-0.01em',
+                  whiteSpace: 'pre-wrap',
                 }}
               >
-                {line.text}
+                {segments.map((seg, j) => (
+                  <span
+                    key={j}
+                    style={{ color: seg.dim ? 'rgba(255,255,255,0.22)' : '#fff' }}
+                  >
+                    {seg.text}
+                  </span>
+                ))}
               </span>
             </div>
           ))}
