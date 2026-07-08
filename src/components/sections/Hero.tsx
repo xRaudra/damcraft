@@ -105,9 +105,9 @@ export default function Hero() {
       {/* ── Star-particle logo — hero center ─────────────── */}
       <HeroParticles />
 
-      {/* ── CTA Button — upper right ──────────────────────── */}
+      {/* ── CTA Button — floating bottom-right, desktop only ── */}
       <div
-        className="hero-cta absolute"
+        className="hero-cta hero-cta-desktop absolute"
         style={{
           bottom: 'clamp(36px, 5.5vh, 72px)',
           right: 'var(--margin-page)',
@@ -116,12 +116,11 @@ export default function Hero() {
         <Button variant="glass">Start a Project</Button>
       </div>
 
-      {/* ── Main text block — lower left ─────────────────── */}
+      {/* ── Main text block — lower left (bottom set in CSS) ── */}
       <div
         className="hero-text-block absolute"
         style={{
           left: 'var(--margin-page)',
-          bottom: 'clamp(36px, 5.5vh, 72px)',
         }}
       >
         {/* Eyebrow */}
@@ -171,6 +170,11 @@ export default function Hero() {
               </span>
             </div>
           ))}
+        </div>
+
+        {/* In-flow CTA — mobile only, follows the headline */}
+        <div className="hero-cta hero-cta-mobile">
+          <Button variant="glass">Start a Project</Button>
         </div>
       </div>
 

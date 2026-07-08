@@ -123,24 +123,44 @@
 }
 
 /* ─── Hero particle logo sizing ──────────────────────────── */
+/* mark draws at 70% of the canvas, so the canvas is oversized to
+   keep the visible mark large while halos never clip */
 .hero-particles {
-  width: clamp(320px, 56vh, 580px);
-  height: clamp(320px, 56vh, 580px);
+  top: 42%;
+  width: clamp(430px, 75vh, 780px);
+  height: clamp(430px, 75vh, 780px);
 }
 @media (max-width: 640px) {
   .hero-particles {
-    width: clamp(170px, 54vw, 240px);
-    height: clamp(170px, 54vw, 240px);
+    top: 32%;
+    width: clamp(240px, 76vw, 340px);
+    height: clamp(240px, 76vw, 340px);
   }
 }
 
 /* ─── Hero text block responsive ─────────────────────────── */
 .hero-text-block {
   max-width: min(780px, 78vw);
+  bottom: clamp(36px, 5.5vh, 72px);
 }
 @media (max-width: 640px) {
   .hero-text-block {
     max-width: 88vw;
+    bottom: 76px;
+  }
+}
+
+/* ─── Hero CTA placement — floating on desktop, in-flow on mobile ── */
+.hero-cta-mobile {
+  display: none;
+}
+@media (max-width: 640px) {
+  .hero-cta-desktop {
+    display: none;
+  }
+  .hero-cta-mobile {
+    display: block;
+    margin-top: 22px;
   }
 }
 

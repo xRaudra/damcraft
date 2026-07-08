@@ -120,7 +120,9 @@ export default function HeroParticles() {
       off.height = S
       const octx = off.getContext('2d')
       if (!octx) return
-      const scale = (S * 0.94) / ART_W
+      // mark fills 70% of the canvas — the margin keeps halos and
+      // scattered particles from clipping at the canvas edge
+      const scale = (S * 0.7) / ART_W
       octx.translate(
         (S - ART_W * scale) / 2 - ART_X * scale,
         (S - ART_H * scale) / 2 - ART_Y * scale,
@@ -146,9 +148,13 @@ export default function HeroParticles() {
             const roll = Math.random()
             const kind: SpriteKind = roll < 0.62 ? 0 : roll < 0.9 ? 1 : 2
             const base = kind === 2 ? 7 + Math.random() * 6 : kind === 0 ? 3.5 + Math.random() * 3 : 2 + Math.random() * 1.8
+            // scatter start positions inside a circle so the canvas
+            // never reads as a square during assembly
+            const ang = Math.random() * Math.PI * 2
+            const rad = Math.sqrt(Math.random()) * (Math.min(W, H) / 2)
             particles.push({
-              x: Math.random() * W,
-              y: Math.random() * H,
+              x: W / 2 + Math.cos(ang) * rad,
+              y: H / 2 + Math.sin(ang) * rad,
               vx: 0,
               vy: 0,
               tx: (x / S) * W,
@@ -255,10 +261,9 @@ export default function HeroParticles() {
       style={{
         position: 'absolute',
         left: '50%',
-        top: '42%',
         transform: 'translate(-50%, -50%)',
-        // width/height live in globals.css (.hero-particles) so the
-        // mobile breakpoint can shrink them
+        // width/height/top live in globals.css (.hero-particles) so
+        // the mobile breakpoint can resize and reposition it
         pointerEvents: 'none',
         opacity: 0, // GSAP fades it in with the hero timeline
       }}
