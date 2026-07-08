@@ -128,7 +128,7 @@ export default function Hero() {
           className="hero-eyebrow block uppercase"
           style={{
             fontFamily: 'var(--font-ui)',
-            fontSize: 'var(--size-label)',
+            fontSize: 'var(--size-eyebrow)',
             lineHeight: '23px',
             color: 'var(--color-text-muted)',
             letterSpacing: '0.05em',

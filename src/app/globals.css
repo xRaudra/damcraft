@@ -17,6 +17,7 @@
   --size-hero: clamp(26px, 3.0vw, 42px);
   --lh-hero: clamp(30px, 3.5vw, 48px);
   --size-label: 15.4px;
+  --size-eyebrow: 15.4px;
   --size-nav: 13.8px;
 
   --radius-card: 15.36px;
@@ -38,6 +39,7 @@
   :root {
     --size-hero: clamp(15px, 4.6vw, 26px);
     --lh-hero: clamp(18px, 5.4vw, 30px);
+    --size-eyebrow: 11px;
     --margin-page: 20px;
     --card-h: 420px;
   }
@@ -133,8 +135,8 @@
 @media (max-width: 640px) {
   .hero-particles {
     top: 32%;
-    width: clamp(240px, 76vw, 340px);
-    height: clamp(240px, 76vw, 340px);
+    width: clamp(300px, 94vw, 410px);
+    height: clamp(300px, 94vw, 410px);
   }
 }
 
@@ -160,7 +162,18 @@
   }
   .hero-cta-mobile {
     display: block;
-    margin-top: 22px;
+    margin-top: 20px;
+  }
+  /* buttons scale down with the smaller mobile type
+     (!important — the Button component sets these inline) */
+  .hero-cta button,
+  .services-cta button {
+    font-size: 13px !important;
+    line-height: 19px !important;
+    padding: 9px 13px 9px 17px !important;
+  }
+  .services-cta button {
+    min-width: 150px !important;
   }
 }
 
