@@ -102,7 +102,7 @@ export default function Hero() {
       <div
         className="hero-cta absolute"
         style={{
-          bottom: 'clamp(64px, 10vh, 140px)',
+          bottom: 'clamp(36px, 5.5vh, 72px)',
           right: 'var(--margin-page)',
         }}
       >
@@ -114,7 +114,7 @@ export default function Hero() {
         className="hero-text-block absolute"
         style={{
           left: 'var(--margin-page)',
-          bottom: 'clamp(64px, 10vh, 140px)',
+          bottom: 'clamp(36px, 5.5vh, 72px)',
         }}
       >
         {/* Eyebrow */}
