@@ -10,11 +10,11 @@ import Button from '@/components/ui/Button'
 const HEADLINE_LINES: { text: string; dim: boolean }[][] = [
   [{ text: 'Damcraft is a design and technology', dim: false }],
   [
-    { text: 'studio based in Italy. ', dim: false },
-    { text: 'We deliver', dim: true },
+    { text: 'studio from Noida. ', dim: false },
+    { text: "We don't", dim: true },
   ],
-  [{ text: 'holistic brand identity & digital', dim: true }],
-  [{ text: 'experiences.', dim: true }],
+  [{ text: 'decorate — we construct brands,', dim: true }],
+  [{ text: 'products & experiences.', dim: true }],
 ]
 
 export default function Hero() {

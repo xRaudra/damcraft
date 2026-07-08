@@ -29,8 +29,8 @@ export const metadata: Metadata = {
     template: '%s | Damcraft',
   },
   description:
-    'Damcraft is a design and technology studio based in Italy. We deliver holistic brand identity & digital experiences.',
-  keywords: ['design studio', 'brand identity', 'web development', 'UX design', 'Italy'],
+    "Damcraft is a design and technology studio from Noida. We don't decorate — we construct brands, products & experiences.",
+  keywords: ['design studio', 'brand identity', 'web development', 'UX design', 'Noida', 'India'],
   openGraph: {
     type: 'website',
     locale: 'en_US',

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'About',
-  description: 'We are Damcraft — a design and technology studio based in Italy.',
+  description: 'We are Damcraft — a design and technology studio from Noida.',
 }
 
 export default function AboutPage() {
