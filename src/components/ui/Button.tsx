@@ -8,9 +8,18 @@ interface ButtonProps {
   variant?: 'glass' | 'dark'
   onClick?: () => void
   className?: string
+  type?: 'button' | 'submit'
+  disabled?: boolean
 }
 
-export default function Button({ children, variant = 'glass', onClick, className = '' }: ButtonProps) {
+export default function Button({
+  children,
+  variant = 'glass',
+  onClick,
+  className = '',
+  type = 'button',
+  disabled = false,
+}: ButtonProps) {
   const [hovered, setHovered] = useState(false)
 
   const base: React.CSSProperties = {
@@ -55,8 +64,9 @@ export default function Button({ children, variant = 'glass', onClick, className
 
   return (
     <button
-      type="button"
-      style={{ ...base, ...variants[variant] }}
+      type={type}
+      disabled={disabled}
+      style={{ ...base, ...variants[variant], opacity: disabled ? 0.55 : 1 }}
       onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}

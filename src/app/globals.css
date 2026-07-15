@@ -348,6 +348,61 @@ body {
   }
 }
 
+/* ─── Contact form ───────────────────────────────────────── */
+.cf-panel {
+  display: flex;
+  gap: 24px;
+}
+.cf-row {
+  display: flex;
+  gap: 15.35px;
+}
+.cf-row .cf-input {
+  flex: 1;
+  min-width: 0;
+}
+.cf-services-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 24px;
+}
+.cf-input {
+  display: block;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(159, 159, 159, 0.3);
+  border-radius: var(--radius-btn);
+  padding: 14px 15px;
+  font-family: var(--font-ui);
+  font-size: 15.4px;
+  line-height: 23px;
+  color: #fff;
+  outline: none;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+.cf-input::placeholder {
+  color: rgba(255, 255, 255, 0.72);
+}
+.cf-input:focus {
+  border-color: rgba(255, 255, 255, 0.55);
+  background: rgba(0, 0, 0, 0.35);
+}
+@media (max-width: 900px) {
+  .cf-panel {
+    flex-direction: column;
+    gap: 34px;
+  }
+}
+@media (max-width: 640px) {
+  .cf-row {
+    flex-direction: column;
+    gap: 15.35px;
+  }
+  .cf-services-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ─── Selection ──────────────────────────────────────────── */
 ::selection {
   background: rgba(255, 255, 255, 0.15);
