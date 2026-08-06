@@ -4613,9 +4613,60 @@ function ndFmtDate(iso){
 function ndSaveNotes(){localStorage.setItem(ND_KEY,JSON.stringify(ndNotes));}
 function ndSaveDb(){localStorage.setItem(ND_DB_KEY,JSON.stringify(ndCollections));}
 
+function ndSeedAiLinks(){
+  const AI_LINKS=[
+    ["https://lovable.dev/","website generating"],
+    ["https://app.emergent.sh/home","app and website generation"],
+    ["https://www.perplexity.ai/","research"],
+    ["https://notebooklm.google/","video/meetings"],
+    ["https://playground.rumik.ai/playground","voice assistant"],
+    ["https://rumi.ai/dashboard","meetings transcripts"],
+    ["https://www.napkin.ai/","text to image"],
+    ["https://www.meshy.ai/?noRedirect=true","3d generation"],
+    ["https://chroniclehq.com/","presentation"],
+    ["https://huggingface.co/","check out multiple models"],
+    ["https://www.seedance2ai.io/","video generation"],
+    ["https://www.kimi.com/en","coding"],
+    ["https://zapier.com/","Automate AI Workflows, Agents, and Apps"],
+    ["https://www.n10ai.com/","agents work for you"],
+    ["https://relevanceai.com/","Run AI Agents at the Lowest Possible Cost"],
+    ["https://www.lindy.ai/","Any task any meeting"],
+    ["https://www.prosp.ai/","Messaging Automation AI"],
+    ["https://crewai.com/","Anyone who needs to build an agent can work with CrewAI"],
+    ["https://vapi.ai/","Build, test, and deploy advanced voice AI agents"],
+    ["https://feedly.com/","scrap internet for content"],
+    ["https://stability.ai/","Best Image/video Generating Models"],
+    ["https://smallest.ai/","Power enterprise voice with Smallest AI's Text-to-Speech, Speech-to-Text, and Voice Agent APIs. Real-time"],
+    ["https://elevenlabs.io/","Create lifelike speech with our AI voice generator and voice agents platform"],
+    ["https://dream-machine.lumalabs.ai/","Ideate, visualize, create videos, and share your dreams with the world"],
+    ["https://runwayml.com/","A real-time video agent API that lets you build fully custom conversational characters"],
+    ["https://meetemily.ai/","AI will chat with your website/video, etc and get answers to your questions"],
+    ["https://grok.com/","Grok is an AI assistant built by xAI. Chat, create images, write code, and get real-time answers from the web and X."],
+    ["https://apify.com/","Apify: The largest marketplace of trusted tools for AI"],
+    ["https://app.heygen.com/","Create AI videos from your ideas using HeyGen"],
+    ["https://happenstance.ai/","AI-powered network search for sales, recruiting, finding a job, fundraising, and more. Find warm intros, discover mutual connections, and research people"],
+    ["https://www.crystalknows.com/","Take a personality assessment in ten minutes"],
+    ["https://julius.ai/chat","AI for your workplace tasks: Data Analytics"]
+  ];
+  let coll=ndCollections.find(c=>c.name.trim().toLowerCase()==='ai links');
+  if(!coll){
+    coll={id:ndUID(),name:'AI links',desc:'',created:new Date().toISOString(),expanded:true,entries:[]};
+    ndCollections.unshift(coll);
+  }
+  const existing=new Set(coll.entries.map(e=>e.title.trim().toLowerCase()));
+  let added=0;
+  AI_LINKS.forEach(([url,desc])=>{
+    if(existing.has(url.toLowerCase()))return;
+    coll.entries.push({id:ndUID(),title:url,content:desc,type:'Link',added:new Date().toISOString()});
+    added++;
+  });
+  if(added>0)ndSaveDb();
+}
+
 function ndInit(){
   ndNotes=JSON.parse(localStorage.getItem(ND_KEY)||'[]');
   ndCollections=JSON.parse(localStorage.getItem(ND_DB_KEY)||'[]');
+  ndSeedAiLinks();
   ndRenderNoteList();
   ndRenderColls();
   ndSyncQnotes();
