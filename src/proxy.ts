@@ -22,5 +22,16 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/personalapp', '/personalapp/:path*'],
+  matcher: [
+    '/personalapp',
+    '/personalapp/:path*',
+    '/api/gmail/:path*',
+    '/api/auth/gmail/start',
+    '/api/slack/:path*',
+    '/api/whatsapp/send',
+    // NOT protected: /api/auth/gmail/callback (guarded by Google's
+    // single-use OAuth code) and /api/whatsapp/incoming (Twilio
+    // webhook, guarded by request-signature validation instead —
+    // Twilio can't send this app's Basic Auth credentials).
+  ],
 }

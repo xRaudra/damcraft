@@ -2274,6 +2274,46 @@ B.Com — DDU Gorakhpur University (2016)</span>
           </div>
         </div>
 
+        <!-- SECTION 1B: Integrations -->
+        <div class="st-section">
+          <div class="st-sec-title">Integrations</div>
+
+          <!-- Gmail -->
+          <div style="margin-bottom:20px">
+            <div class="st-label">Gmail</div>
+            <div class="st-sub">Read recent mail and send emails from CareerOS. Requires one-time authorization.</div>
+            <div class="st-key-row">
+              <button type="button" class="btn btn-p" onclick="window.open('/api/auth/gmail/start','_blank')">Connect Gmail</button>
+              <button type="button" class="btn btn-o" onclick="intTestGmail()">Send Test Email</button>
+            </div>
+            <div id="gmail-int-status" style="font-size:12.5px;color:var(--text-muted);margin-top:8px"></div>
+          </div>
+
+          <hr class="st-divider">
+
+          <!-- Slack -->
+          <div style="margin-bottom:20px">
+            <div class="st-label">Slack</div>
+            <div class="st-sub">Posts notifications to a channel via a Bot Token — set SLACK_BOT_TOKEN and SLACK_CHANNEL_ID in Vercel.</div>
+            <div class="st-key-row">
+              <button type="button" class="btn btn-o" onclick="intTestSlack()">Send Test Message</button>
+            </div>
+            <div id="slack-int-status" style="font-size:12.5px;color:var(--text-muted);margin-top:8px"></div>
+          </div>
+
+          <hr class="st-divider">
+
+          <!-- WhatsApp -->
+          <div>
+            <div class="st-label">WhatsApp</div>
+            <div class="st-sub">Sends via Twilio's WhatsApp API — set TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_FROM, TWILIO_WHATSAPP_TO in Vercel.</div>
+            <div class="st-key-row">
+              <button type="button" class="btn btn-o" onclick="intTestWhatsapp()">Send Test Message</button>
+            </div>
+            <div id="whatsapp-int-status" style="font-size:12.5px;color:var(--text-muted);margin-top:8px"></div>
+          </div>
+        </div>
+
         <!-- SECTION 2: Preferences -->
         <div class="st-section">
           <div class="st-sec-title">App Preferences</div>
@@ -4512,6 +4552,46 @@ function stInit(){
 function stEye(id){
   const inp=document.getElementById(id);
   if(inp)inp.type=inp.type==='text'?'password':'text';
+}
+
+// ── Integrations: Gmail / Slack / WhatsApp ──
+async function intTestGmail(){
+  const to=prompt('Send a test email to which address?', 'sp.echobox@gmail.com');
+  if(!to)return;
+  const el=document.getElementById('gmail-int-status');
+  el.innerHTML='Sending…';
+  try{
+    const res=await fetch('/api/gmail/send',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({to,subject:'CareerOS test email',body:'This is a test email sent from CareerOS.'})
+    });
+    const data=await res.json();
+    el.innerHTML=res.ok?'<span class="st-badge-ok">✓ Sent</span>':`<span style="color:var(--danger)">✗ ${lsEsc(data.error||'Failed')}</span>`;
+  }catch(e){el.innerHTML=`<span style="color:var(--danger)">✗ ${lsEsc(e.message)}</span>`;}
+}
+async function intTestSlack(){
+  const el=document.getElementById('slack-int-status');
+  el.innerHTML='Sending…';
+  try{
+    const res=await fetch('/api/slack/send',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({text:'👋 CareerOS test message'})
+    });
+    const data=await res.json();
+    el.innerHTML=res.ok?'<span class="st-badge-ok">✓ Sent</span>':`<span style="color:var(--danger)">✗ ${lsEsc(data.error||'Failed')}</span>`;
+  }catch(e){el.innerHTML=`<span style="color:var(--danger)">✗ ${lsEsc(e.message)}</span>`;}
+}
+async function intTestWhatsapp(){
+  const el=document.getElementById('whatsapp-int-status');
+  el.innerHTML='Sending…';
+  try{
+    const res=await fetch('/api/whatsapp/send',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({body:'👋 CareerOS test message'})
+    });
+    const data=await res.json();
+    el.innerHTML=res.ok?'<span class="st-badge-ok">✓ Sent</span>':`<span style="color:var(--danger)">✗ ${lsEsc(data.error||'Failed')}</span>`;
+  }catch(e){el.innerHTML=`<span style="color:var(--danger)">✗ ${lsEsc(e.message)}</span>`;}
 }
 
 function stSaveApify(){
