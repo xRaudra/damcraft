@@ -1095,7 +1095,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
             <div class="wb">
               <div class="wb-greet" id="greet">Good morning 👋</div>
               <div class="wb-name">Saurabh Pandey</div>
-              <div class="wb-role">Lead UI/UX Designer · 8 Years Experience</div>
+              <div class="wb-role">Lead UI/UX Designer · 6+ Years Experience</div>
               <div class="wb-acts">
                 <button type="button" class="btn btn-p" onclick="go('resume')">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
@@ -1775,7 +1775,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
 
             <div class="rb-field" style="margin-bottom:14px">
               <label class="rb-label" for="ls-prof-hl">LinkedIn Headline</label>
-              <input class="rb-input" id="ls-prof-hl" type="text" value="Lead UI/UX Designer | 8 Years | Helping Teams Build Products People Love">
+              <input class="rb-input" id="ls-prof-hl" type="text" value="Lead UI/UX Designer | 6+ Years | Helping Teams Build Products People Love">
             </div>
             <div class="rb-field" style="margin-bottom:14px">
               <label class="rb-label" for="ls-prof-about">LinkedIn About / Summary <span style="font-weight:400;color:var(--text-muted)">(auto-filled from PDF, or paste yours)</span></label>
@@ -2126,7 +2126,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
             <div class="pf-sec-title">Contact &amp; Links</div>
             <div class="pf-list">
               <div class="pf-row"><span class="pf-lbl">Name</span><span class="pf-val" id="pf-name" onclick="pfCopyEl(this)" title="Click to copy">Saurabh Pandey</span></div>
-              <div class="pf-row"><span class="pf-lbl">Title</span><span class="pf-val" id="pf-ttl" onclick="pfCopyEl(this)" title="Click to copy">Lead UX Designer · 8 Years</span></div>
+              <div class="pf-row"><span class="pf-lbl">Title</span><span class="pf-val" id="pf-ttl" onclick="pfCopyEl(this)" title="Click to copy">Lead UX Designer · 6+ Years</span></div>
               <div class="pf-row"><span class="pf-lbl">Email</span><span class="pf-val" id="pf-email" onclick="pfCopyEl(this)" title="Click to copy">sp.echobox@gmail.com</span></div>
               <div class="pf-row"><span class="pf-lbl">Phone</span><span class="pf-val" id="pf-phone" onclick="pfCopyEl(this)" title="Click to copy">+91 93353 55931</span></div>
               <div class="pf-row"><span class="pf-lbl">Location</span><span class="pf-val" id="pf-loc" onclick="pfCopyEl(this)" title="Click to copy">Noida, Uttar Pradesh, India</span></div>
@@ -2856,7 +2856,7 @@ const PROFILE = {
   github:'github.com/xRaudra',
   behance:'behance.net/raudra',
   title:'Lead UX Designer',
-  exp_years:'8 Years',
+  exp_years:'6+ Years',
   skills:'UX Design, Product Design, Mobile UX, Product Strategy, AI-Augmented Design, Design Leadership, Figma, Adobe Creative Cloud, Framer, Miro, HTML/CSS',
   languages:'English (Expert) · Hindi (Expert)',
   exp:'Lead UX Designer @ Seiva Networks (2023–2026) · UI/UX Designer @ Mach1 Digital · Communication Designer @ Hav Strategy · Web Designer @ Neurologix · Freelance (2018)',
@@ -3456,7 +3456,7 @@ async function generatePostFromTopic(){
   document.getElementById('ls-post-spinner').classList.remove('hidden');
   document.getElementById('ls-post-output').classList.add('hidden');
   try{
-    const raw=await callClaude(`Write social media posts as ${PROFILE.name}, ${PROFILE.title} with 8 years experience in Fintech, Healthcare, and SaaS products.
+    const raw=await callClaude(`Write social media posts as ${PROFILE.name}, ${PROFILE.title} with 6+ years experience in Fintech, Healthcare, and SaaS products.
 Topic: ${lsSelectedTopic}
 Voice: first-person, direct, experienced, slightly opinionated, human — not corporate. Hook opening. Short paragraphs. End with a question or CTA.
 
@@ -3511,7 +3511,7 @@ async function generateOwnPost(){
   const imgNote=lsBriefImage?`\nNote: The user has an image (${lsEsc(lsBriefImage)}) for this post — reference visual content where relevant.`:'';
 
   try{
-    const raw=await callClaude(`Write social media posts as ${PROFILE.name}, ${PROFILE.title} with 8 years experience.
+    const raw=await callClaude(`Write social media posts as ${PROFILE.name}, ${PROFILE.title} with 6+ years experience.
 Brief: ${brief}${imgNote}
 Voice: first-person, direct, experienced, slightly opinionated, human — not corporate.
 
@@ -3637,7 +3637,7 @@ Keep it concise. This is benchmark data for optimising a senior UX designer's pr
     const topSection=analyseTop&&topCtx?`\nTop UX leader profile patterns (benchmark):\n${topCtx}\n\nUse these patterns as inspiration — make the rewrite competitive with top players in the field.\n`:'';
     const profileData=hasPdf&&profileCtx?`Profile data extracted from LinkedIn PDF:\n${profileCtx}`:`Current headline: ${hl||'[not provided]'}\nCurrent about: ${about||'[not provided]'}`;
     const prompt=`Act as a LinkedIn profile expert specialising in helping senior designers get recruited.
-Candidate: ${PROFILE.name}, ${PROFILE.title}, 8 years experience, based in Noida India, open to remote global roles.
+Candidate: ${PROFILE.name}, ${PROFILE.title}, 6+ years experience, based in Noida India, open to remote global roles.
 ${profileData}
 Target role: ${target||'Senior Product Designer at growth-stage startup'}
 Keywords to include: ${kw||'UX Design, Product Design, Design Systems, Mobile UX, AI-Augmented Design'}
