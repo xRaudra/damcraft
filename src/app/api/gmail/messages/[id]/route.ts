@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getGmailAccessToken, extractBody, type GmailHeader } from '@/lib/gmail'
+import { getGmailAccessToken, extractBody, resolveCidImages, type GmailHeader } from '@/lib/gmail'
 
 // This must always reflect live mailbox state (unread flips after a
 // read, message content never changes) — never let Vercel/Next cache it.
@@ -25,6 +25,7 @@ export async function GET(
     const labelIds: string[] = msg.labelIds || []
 
     const { text, html } = extractBody(msg.payload || {})
+    const resolvedHtml = html ? await resolveCidImages(html, msg.payload || {}, id, accessToken) : html
 
     const result: Record<string, unknown> = {
       id,
@@ -36,7 +37,7 @@ export async function GET(
       messageIdHeader: get('Message-ID'),
       references: get('References'),
       body: text.trim(),
-      bodyHtml: html,
+      bodyHtml: resolvedHtml,
       unread: labelIds.includes('UNREAD'),
       starred: labelIds.includes('STARRED'),
       labelIds,

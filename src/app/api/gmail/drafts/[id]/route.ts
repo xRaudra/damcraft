@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getGmailAccessToken, extractBody } from '@/lib/gmail'
+import { getGmailAccessToken, extractBody, resolveCidImages } from '@/lib/gmail'
 
 export const dynamic = 'force-dynamic'
 
@@ -22,6 +22,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
     const get = (n: string) => headers.find(h => h.name.toLowerCase() === n.toLowerCase())?.value || ''
 
     const { text, html } = extractBody(msg.payload || {})
+    const resolvedHtml = html ? await resolveCidImages(html, msg.payload || {}, msg.id, accessToken) : html
 
     return NextResponse.json({
       draftId: id,
@@ -29,7 +30,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
       to: get('To'),
       subject: get('Subject'),
       body: text.trim(),
-      bodyHtml: html,
+      bodyHtml: resolvedHtml,
     })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error'

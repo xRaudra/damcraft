@@ -32,7 +32,7 @@ export interface GmailHeader {
 }
 export interface GmailPart {
   mimeType?: string
-  body?: { data?: string }
+  body?: { data?: string; attachmentId?: string }
   parts?: GmailPart[]
   headers?: GmailHeader[]
 }
@@ -134,7 +134,12 @@ function sanitizeEmailHtml(html: string): string {
       font: ['face', 'size', 'color'],
     },
     allowedSchemes: ['http', 'https', 'mailto', 'tel'],
-    allowedSchemesByTag: { img: ['http', 'https', 'data'] },
+    // 'cid' (Content-ID references to inline attachments — e.g. a logo
+    // embedded in the email itself rather than hotlinked) is allowed
+    // through here so resolveCidImages can swap it for real image data
+    // afterward; without this sanitize-html strips the src outright
+    // since cid isn't a scheme it recognizes.
+    allowedSchemesByTag: { img: ['http', 'https', 'data', 'cid'] },
     transformTags: {
       a: sanitizeHtml.simpleTransform('a', { target: '_blank', rel: 'noopener noreferrer' }),
     },
@@ -154,4 +159,54 @@ export function extractBody(payload: GmailPart): { text: string; html: string | 
       : ''
 
   return { text, html }
+}
+
+function findInlineAttachments(payload: GmailPart): Map<string, { attachmentId: string; mimeType: string }> {
+  const found = new Map<string, { attachmentId: string; mimeType: string }>()
+  function walk(part: GmailPart) {
+    const cid = getHeader(part, 'Content-ID').replace(/^<|>$/g, '')
+    if (cid && part.body?.attachmentId) {
+      found.set(cid, { attachmentId: part.body.attachmentId, mimeType: part.mimeType || 'image/png' })
+    }
+    for (const p of part.parts || []) walk(p)
+  }
+  walk(payload)
+  return found
+}
+
+// Logos/photos embedded as inline attachments (rather than hotlinked to a
+// public URL) show up as <img src="cid:some-content-id">. Gmail's own
+// client resolves these internally; anyone else has to fetch the
+// attachment bytes separately and inline them as a data: URI. Only runs
+// the attachment tree walk/fetches when the html actually references a
+// cid, so the common case (hosted images) pays nothing extra.
+export async function resolveCidImages(
+  html: string,
+  payload: GmailPart,
+  messageId: string,
+  accessToken: string,
+): Promise<string> {
+  const cids = [...html.matchAll(/src=["']cid:([^"']+)["']/gi)].map(m => m[1])
+  if (!cids.length) return html
+
+  const inlineAttachments = findInlineAttachments(payload)
+  let result = html
+  for (const cid of new Set(cids)) {
+    const info = inlineAttachments.get(cid)
+    if (!info) continue
+    try {
+      const res = await fetch(
+        `https://gmail.googleapis.com/gmail/v1/users/me/messages/${messageId}/attachments/${info.attachmentId}`,
+        { headers: { Authorization: `Bearer ${accessToken}` } },
+      )
+      if (!res.ok) continue
+      const att = await res.json()
+      const base64Std = String(att.data || '').replace(/-/g, '+').replace(/_/g, '/')
+      result = result.split(`cid:${cid}`).join(`data:${info.mimeType};base64,${base64Std}`)
+    } catch {
+      // leave this one as an unresolved cid: reference (same broken-image
+      // result as before) rather than failing the whole message load
+    }
+  }
+  return result
 }
