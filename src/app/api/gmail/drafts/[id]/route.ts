@@ -21,7 +21,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
     const headers: { name: string; value: string }[] = msg.payload?.headers || []
     const get = (n: string) => headers.find(h => h.name.toLowerCase() === n.toLowerCase())?.value || ''
 
-    const { text } = extractBody(msg.payload || {})
+    const { text, html } = extractBody(msg.payload || {})
 
     return NextResponse.json({
       draftId: id,
@@ -29,6 +29,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
       to: get('To'),
       subject: get('Subject'),
       body: text.trim(),
+      bodyHtml: html,
     })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error'

@@ -758,6 +758,9 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
 .nd-editor-meta{font-size:11px;color:var(--text-muted);padding:0 16px 10px;border-bottom:1px solid var(--border-light)}
 .nd-textarea{flex:1;background:none;border:none;resize:none;padding:14px 16px;font-size:13.5px;line-height:1.85;color:var(--text-primary);font-family:var(--font);outline:none;width:100%;box-sizing:border-box}
 .nd-textarea::placeholder{color:var(--text-muted)}
+.nd-editable{overflow-y:auto;cursor:text}
+.nd-editable:empty:before{content:attr(data-placeholder);color:var(--text-muted);pointer-events:none}
+.nd-editable img{max-width:100%}
 .nd-editor-foot{padding:10px 16px;border-top:1px solid var(--border-light);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
 .nd-ph-inner{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:40px 20px;text-align:center;color:var(--text-muted)}
 .nd-coll-list{display:flex;flex-direction:column;gap:12px}
@@ -1355,7 +1358,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
                   <input class="rb-input" id="ib-c-to" type="text" placeholder="To *" style="margin-bottom:8px">
                   <input class="rb-input" id="ib-c-subject" type="text" placeholder="Subject *" style="margin-bottom:8px">
                 </div>
-                <textarea class="nd-textarea" id="ib-c-body" placeholder="Write your email… or use AI Draft"></textarea>
+                <div class="nd-textarea nd-editable" id="ib-c-body" contenteditable="true" data-placeholder="Write your email… or use AI Draft"></div>
                 <div style="display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--border);flex-shrink:0;flex-wrap:wrap;align-items:center">
                   <button type="button" class="btn btn-o" onclick="ibAiDraft('email')">✦ AI Draft</button>
                   <button type="button" class="btn btn-p" onclick="ibSendEmail()">Send</button>
@@ -3426,6 +3429,7 @@ async function copyCaseStudy(mode){
 
 // ── LINKEDIN STUDIO ──
 function lsEsc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function ibTextToHtml(t){return lsEsc(t).split('\n').map(l=>l||'<br>').join('<br>');}
 function lsText(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
 let lsSelectedTopic=null, lsBriefImage=null, lsOrigHL='', lsOrigAbout='';
@@ -5120,7 +5124,7 @@ async function ibEditDraft(draftId){
   ibReplyCtx=null;
   document.getElementById('ib-c-to').value='';
   document.getElementById('ib-c-subject').value='Loading…';
-  document.getElementById('ib-c-body').value='';
+  document.getElementById('ib-c-body').innerHTML='';
   document.getElementById('ib-mail-send-status').textContent='';
   try{
     const res=await fetch('/api/gmail/drafts/'+encodeURIComponent(draftId),{cache:'no-store'});
@@ -5129,7 +5133,10 @@ async function ibEditDraft(draftId){
     ibEditingDraftId=draftId;
     document.getElementById('ib-c-to').value=data.to||'';
     document.getElementById('ib-c-subject').value=data.subject||'';
-    document.getElementById('ib-c-body').value=data.body||'';
+    // bodyHtml (already sanitized server-side) preserves signature styling
+    // exactly as Gmail's own compose window shows it; fall back to plain
+    // text turned into <br>-separated HTML for text-only drafts.
+    document.getElementById('ib-c-body').innerHTML=data.bodyHtml||ibTextToHtml(data.body||'');
   }catch(e){
     document.getElementById('ib-mail-send-status').innerHTML=`<span style="color:var(--danger)">✗ ${lsEsc(e.message)}</span>`;
   }
@@ -5143,7 +5150,7 @@ function ibCompose(){
   ibReplyCtx=null;ibEditingDraftId=null;
   document.getElementById('ib-c-to').value='';
   document.getElementById('ib-c-subject').value='';
-  document.getElementById('ib-c-body').value='';
+  document.getElementById('ib-c-body').innerHTML='';
   document.getElementById('ib-mail-send-status').textContent='';
   ibShowPane('compose');
 }
@@ -5154,7 +5161,7 @@ function ibReply(){
   ibReplyCtx={threadId:ibCurrentMail.threadId,inReplyTo:ibCurrentMail.messageIdHeader,references:ibCurrentMail.references};
   document.getElementById('ib-c-to').value=fromAddr;
   document.getElementById('ib-c-subject').value=/^re:/i.test(ibCurrentMail.subject||'')?ibCurrentMail.subject:'Re: '+(ibCurrentMail.subject||'');
-  document.getElementById('ib-c-body').value='';
+  document.getElementById('ib-c-body').innerHTML='';
   document.getElementById('ib-mail-send-status').textContent='';
   ibShowPane('compose');
 }
@@ -5164,12 +5171,14 @@ function ibCancelCompose(){
 async function ibSendEmail(){
   const to=document.getElementById('ib-c-to').value.trim();
   const subject=document.getElementById('ib-c-subject').value.trim();
-  const body=document.getElementById('ib-c-body').value.trim();
+  const bodyEl=document.getElementById('ib-c-body');
+  const body=bodyEl.innerText.trim();
+  const bodyHtml=bodyEl.innerHTML.trim();
   const status=document.getElementById('ib-mail-send-status');
   if(!to||!subject||!body){status.innerHTML='<span style="color:var(--danger)">Fill To, Subject, and message.</span>';return;}
   status.textContent='Sending…';
   try{
-    const payload={to,subject,body};
+    const payload={to,subject,body,bodyHtml};
     if(ibReplyCtx){payload.threadId=ibReplyCtx.threadId;payload.inReplyTo=ibReplyCtx.inReplyTo;payload.references=ibReplyCtx.references;}
     const res=await fetch('/api/gmail/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     const data=await res.json();
@@ -5305,8 +5314,9 @@ async function ibAiDraft(kind){
   const instruction=prompt('What should this message say? (e.g. "politely decline the offer" or "ask to reschedule to next week")');
   if(!instruction)return;
   const bodyEl=document.getElementById(kind==='email'?'ib-c-body':kind==='slack'?'ib-slack-body':'ib-wa-body');
-  const original=bodyEl.value;
-  bodyEl.value='Drafting…';
+  const isCE=bodyEl.isContentEditable;
+  const original=isCE?bodyEl.innerHTML:bodyEl.value;
+  if(isCE)bodyEl.innerHTML='Drafting…';else bodyEl.value='Drafting…';
   try{
     let context='';
     if(kind==='email'&&ibReplyCtx&&ibCurrentMail){
@@ -5314,8 +5324,8 @@ async function ibAiDraft(kind){
     }
     const prompt2=`${context}Write a ${kind==='whatsapp'?'short, casual WhatsApp':kind==='slack'?'brief, casual Slack':'professional email'} message from ${PROFILE.name} (${PROFILE.title}). Instruction: ${instruction}\n\nReturn ONLY the message body text, no subject line, no preamble, no quotes.`;
     const draft=await callClaude(prompt2);
-    bodyEl.value=draft.trim();
-  }catch(e){bodyEl.value=original;alert('AI draft failed: '+e.message);}
+    if(isCE)bodyEl.innerHTML=ibTextToHtml(draft.trim());else bodyEl.value=draft.trim();
+  }catch(e){if(isCE)bodyEl.innerHTML=original;else bodyEl.value=original;alert('AI draft failed: '+e.message);}
 }
 
 function stSaveApify(){
