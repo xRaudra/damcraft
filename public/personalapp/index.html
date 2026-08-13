@@ -2282,9 +2282,8 @@ B.Com — DDU Gorakhpur University (2016)</span>
           <div style="margin-bottom:20px">
             <div class="st-label">Gmail</div>
             <div class="st-sub">Read recent mail and send emails from CareerOS. Requires one-time authorization.</div>
-            <div class="st-key-row">
-              <button type="button" class="btn btn-p" onclick="window.open('/api/auth/gmail/start','_blank')">Connect Gmail</button>
-              <button type="button" class="btn btn-o" onclick="intTestGmail()">Send Test Email</button>
+            <div id="gmail-int-actions" class="st-key-row">
+              <span class="st-badge-dim">Checking…</span>
             </div>
             <div id="gmail-int-status" style="font-size:12.5px;color:var(--text-muted);margin-top:8px"></div>
           </div>
@@ -4544,7 +4543,7 @@ async function dbRefreshStocks(){
 
 // ── SETTINGS ──
 function stInit(){
-  stRenderApify();stRenderAv();stCheckClaude();
+  stRenderApify();stRenderAv();stCheckClaude();intGmailStatus();
   const t=document.documentElement.getAttribute('data-theme')||'dark';
   stSyncTheme(t);
 }
@@ -4555,6 +4554,48 @@ function stEye(id){
 }
 
 // ── Integrations: Gmail / Slack / WhatsApp ──
+async function intGmailStatus(){
+  const el=document.getElementById('gmail-int-actions');if(!el)return;
+  el.innerHTML='<span class="st-badge-dim">Checking…</span>';
+  try{
+    const res=await fetch('/api/gmail/status');
+    const data=await res.json();
+    intRenderGmailActions(!!data.connected);
+  }catch(e){
+    intRenderGmailActions(false);
+  }
+}
+function intRenderGmailActions(connected){
+  const el=document.getElementById('gmail-int-actions');if(!el)return;
+  if(connected){
+    el.innerHTML=`
+      <span class="st-badge-ok">✓ Gmail connected</span>
+      <button type="button" class="btn btn-o" onclick="intTestGmail()">Send Test Email</button>
+      <button type="button" class="btn btn-o" onclick="intDisconnectGmail()" style="color:var(--danger);border-color:var(--danger)">Disconnect</button>`;
+  }else{
+    el.innerHTML=`<button type="button" class="btn btn-p" onclick="intConnectGmail()">Connect Gmail</button>`;
+  }
+}
+function intConnectGmail(){
+  window.open('/api/auth/gmail/start','_blank');
+  // re-check status once the user is likely done with the popup flow
+  setTimeout(intGmailStatus,15000);
+}
+async function intDisconnectGmail(){
+  if(!confirm('Disconnect Gmail? This revokes access at Google — you\'ll need to reconnect to send or read email again.'))return;
+  const el=document.getElementById('gmail-int-status');
+  el.innerHTML='Disconnecting…';
+  try{
+    const res=await fetch('/api/auth/gmail/disconnect',{method:'POST'});
+    const data=await res.json();
+    if(res.ok){
+      el.innerHTML='<span class="st-badge-dim">Disconnected</span>';
+      intRenderGmailActions(false);
+    }else{
+      el.innerHTML=`<span style="color:var(--danger)">✗ ${lsEsc(data.error||'Failed')}</span>`;
+    }
+  }catch(e){el.innerHTML=`<span style="color:var(--danger)">✗ ${lsEsc(e.message)}</span>`;}
+}
 async function intTestGmail(){
   const to=prompt('Send a test email to which address?', 'sp.echobox@gmail.com');
   if(!to)return;

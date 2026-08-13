@@ -27,6 +27,7 @@ export const config = {
     '/personalapp/:path*',
     '/api/gmail/:path*',
     '/api/auth/gmail/start',
+    '/api/auth/gmail/disconnect',
     '/api/slack/:path*',
     '/api/whatsapp/send',
     // NOT protected: /api/auth/gmail/callback (guarded by Google's
