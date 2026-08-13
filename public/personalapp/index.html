@@ -422,6 +422,15 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
 .pf-skill{display:inline-flex;align-items:center;background:var(--bg-base);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--text-primary);cursor:pointer;transition:background .15s,border-color .15s,color .15s;user-select:none;font-family:var(--font)}
 .pf-skill:hover{background:var(--accent);border-color:var(--accent);color:#fff}
 .pf-skill.pf-flash{background:var(--success,#22c55e)!important;border-color:var(--success,#22c55e)!important;color:#fff!important;transition:none}
+.pf-exp-item{padding:9px 0;border-bottom:1px solid var(--border)}
+.pf-exp-item:last-child{border-bottom:none}
+.pf-exp-row{display:flex;flex-wrap:wrap;align-items:baseline}
+.pf-exp-sep{color:var(--text-muted);padding:0 5px}
+.pf-exp-meta{font-size:12px;color:var(--text-muted);margin-top:3px}
+.pf-exp-dur{color:var(--text-secondary);font-weight:600}
+.pf-exp-total{font-size:12.5px;color:var(--text-primary);font-weight:600;margin-top:8px;padding-top:10px;border-top:1px solid var(--border)}
+.pf-edu-item{padding:7px 0;border-bottom:1px solid var(--border)}
+.pf-edu-item:last-child{border-bottom:none}
 
 /* quick access */
 .qg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -2333,35 +2342,14 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
           <!-- Experience -->
           <div class="pf-section">
             <div class="pf-sec-title">Work Experience</div>
-            <div class="pf-list">
-              <div class="pf-row" style="align-items:flex-start">
-                <span class="pf-val" id="pf-exp" onclick="pfCopyEl(this)" title="Click to copy all experience" style="white-space:pre-line;font-size:13px;line-height:1.8">Lead UI/UX Designer — Seiva Networks Solutions Pvt. Ltd.
-May 2023 – May 2026 · Remote · Thiruvananthapuram, Kerala
-
-UI/UX Designer — Mach1 Digital Pvt. Ltd.
-Aug 2022 – May 2023
-
-Communication Designer — Hav Strategy Pvt Ltd.
-Jan 2022 – Jun 2022
-
-Web Designer — Neurologix Technology Pvt Ltd.
-Mar 2020 – Dec 2021
-
-Freelance UI/UX Designer — Self-Employed
-Sep 2018 – Feb 2020</span>
-              </div>
-            </div>
+            <div id="pf-exp-list"></div>
+            <div id="pf-exp-total" class="pf-exp-total"></div>
           </div>
 
           <!-- Education -->
           <div class="pf-section">
             <div class="pf-sec-title">Education</div>
-            <div class="pf-list">
-              <div class="pf-row" style="align-items:flex-start">
-                <span class="pf-val" id="pf-edu" onclick="pfCopyEl(this)" title="Click to copy" style="white-space:pre-line;font-size:13px;line-height:1.8">M.Com — DDU Gorakhpur University (2018)
-B.Com — DDU Gorakhpur University (2016)</span>
-              </div>
-            </div>
+            <div id="pf-edu-list"></div>
           </div>
 
           <!-- Certifications -->
@@ -3070,6 +3058,34 @@ function initHuntStats(){
 }
 
 // ── RESUME BUILDER ──
+// Work history lives here as structured start/end dates (YYYY-MM) — it's
+// the single source of truth pfInit() renders into individually-copyable
+// Work Experience / Education rows and computes per-role + total
+// experience from, instead of that being hand-typed in several places
+// (profile text, PROFILE.exp, PROFILE.exp_detail) that could drift.
+const WORK_HISTORY = [
+  {title:'Lead UI/UX Designer', company:'Seiva Networks Solutions Pvt. Ltd.', start:'2023-05', end:'2026-05', location:'Remote · Thiruvananthapuram, Kerala'},
+  {title:'UI/UX Designer', company:'Mach1 Digital Pvt. Ltd.', start:'2022-08', end:'2023-05'},
+  {title:'Communication Designer', company:'Hav Strategy Pvt Ltd.', start:'2022-01', end:'2022-06'},
+  {title:'Web Designer', company:'Neurologix Technology Pvt Ltd.', start:'2020-03', end:'2021-12'},
+];
+const EDUCATION = [
+  {label:'M.Com — DDU Gorakhpur University (2018)'},
+  {label:'B.Com — DDU Gorakhpur University (2016)'},
+];
+const MONTH_NAMES=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function pfLabelYM(ym){const p=ym.split('-').map(Number);return MONTH_NAMES[p[1]-1]+' '+p[0];}
+function pfMonthsBetween(startYM,endYM){
+  const s=startYM.split('-').map(Number), e=endYM.split('-').map(Number);
+  return (e[0]-s[0])*12+(e[1]-s[1])+1;
+}
+function pfDurationLabel(months){
+  const y=Math.floor(months/12), m=months%12;
+  if(y&&m)return y+'y '+m+'m';
+  if(y)return y+'y';
+  return m+'m';
+}
+
 const PROFILE = {
   name:'Saurabh Pandey',
   email:'sp.echobox@gmail.com',
@@ -3083,12 +3099,42 @@ const PROFILE = {
   exp_years:'6+ Years',
   skills:'UX Design, Product Design, Mobile UX, Product Strategy, AI-Augmented Design, Design Leadership, Figma, Adobe Creative Cloud, Framer, Miro, HTML/CSS',
   languages:'English (Expert) · Hindi (Expert)',
-  exp:'Lead UX Designer @ Seiva Networks (2023–2026) · UI/UX Designer @ Mach1 Digital · Communication Designer @ Hav Strategy · Web Designer @ Neurologix · Freelance (2018)',
-  exp_detail:'Lead UI/UX Designer — Seiva Networks Solutions Pvt. Ltd. (May 2023–May 2026, Remote)\nUI/UX Designer — Mach1 Digital Pvt. Ltd. (Aug 2022–May 2023)\nCommunication Designer — Hav Strategy Pvt Ltd. (Jan 2022–Jun 2022)\nWeb Designer — Neurologix Technology Pvt Ltd. (Mar 2020–Dec 2021)\nFreelance UI/UX Designer — Self-Employed (Sep 2018–Feb 2020)',
+  exp:'Lead UX Designer @ Seiva Networks (2023–2026) · UI/UX Designer @ Mach1 Digital · Communication Designer @ Hav Strategy · Web Designer @ Neurologix',
+  exp_detail:'Lead UI/UX Designer — Seiva Networks Solutions Pvt. Ltd. (May 2023–May 2026, Remote)\nUI/UX Designer — Mach1 Digital Pvt. Ltd. (Aug 2022–May 2023)\nCommunication Designer — Hav Strategy Pvt Ltd. (Jan 2022–Jun 2022)\nWeb Designer — Neurologix Technology Pvt Ltd. (Mar 2020–Dec 2021)',
   edu:'M.Com — DDU Gorakhpur University · B.Com — DDU Gorakhpur University',
   certs:'UX Design for Augmented Reality — IxDF (Jan 2026)\nAI for Designers — IxDF (Jan 2026)\nHuman-Computer Interaction: Foundations of UX — IxDF (Dec 2025)\nConduct UX Research & Test Early Concepts — Coursera / Google (Apr 2023)\nBuild Wireframes & Low-Fidelity Prototypes — Coursera / Google (Apr 2023)\nStart UX Design Process: Empathize, Define, Ideate — Coursera / Google (Apr 2023)\nFoundations of UX Design — Coursera / Google (Mar 2023)\nProject Management Tips — LinkedIn Learning (Apr 2023)\n100 Days of Code: Python Pro Bootcamp — Udemy (Sep 2021)',
   projects:'MedGlobal360 — Healthcare Consumer Platform, Product Designer (2026)\nGeode Fit — AI-Assisted Fitness Platform, 0-to-1 Product Designer, live: geodefit.in (2026)\nDamcraft — Brand & Web Experience, 0-to-1 (2026), live: damcraft.com\nAmritpex 2023 — Event App for India Post (PM Modi event, Pragati Maidan, Jan 2023)'
 };
+
+// Renders Work Experience / Education as individually click-to-copy rows
+// (title separate from company, each degree its own row) and computes
+// per-role + total experience from WORK_HISTORY's dates — replaces the
+// old single-block-of-text-per-section layout where clicking anywhere
+// copied the whole section (all roles, or both degrees) at once.
+function pfInit(){
+  const list=document.getElementById('pf-exp-list');
+  if(list){
+    let totalMonths=0;
+    list.innerHTML=WORK_HISTORY.map(job=>{
+      const months=pfMonthsBetween(job.start,job.end);
+      totalMonths+=months;
+      return `<div class="pf-exp-item">
+        <div class="pf-exp-row">
+          <span class="pf-val" onclick="pfCopyEl(this)" title="Click to copy title">${lsEsc(job.title)}</span><span class="pf-exp-sep">—</span><span class="pf-val" onclick="pfCopyEl(this)" title="Click to copy company">${lsEsc(job.company)}</span>
+        </div>
+        <div class="pf-exp-meta">${pfLabelYM(job.start)} – ${pfLabelYM(job.end)}${job.location?' · '+lsEsc(job.location):''} · <span class="pf-exp-dur">${pfDurationLabel(months)}</span></div>
+      </div>`;
+    }).join('');
+    const totalLabel=pfDurationLabel(totalMonths);
+    document.getElementById('pf-exp-total').textContent='Total experience: '+totalLabel;
+    PROFILE.exp_years=totalLabel;
+    PROFILE.exp_detail=WORK_HISTORY.map(j=>`${j.title} — ${j.company} (${pfLabelYM(j.start)}–${pfLabelYM(j.end)}${j.location?', '+j.location:''})`).join('\n');
+  }
+  const eduList=document.getElementById('pf-edu-list');
+  if(eduList){
+    eduList.innerHTML=EDUCATION.map(e=>`<div class="pf-edu-item"><span class="pf-val" onclick="pfCopyEl(this)" title="Click to copy">${lsEsc(e.label)}</span></div>`).join('');
+  }
+}
 
 async function callClaude(prompt){
   const res = await fetch('/api/claude',{
@@ -6190,6 +6236,7 @@ function initApp(){
   dbInit();
   lhInit();
   calInit();
+  pfInit();
   go('dash');
   // Background news fetch to populate home highlights immediately
   setTimeout(()=>{ if(!dbNewsFetched){ dbNewsFetched=true; dbFetchBriefing(); } },800);
