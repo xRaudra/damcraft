@@ -176,6 +176,10 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
 }
 #sb.col .sb-wordmark{opacity:0;max-width:0}
 
+.mode-toggle{display:flex;background:var(--bg-elevated);border:1px solid var(--border);border-radius:10px;padding:3px;margin:2px 8px 4px;gap:2px}
+.mode-opt{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:8px 4px;border-radius:8px;font-size:11px;font-weight:700;font-family:var(--font);color:var(--text-muted);cursor:pointer;transition:all .15s;border:none;background:none;white-space:nowrap}
+.mode-opt.on{background:var(--accent);color:#fff}
+.ni.mode-hidden{display:none}
 .sb-nav{flex:1;padding:10px 8px;overflow-y:auto;overflow-x:hidden}
 
 .ni{
@@ -1004,40 +1008,45 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
       <span class="sb-wordmark">CareerOS</span>
     </div>
 
+    <div class="mode-toggle" id="mode-toggle">
+      <button type="button" class="mode-opt" id="mode-opt-work" onclick="setMode('work')">✦ Work</button>
+      <button type="button" class="mode-opt" id="mode-opt-jobs" onclick="setMode('jobs')">💼 Job Search</button>
+    </div>
+
     <nav class="sb-nav">
       <div class="ni on" data-p="dash" title="Dashboard">
         <span class="ni-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
         <span class="ni-lbl">Dashboard</span>
       </div>
-      <div class="ni" data-p="inbox" title="Inbox">
+      <div class="ni" data-p="inbox" data-mode="work" title="Inbox">
         <span class="ni-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></span>
         <span class="ni-lbl">Inbox</span>
       </div>
-      <div class="ni" data-p="jobs" title="Job Board">
+      <div class="ni" data-p="jobs" data-mode="jobs" title="Job Board">
         <span class="ni-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></span>
         <span class="ni-lbl">Job Board</span>
       </div>
-      <div class="ni" data-p="resume" title="Resume Builder">
+      <div class="ni" data-p="resume" data-mode="jobs" title="Resume Builder">
         <span class="ni-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
         <span class="ni-lbl">Resume Builder</span>
       </div>
-      <div class="ni" data-p="interview" title="Interview Coach">
+      <div class="ni" data-p="interview" data-mode="jobs" title="Interview Coach">
         <span class="ni-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></span>
         <span class="ni-lbl">Interview Coach</span>
       </div>
-      <div class="ni" data-p="linkedin" title="LinkedIn Studio">
+      <div class="ni" data-p="linkedin" data-mode="work" title="LinkedIn Studio">
         <span class="ni-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></span>
         <span class="ni-lbl">LinkedIn Studio</span>
       </div>
-      <div class="ni" data-p="briefing" title="Daily Briefing">
+      <div class="ni" data-p="briefing" data-mode="work" title="Daily Briefing">
         <span class="ni-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h14a2 2 0 0 0 2-2V7.5L14.5 2H6a2 2 0 0 0-2 2v4"/><polyline points="14 2 14 8 20 8"/><line x1="2" y1="15" x2="11" y2="15"/><line x1="2" y1="19" x2="11" y2="19"/></svg></span>
         <span class="ni-lbl">Daily Briefing</span>
       </div>
-      <div class="ni" data-p="learning" title="Learning Hub">
+      <div class="ni" data-p="learning" data-mode="work" title="Learning Hub">
         <span class="ni-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span>
         <span class="ni-lbl">Learning Hub</span>
       </div>
-      <div class="ni" data-p="notes" title="Notes & Database">
+      <div class="ni" data-p="notes" data-mode="work" title="Notes & Database">
         <span class="ni-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span>
         <span class="ni-lbl">Notes &amp; Database</span>
       </div>
@@ -2711,6 +2720,22 @@ function go(id){
     if(quiz)quiz.classList.add('hidden');
     lhCurrentTopic=null;
   }
+}
+
+// ── MODE TOGGLE (Work / Job Search) ──
+function setMode(mode){
+  localStorage.setItem('cos-mode',mode);
+  document.getElementById('mode-opt-work').classList.toggle('on',mode==='work');
+  document.getElementById('mode-opt-jobs').classList.toggle('on',mode==='jobs');
+  document.querySelectorAll('.ni[data-mode]').forEach(ni=>{
+    ni.classList.toggle('mode-hidden', ni.dataset.mode!==mode);
+  });
+  // if the currently open page just got hidden by the mode switch, fall back to Dashboard
+  const activeNi=document.querySelector('.ni.on');
+  if(activeNi&&activeNi.classList.contains('mode-hidden')) go('dash');
+}
+function initMode(){
+  setMode(localStorage.getItem('cos-mode')||'work');
 }
 
 document.querySelectorAll('.ni').forEach(n=>{
@@ -5745,6 +5770,7 @@ function lhCopyOut(btn){
 
 // ── INIT ──
 function initApp(){
+  initMode();
   initSb();
   setGreeting();
   tickClock();
