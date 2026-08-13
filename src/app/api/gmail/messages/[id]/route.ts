@@ -96,23 +96,44 @@ function htmlToText(html: string): string {
     .trim()
 }
 
-// Walks the MIME tree for a plain-text part, falling back to HTML
-// (converted to readable text) if that's all the message provides.
-function extractBody(payload: GmailPart): string {
-  if (payload.body?.data && payload.mimeType?.startsWith('text/')) {
-    const text = decodePartText(payload)
-    return payload.mimeType === 'text/html' ? htmlToText(text) : text
-  }
+// Walks the MIME tree and returns the actual part object chosen for
+// the body (plain text preferred, HTML as fallback) — split out from
+// decoding so the debug endpoint can report exactly what was picked.
+function findTextPart(payload: GmailPart): GmailPart | null {
+  if (payload.body?.data && payload.mimeType?.startsWith('text/')) return payload
   const parts = payload.parts || []
-  const plain = parts.find(p => p.mimeType === 'text/plain')
-  if (plain?.body?.data) return decodePartText(plain)
-  const html = parts.find(p => p.mimeType === 'text/html')
-  if (html?.body?.data) return htmlToText(decodePartText(html))
+  const plain = parts.find(p => p.mimeType === 'text/plain' && p.body?.data)
+  if (plain) return plain
+  const html = parts.find(p => p.mimeType === 'text/html' && p.body?.data)
+  if (html) return html
   for (const p of parts) {
-    const nested = extractBody(p)
+    const nested = findTextPart(p)
     if (nested) return nested
   }
-  return ''
+  return null
+}
+
+function extractBody(payload: GmailPart): string {
+  const part = findTextPart(payload)
+  if (!part) return ''
+  const text = decodePartText(part)
+  return part.mimeType === 'text/html' ? htmlToText(text) : text
+}
+
+// TEMPORARY diagnostics — remove once the mojibake issue is confirmed
+// fixed. Reports the real MIME structure and raw bytes Gmail returned
+// so we can see exactly what's happening instead of guessing.
+function debugTree(payload: GmailPart, depth = 0): unknown {
+  if (depth > 6) return { mimeType: payload.mimeType, truncated: true }
+  return {
+    mimeType: payload.mimeType,
+    hasData: !!payload.body?.data,
+    dataLen: payload.body?.data?.length || 0,
+    hasAttachmentId: !!(payload.body as { attachmentId?: string } | undefined)?.attachmentId,
+    transferEncoding: getHeader(payload, 'Content-Transfer-Encoding'),
+    contentType: getHeader(payload, 'Content-Type'),
+    children: (payload.parts || []).map(p => debugTree(p, depth + 1)),
+  }
 }
 
 export async function GET(
@@ -134,7 +155,7 @@ export async function GET(
     const get = (n: string) => headers.find(h => h.name.toLowerCase() === n.toLowerCase())?.value || ''
     const labelIds: string[] = msg.labelIds || []
 
-    const result = {
+    const result: Record<string, unknown> = {
       id,
       threadId: msg.threadId as string,
       from: get('From'),
@@ -145,6 +166,17 @@ export async function GET(
       references: get('References'),
       body: extractBody(msg.payload || {}).trim(),
       unread: labelIds.includes('UNREAD'),
+    }
+
+    if (request.nextUrl.searchParams.get('debug') === '1') {
+      const part = findTextPart(msg.payload || {})
+      const rawBytes = part ? decodeBase64UrlToBuffer(part.body?.data || '') : Buffer.alloc(0)
+      result.debugTree = debugTree(msg.payload || {})
+      result.debugChosenMimeType = part?.mimeType || null
+      result.debugTransferEncoding = part ? getHeader(part, 'Content-Transfer-Encoding') : ''
+      result.debugCharset = part ? getPartCharset(part) : ''
+      result.debugRawHexPreview = rawBytes.subarray(0, 150).toString('hex')
+      result.debugRawAsciiPreview = rawBytes.subarray(0, 300).toString('latin1')
     }
 
     // Mark as read — best effort, viewing shouldn't fail if this does.
