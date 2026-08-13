@@ -17,29 +17,17 @@ interface GmailPart {
   headers?: GmailHeader[]
 }
 
-// Gmail API always base64url-wraps a part's raw bytes for JSON
-// transport — that's unrelated to the part's own
-// Content-Transfer-Encoding and Content-Type charset. Everything below
-// stays in raw Buffers until the final step, where the part's declared
-// charset (not a hardcoded UTF-8 guess) does the string conversion —
-// guessing UTF-8 on Latin-1/Windows-1252 content is what produces the
-// "�" mojibake.
+// Gmail API's body.data is the part's FINAL, already-decoded content —
+// Gmail itself undoes whatever Content-Transfer-Encoding (base64,
+// quoted-printable) the original email used server-side. It's only
+// base64url-wrapped here for safe JSON transport. Re-decoding based on
+// the Content-Transfer-Encoding header (as an earlier version of this
+// code did) corrupts already-correct text — that header describes the
+// original wire format, not the shape of what the API actually returns.
+// The one real remaining step is applying the part's declared charset,
+// since a hardcoded UTF-8 assumption mangles Latin-1/Windows-1252 mail.
 function decodeBase64UrlToBuffer(data: string): Buffer {
   return Buffer.from(data.replace(/-/g, '+').replace(/_/g, '/'), 'base64')
-}
-
-function decodeQuotedPrintableToBuffer(input: Buffer): Buffer {
-  const ascii = input.toString('latin1').replace(/=\r?\n/g, '') // soft line breaks
-  const bytes: number[] = []
-  for (let i = 0; i < ascii.length; i++) {
-    if (ascii[i] === '=' && /^[0-9A-Fa-f]{2}$/.test(ascii.slice(i + 1, i + 3))) {
-      bytes.push(parseInt(ascii.slice(i + 1, i + 3), 16))
-      i += 2
-    } else {
-      bytes.push(ascii.charCodeAt(i))
-    }
-  }
-  return Buffer.from(bytes)
 }
 
 function getHeader(part: GmailPart, name: string): string {
@@ -51,23 +39,8 @@ function getPartCharset(part: GmailPart): string {
   return (match?.[1] || 'utf-8').trim()
 }
 
-// Resolves a part all the way to a correctly-decoded string: undo the
-// transport wrapper, undo the part's own transfer encoding, then
-// decode the resulting bytes with its declared charset.
 function decodePartText(part: GmailPart): string {
-  let bytes = decodeBase64UrlToBuffer(part.body?.data || '')
-  const transferEncoding = getHeader(part, 'Content-Transfer-Encoding').toLowerCase()
-
-  if (transferEncoding === 'base64') {
-    try {
-      bytes = Buffer.from(bytes.toString('latin1'), 'base64')
-    } catch {
-      // keep bytes as-is
-    }
-  } else if (transferEncoding === 'quoted-printable') {
-    bytes = decodeQuotedPrintableToBuffer(bytes)
-  }
-
+  const bytes = decodeBase64UrlToBuffer(part.body?.data || '')
   const charset = getPartCharset(part).toLowerCase()
   if (iconv.encodingExists(charset)) {
     return iconv.decode(bytes, charset)
