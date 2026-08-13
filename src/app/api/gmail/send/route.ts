@@ -11,13 +11,17 @@ function toBase64Url(str: string): string {
 
 export async function POST(request: NextRequest) {
   try {
-    const { to, subject, body } = await request.json()
+    const { to, subject, body, threadId, inReplyTo, references } = await request.json()
     if (!to || !subject || !body) {
       return NextResponse.json({ error: 'Missing to/subject/body' }, { status: 400 })
     }
     const accessToken = await getGmailAccessToken()
+
+    const replyHeaders = inReplyTo
+      ? `In-Reply-To: ${inReplyTo}\r\nReferences: ${references || inReplyTo}\r\n`
+      : ''
     const raw = toBase64Url(
-      `To: ${to}\r\nSubject: ${subject}\r\nContent-Type: text/plain; charset="UTF-8"\r\n\r\n${body}`,
+      `To: ${to}\r\nSubject: ${subject}\r\n${replyHeaders}Content-Type: text/plain; charset="UTF-8"\r\n\r\n${body}`,
     )
     const res = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', {
       method: 'POST',
@@ -25,7 +29,7 @@ export async function POST(request: NextRequest) {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ raw }),
+      body: JSON.stringify(threadId ? { raw, threadId } : { raw }),
     })
     if (!res.ok) {
       const text = await res.text()

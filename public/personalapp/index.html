@@ -721,6 +721,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
 .nd-tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:20px;gap:0}
 .nd-tab{padding:10px 20px;font-size:13.5px;font-weight:600;cursor:pointer;border:none;background:none;font-family:var(--font);color:var(--text-muted);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s}
 .nd-tab.on{color:var(--accent);border-bottom-color:var(--accent)}
+.ib-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:6px;vertical-align:middle}
 .nd-tab:hover:not(.on){color:var(--text-primary)}
 .nd-layout{display:grid;grid-template-columns:260px 1fr;gap:16px;height:calc(100vh - 160px);min-height:420px}
 @media(max-width:720px){.nd-layout{grid-template-columns:1fr;height:auto}}
@@ -1008,6 +1009,10 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
         <span class="ni-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
         <span class="ni-lbl">Dashboard</span>
       </div>
+      <div class="ni" data-p="inbox" title="Inbox">
+        <span class="ni-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></span>
+        <span class="ni-lbl">Inbox</span>
+      </div>
       <div class="ni" data-p="jobs" title="Job Board">
         <span class="ni-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></span>
         <span class="ni-lbl">Job Board</span>
@@ -1120,6 +1125,17 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
                 </tr></thead>
                 <tbody id="dash-jobs-tbody"></tbody>
               </table>
+            </div>
+
+            <!-- Inbox -->
+            <div class="c">
+              <div class="ch">
+                <div class="ct">Inbox</div>
+                <a class="cl" onclick="go('inbox')">View All →</a>
+              </div>
+              <div id="dash-inbox-list" style="display:flex;flex-direction:column;gap:2px">
+                <div style="color:var(--text-muted);font-size:12.5px;padding:10px 0">Loading…</div>
+              </div>
             </div>
 
             <!-- News -->
@@ -1242,6 +1258,94 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
               </div>
             </div>
 
+          </div>
+        </div>
+      </section>
+
+      <!-- INBOX PAGE -->
+      <section id="page-inbox" class="page">
+        <div class="nd-tabs">
+          <button type="button" class="nd-tab on" onclick="ibTab('email')">Email</button>
+          <button type="button" class="nd-tab" onclick="ibTab('slack')">Slack</button>
+          <button type="button" class="nd-tab" onclick="ibTab('whatsapp')">WhatsApp</button>
+        </div>
+
+        <!-- EMAIL TAB -->
+        <div id="ib-email-tab">
+          <div class="nd-layout">
+            <div class="nd-panel-l">
+              <div class="nd-panel-hdr">
+                <input class="nd-search" id="ib-mail-search" type="text" placeholder="Search mail…" oninput="ibFilterMail()">
+                <button type="button" class="btn btn-p" onclick="ibCompose()" title="Compose" style="flex-shrink:0;padding:7px 10px">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+              </div>
+              <div class="nd-note-list" id="ib-mail-list"></div>
+            </div>
+            <div class="nd-panel-r">
+              <!-- Reading pane -->
+              <div id="ib-mail-read" style="display:none;flex-direction:column;height:100%;overflow:hidden">
+                <div class="nd-editor-hdr" style="padding-bottom:12px;border-bottom:1px solid var(--border)">
+                  <div id="ib-mail-subject" style="font-size:17px;font-weight:700;margin-bottom:6px"></div>
+                  <div id="ib-mail-meta" style="font-size:12px;color:var(--text-muted)"></div>
+                </div>
+                <div id="ib-mail-body" style="flex:1;overflow-y:auto;padding:14px 16px;font-size:13.5px;line-height:1.75;white-space:pre-wrap"></div>
+                <div style="padding:12px 16px;border-top:1px solid var(--border);flex-shrink:0">
+                  <button type="button" class="btn btn-p" onclick="ibReply()">↩ Reply</button>
+                </div>
+              </div>
+              <!-- Compose / reply pane -->
+              <div id="ib-mail-compose" style="display:none;flex-direction:column;height:100%">
+                <div class="nd-editor-hdr">
+                  <input class="rb-input" id="ib-c-to" type="text" placeholder="To *" style="margin-bottom:8px">
+                  <input class="rb-input" id="ib-c-subject" type="text" placeholder="Subject *" style="margin-bottom:8px">
+                </div>
+                <textarea class="nd-textarea" id="ib-c-body" placeholder="Write your email… or use AI Draft"></textarea>
+                <div style="display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--border);flex-shrink:0;flex-wrap:wrap;align-items:center">
+                  <button type="button" class="btn btn-o" onclick="ibAiDraft('email')">✦ AI Draft</button>
+                  <button type="button" class="btn btn-p" onclick="ibSendEmail()">Send</button>
+                  <button type="button" class="btn btn-o" onclick="ibCancelCompose()">Cancel</button>
+                  <span id="ib-mail-send-status" style="font-size:12px;color:var(--text-muted)"></span>
+                </div>
+              </div>
+              <div id="ib-mail-placeholder" class="nd-ph-inner">
+                <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+                <div style="font-size:14px;font-weight:600">No message selected</div>
+                <div style="font-size:12.5px" id="ib-mail-ph-sub">Click an email or press + to compose</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLACK TAB -->
+        <div id="ib-slack-tab" class="hidden">
+          <div class="nd-layout" style="grid-template-columns:1fr">
+            <div class="nd-panel-l" style="height:100%">
+              <div class="nd-panel-hdr"><div class="st-label" style="margin:0">Recent messages</div></div>
+              <div class="nd-note-list" id="ib-slack-list"></div>
+              <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:8px">
+                <textarea class="rb-ta" id="ib-slack-body" placeholder="Write a message… or use AI Draft" style="height:70px"></textarea>
+                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                  <button type="button" class="btn btn-o" onclick="ibAiDraft('slack')">✦ AI Draft</button>
+                  <button type="button" class="btn btn-p" onclick="ibSendSlack()">Send</button>
+                  <span id="ib-slack-send-status" style="font-size:12px;color:var(--text-muted)"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WHATSAPP TAB -->
+        <div id="ib-whatsapp-tab" class="hidden">
+          <div class="st-info-card" style="margin-bottom:16px">
+            Sent messages arrive in your WhatsApp app. Incoming messages aren't mirrored here — check WhatsApp directly.
+          </div>
+          <input class="rb-input" id="ib-wa-to" type="text" placeholder="To (e.g. whatsapp:+91XXXXXXXXXX — leave blank to use your default number)" style="margin-bottom:10px">
+          <textarea class="rb-ta" id="ib-wa-body" placeholder="Write a message… or use AI Draft" style="height:90px;margin-bottom:10px"></textarea>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <button type="button" class="btn btn-o" onclick="ibAiDraft('whatsapp')">✦ AI Draft</button>
+            <button type="button" class="btn btn-p" onclick="ibSendWhatsapp()">Send</button>
+            <span id="ib-wa-send-status" style="font-size:12px;color:var(--text-muted)"></span>
           </div>
         </div>
       </section>
@@ -2414,7 +2518,7 @@ B.Com — DDU Gorakhpur University (2016)</span>
 <script>
 // ── PAGE MAP ──
 const PAGES = {
-  dash:'Dashboard', jobs:'Job Board', resume:'Resume Builder',
+  dash:'Dashboard', inbox:'Inbox', jobs:'Job Board', resume:'Resume Builder',
   interview:'Interview Coach', linkedin:'LinkedIn Studio',
   briefing:'Daily Briefing', learning:'Learning Hub', notes:'Notes & Database',
   profile:'My Profile', settings:'Settings'
@@ -2596,6 +2700,7 @@ function go(id){
   // page-specific hooks
   if(id==='briefing') dbPageLoad();
   if(id==='settings') stInit();
+  if(id==='inbox') ibInit();
   if(id==='learning'){
     // restore main view if returning from a sub-view
     const main=document.getElementById('lh-main');
@@ -4635,6 +4740,179 @@ async function intTestWhatsapp(){
   }catch(e){el.innerHTML=`<span style="color:var(--danger)">✗ ${lsEsc(e.message)}</span>`;}
 }
 
+// ── INBOX (Email / Slack / WhatsApp) ──
+let ibMail=[],ibActiveMailId=null,ibCurrentMail=null,ibReplyCtx=null,ibMailLoaded=false,ibSlackLoaded=false;
+
+function ibInit(){
+  if(!ibMailLoaded){ibLoadMail();ibMailLoaded=true;}
+}
+
+function ibTab(t){
+  document.querySelectorAll('#page-inbox .nd-tab').forEach(b=>b.classList.toggle('on',b.textContent.trim().toLowerCase()===t));
+  document.getElementById('ib-email-tab').classList.toggle('hidden',t!=='email');
+  document.getElementById('ib-slack-tab').classList.toggle('hidden',t!=='slack');
+  document.getElementById('ib-whatsapp-tab').classList.toggle('hidden',t!=='whatsapp');
+  if(t==='slack'&&!ibSlackLoaded){ibLoadSlack();ibSlackLoaded=true;}
+}
+
+async function ibLoadMail(){
+  const list=document.getElementById('ib-mail-list');
+  list.innerHTML='<div class="nd-empty">Loading…</div>';
+  try{
+    const res=await fetch('/api/gmail/messages');
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error||'Failed to load mail');
+    ibMail=data.messages||[];
+    ibRenderMailList();
+  }catch(e){
+    list.innerHTML=`<div class="nd-empty">Couldn't load mail — ${lsEsc(e.message)}.<br>Connect Gmail in Settings first.</div>`;
+  }
+}
+function ibFilterMail(){ibRenderMailList(document.getElementById('ib-mail-search').value);}
+function ibRenderMailList(filter=''){
+  const list=document.getElementById('ib-mail-list');if(!list)return;
+  const f=filter.toLowerCase();
+  const items=ibMail.filter(m=>!f||(m.subject||'').toLowerCase().includes(f)||(m.from||'').toLowerCase().includes(f)||(m.snippet||'').toLowerCase().includes(f));
+  if(!items.length){list.innerHTML='<div class="nd-empty">No mail found.</div>';return;}
+  list.innerHTML=items.map(m=>`
+    <div class="nd-note-item${m.id===ibActiveMailId?' on':''}" onclick="ibSelectMail('${m.id}')">
+      <div class="nd-note-title">${m.unread?'<span class="ib-dot"></span>':''}${lsEsc(m.subject||'(no subject)')}</div>
+      <div style="font-size:11.5px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${lsEsc(m.from||'')} · ${lsEsc(m.snippet||'')}</div>
+    </div>`).join('');
+}
+async function ibSelectMail(id){
+  ibActiveMailId=id;ibRenderMailList(document.getElementById('ib-mail-search')?.value||'');
+  ibShowPane('read');
+  document.getElementById('ib-mail-subject').textContent='Loading…';
+  document.getElementById('ib-mail-body').textContent='';
+  try{
+    const res=await fetch('/api/gmail/messages/'+encodeURIComponent(id));
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error||'Failed to load message');
+    ibCurrentMail=data;
+    const m=ibMail.find(x=>x.id===id);if(m)m.unread=false;
+    ibRenderMailList(document.getElementById('ib-mail-search')?.value||'');
+    document.getElementById('ib-mail-subject').textContent=data.subject||'(no subject)';
+    document.getElementById('ib-mail-meta').textContent=`From: ${data.from}  ·  ${data.date}`;
+    document.getElementById('ib-mail-body').textContent=data.body||'(no content)';
+  }catch(e){
+    document.getElementById('ib-mail-subject').textContent='Error';
+    document.getElementById('ib-mail-body').textContent=e.message;
+  }
+}
+function ibShowPane(which){
+  document.getElementById('ib-mail-placeholder').style.display=which==='placeholder'?'flex':'none';
+  document.getElementById('ib-mail-read').style.display=which==='read'?'flex':'none';
+  document.getElementById('ib-mail-compose').style.display=which==='compose'?'flex':'none';
+}
+function ibCompose(){
+  ibReplyCtx=null;
+  document.getElementById('ib-c-to').value='';
+  document.getElementById('ib-c-subject').value='';
+  document.getElementById('ib-c-body').value='';
+  document.getElementById('ib-mail-send-status').textContent='';
+  ibShowPane('compose');
+}
+function ibReply(){
+  if(!ibCurrentMail)return;
+  const fromAddr=(ibCurrentMail.from.match(/<([^>]+)>/)||[])[1]||ibCurrentMail.from;
+  ibReplyCtx={threadId:ibCurrentMail.threadId,inReplyTo:ibCurrentMail.messageIdHeader,references:ibCurrentMail.references};
+  document.getElementById('ib-c-to').value=fromAddr;
+  document.getElementById('ib-c-subject').value=/^re:/i.test(ibCurrentMail.subject||'')?ibCurrentMail.subject:'Re: '+(ibCurrentMail.subject||'');
+  document.getElementById('ib-c-body').value='';
+  document.getElementById('ib-mail-send-status').textContent='';
+  ibShowPane('compose');
+}
+function ibCancelCompose(){
+  ibShowPane(ibActiveMailId?'read':'placeholder');
+}
+async function ibSendEmail(){
+  const to=document.getElementById('ib-c-to').value.trim();
+  const subject=document.getElementById('ib-c-subject').value.trim();
+  const body=document.getElementById('ib-c-body').value.trim();
+  const status=document.getElementById('ib-mail-send-status');
+  if(!to||!subject||!body){status.innerHTML='<span style="color:var(--danger)">Fill To, Subject, and message.</span>';return;}
+  status.textContent='Sending…';
+  try{
+    const payload={to,subject,body};
+    if(ibReplyCtx){payload.threadId=ibReplyCtx.threadId;payload.inReplyTo=ibReplyCtx.inReplyTo;payload.references=ibReplyCtx.references;}
+    const res=await fetch('/api/gmail/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error||'Send failed');
+    status.innerHTML='<span class="st-badge-ok">✓ Sent</span>';
+    ibLoadMail();
+    setTimeout(()=>ibShowPane(ibActiveMailId?'read':'placeholder'),900);
+  }catch(e){status.innerHTML=`<span style="color:var(--danger)">✗ ${lsEsc(e.message)}</span>`;}
+}
+
+async function ibLoadSlack(){
+  const list=document.getElementById('ib-slack-list');
+  list.innerHTML='<div class="nd-empty">Loading…</div>';
+  try{
+    const res=await fetch('/api/slack/messages');
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error||'Failed to load Slack messages');
+    const msgs=data.messages||[];
+    if(!msgs.length){list.innerHTML='<div class="nd-empty">No messages yet.</div>';return;}
+    list.innerHTML=msgs.map(m=>{
+      const t=m.ts?new Date(parseFloat(m.ts)*1000).toLocaleString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'';
+      return `<div class="nd-note-item" style="cursor:default">
+        <div style="font-size:13px;white-space:pre-wrap">${lsEsc(m.text||'')}</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:4px">${lsEsc(t)}</div>
+      </div>`;
+    }).join('');
+  }catch(e){
+    list.innerHTML=`<div class="nd-empty">Couldn't load Slack — ${lsEsc(e.message)}.<br>Set SLACK_BOT_TOKEN &amp; SLACK_CHANNEL_ID in Vercel.</div>`;
+  }
+}
+async function ibSendSlack(){
+  const body=document.getElementById('ib-slack-body').value.trim();
+  const status=document.getElementById('ib-slack-send-status');
+  if(!body){status.innerHTML='<span style="color:var(--danger)">Write a message first.</span>';return;}
+  status.textContent='Sending…';
+  try{
+    const res=await fetch('/api/slack/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:body})});
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error||'Send failed');
+    status.innerHTML='<span class="st-badge-ok">✓ Sent</span>';
+    document.getElementById('ib-slack-body').value='';
+    ibLoadSlack();
+  }catch(e){status.innerHTML=`<span style="color:var(--danger)">✗ ${lsEsc(e.message)}</span>`;}
+}
+
+async function ibSendWhatsapp(){
+  const to=document.getElementById('ib-wa-to').value.trim();
+  const body=document.getElementById('ib-wa-body').value.trim();
+  const status=document.getElementById('ib-wa-send-status');
+  if(!body){status.innerHTML='<span style="color:var(--danger)">Write a message first.</span>';return;}
+  status.textContent='Sending…';
+  try{
+    const payload={body};if(to)payload.to=to;
+    const res=await fetch('/api/whatsapp/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error||'Send failed');
+    status.innerHTML='<span class="st-badge-ok">✓ Sent</span>';
+    document.getElementById('ib-wa-body').value='';
+  }catch(e){status.innerHTML=`<span style="color:var(--danger)">✗ ${lsEsc(e.message)}</span>`;}
+}
+
+async function ibAiDraft(kind){
+  const instruction=prompt('What should this message say? (e.g. "politely decline the offer" or "ask to reschedule to next week")');
+  if(!instruction)return;
+  const bodyEl=document.getElementById(kind==='email'?'ib-c-body':kind==='slack'?'ib-slack-body':'ib-wa-body');
+  const original=bodyEl.value;
+  bodyEl.value='Drafting…';
+  try{
+    let context='';
+    if(kind==='email'&&ibReplyCtx&&ibCurrentMail){
+      context=`This is a reply to an email from ${ibCurrentMail.from} with subject "${ibCurrentMail.subject}". Original message:\n${ibCurrentMail.body.slice(0,1500)}\n\n`;
+    }
+    const prompt2=`${context}Write a ${kind==='whatsapp'?'short, casual WhatsApp':kind==='slack'?'brief, casual Slack':'professional email'} message from ${PROFILE.name} (${PROFILE.title}). Instruction: ${instruction}\n\nReturn ONLY the message body text, no subject line, no preamble, no quotes.`;
+    const draft=await callClaude(prompt2);
+    bodyEl.value=draft.trim();
+  }catch(e){bodyEl.value=original;alert('AI draft failed: '+e.message);}
+}
+
 function stSaveApify(){
   const v=(document.getElementById('apify-inp')?.value||'').trim();
   if(!v)return;
@@ -5483,6 +5761,28 @@ function initApp(){
   go('dash');
   // Background news fetch to populate home highlights immediately
   setTimeout(()=>{ if(!dbNewsFetched){ dbNewsFetched=true; dbFetchBriefing(); } },800);
+  dashLoadInboxWidget();
+}
+
+async function dashLoadInboxWidget(){
+  const el=document.getElementById('dash-inbox-list');if(!el)return;
+  try{
+    const res=await fetch('/api/gmail/messages');
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error||'not connected');
+    const msgs=(data.messages||[]).slice(0,4);
+    if(!msgs.length){el.innerHTML='<div style="color:var(--text-muted);font-size:12.5px;padding:10px 0">No recent mail.</div>';return;}
+    el.innerHTML=msgs.map(m=>`
+      <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="go('inbox')">
+        ${m.unread?'<span class="ib-dot" style="flex-shrink:0"></span>':'<span style="width:7px;flex-shrink:0"></span>'}
+        <div style="min-width:0;flex:1">
+          <div style="font-size:12.5px;font-weight:${m.unread?'600':'400'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${lsEsc(m.subject||'(no subject)')}</div>
+          <div style="font-size:11px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${lsEsc(m.from||'')}</div>
+        </div>
+      </div>`).join('');
+  }catch(e){
+    el.innerHTML='<div style="color:var(--text-muted);font-size:12.5px;padding:10px 0">Connect Gmail in Settings to see recent mail here.</div>';
+  }
 }
 
 // Auto-login if session is still active

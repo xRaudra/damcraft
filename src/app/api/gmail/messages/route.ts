@@ -28,12 +28,15 @@ export async function GET(request: NextRequest) {
         const msg = await msgRes.json()
         const headers: GmailHeader[] = msg.payload?.headers || []
         const get = (n: string) => headers.find(h => h.name === n)?.value || ''
+        const labelIds: string[] = msg.labelIds || []
         return {
           id,
+          threadId: msg.threadId as string,
           from: get('From'),
           subject: get('Subject'),
           date: get('Date'),
           snippet: msg.snippet as string,
+          unread: labelIds.includes('UNREAD'),
         }
       }),
     )
