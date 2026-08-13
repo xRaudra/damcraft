@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const PASSWORD = process.env.PERSONAL_APP_PASSWORD ?? 'dam-private-2024'
+const PASSWORD = process.env.PERSONAL_APP_PASSWORD ?? 'xRaudra@1916'
 
 export function proxy(request: NextRequest) {
   const authHeader = request.headers.get('authorization')
