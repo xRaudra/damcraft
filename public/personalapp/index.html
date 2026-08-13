@@ -2603,7 +2603,7 @@ function fsInit(){
   const _orig=Storage.prototype.setItem;
   Storage.prototype.setItem=function(k,v){
     _orig.call(this,k,v);
-    if(k.startsWith('cos-')&&k!=='cos-session'&&!_fsSyncing)_fsScheduleSync();
+    if(k.startsWith('cos-')&&k!=='cos-locked'&&!_fsSyncing)_fsScheduleSync();
   };
 }
 
@@ -2683,7 +2683,6 @@ const pinErr = document.getElementById('pin-err');
 const pbs = [0,1,2,3].map(i=>document.getElementById('pb'+i));
 
 document.getElementById('login-screen').addEventListener('click',()=>pinEl.focus());
-setTimeout(()=>pinEl.focus(),120);
 
 pinEl.addEventListener('input',()=>{
   const PIN=getPin();
@@ -2701,7 +2700,7 @@ pinEl.addEventListener('input',()=>{
 });
 
 function loginOK(){
-  localStorage.setItem('cos-session','1');
+  localStorage.removeItem('cos-locked');
   const ls=document.getElementById('login-screen');
   ls.classList.add('out');
   Promise.all([fsPull(),new Promise(r=>setTimeout(r,380))]).then(()=>{
@@ -2856,7 +2855,7 @@ function setAvatar(src){
 
 // ── LOGOUT ──
 document.getElementById('logout-btn').addEventListener('click',()=>{
-  localStorage.removeItem('cos-session');
+  localStorage.setItem('cos-locked','1');
   document.getElementById('app').classList.remove('show');
   const ls = document.getElementById('login-screen');
   ls.classList.remove('hidden','out');
@@ -6213,10 +6212,15 @@ async function dashLoadInboxWidget(){
   }
 }
 
-// Auto-login if session is still active
-if(localStorage.getItem('cos-session')==='1'){
+// The PIN screen is a manual lock, not a per-visit gate — the Basic Auth
+// password prompt in front of this whole page is the real access control.
+// Skip straight into the app unless the user explicitly locked it via
+// the Logout button; only then does the PIN screen ever appear.
+if(localStorage.getItem('cos-locked')==='1'){
+  setTimeout(()=>pinEl.focus(),120);
+} else {
+  document.getElementById('login-screen').classList.add('hidden');
   fsPull().then(()=>{
-    document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('app').classList.add('show');
     initApp();
   });
