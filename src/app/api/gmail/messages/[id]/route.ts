@@ -38,6 +38,8 @@ export async function GET(
       body: text.trim(),
       bodyHtml: html,
       unread: labelIds.includes('UNREAD'),
+      starred: labelIds.includes('STARRED'),
+      labelIds,
     }
 
     // Mark as read in the real Gmail account (not just locally).

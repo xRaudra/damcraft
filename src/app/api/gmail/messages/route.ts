@@ -11,8 +11,13 @@ export async function GET(request: NextRequest) {
     const accessToken = await getGmailAccessToken()
     const q = request.nextUrl.searchParams.get('q') || ''
     const folder = request.nextUrl.searchParams.get('folder') || 'inbox'
+    const customLabel = request.nextUrl.searchParams.get('label') || ''
     const pageToken = request.nextUrl.searchParams.get('pageToken') || ''
-    const labelId = folder === 'sent' ? 'SENT' : 'INBOX'
+
+    let labelId = 'INBOX'
+    if (folder === 'sent') labelId = 'SENT'
+    else if (folder === 'starred') labelId = 'STARRED'
+    else if (folder === 'label' && customLabel) labelId = customLabel
 
     const listUrl = new URL('https://gmail.googleapis.com/gmail/v1/users/me/messages')
     listUrl.searchParams.set('maxResults', '30')
@@ -45,6 +50,8 @@ export async function GET(request: NextRequest) {
           date: get('Date'),
           snippet: msg.snippet as string,
           unread: labelIds.includes('UNREAD'),
+          starred: labelIds.includes('STARRED'),
+          labelIds,
         }
       }),
     )

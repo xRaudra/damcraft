@@ -731,6 +731,13 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
 .ib-folder-tab.on{background:var(--accent-dim);color:var(--accent)}
 .ib-avatar{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;color:#fff;font-size:12.5px;font-weight:700;flex-shrink:0;text-transform:uppercase;object-fit:cover}
 .ib-avatar-sm{width:22px;height:22px;font-size:10.5px}
+.ib-star{background:none;border:none;cursor:pointer;padding:2px;flex-shrink:0;color:var(--text-muted);display:flex;align-items:center;transition:color .15s}
+.ib-star:hover{color:#f1c40f}
+.ib-star.on{color:#f1c40f}
+.ib-label-chip{display:inline-block;font-size:10px;font-weight:600;padding:1px 7px;border-radius:999px;background:var(--accent-dim);color:var(--accent);margin-right:4px;white-space:nowrap}
+.ib-label-menu{position:absolute;z-index:20;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:0 8px 24px rgba(0,0,0,.25);padding:8px;min-width:180px;max-height:220px;overflow-y:auto}
+.ib-label-menu label{display:flex;align-items:center;gap:8px;font-size:12.5px;padding:6px 4px;cursor:pointer;border-radius:6px}
+.ib-label-menu label:hover{background:var(--bg-elevated)}
 .nd-tab:hover:not(.on){color:var(--text-primary)}
 .nd-layout{display:grid;grid-template-columns:260px 1fr;gap:16px;height:calc(100vh - 160px);min-height:420px}
 @media(max-width:720px){.nd-layout{grid-template-columns:1fr;height:auto}}
@@ -1290,6 +1297,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
             <div class="nd-panel-l">
               <div class="ib-folder-tabs">
                 <button type="button" class="ib-folder-tab on" data-folder="inbox" onclick="ibSwitchFolder('inbox')">Inbox</button>
+                <button type="button" class="ib-folder-tab" data-folder="starred" onclick="ibSwitchFolder('starred')">★ Starred</button>
                 <button type="button" class="ib-folder-tab" data-folder="sent" onclick="ibSwitchFolder('sent')">Sent</button>
                 <button type="button" class="ib-folder-tab" data-folder="drafts" onclick="ibSwitchFolder('drafts')">Drafts</button>
               </div>
@@ -1299,6 +1307,17 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 </button>
               </div>
+              <div style="display:flex;gap:6px;padding:0 8px 8px">
+                <select class="rb-input" id="ib-filter-sel" style="flex:1;font-size:11.5px;padding:6px 8px" onchange="ibApplyFilter()">
+                  <option value="">All mail</option>
+                  <option value="is:unread">Unread</option>
+                  <option value="has:attachment">Has attachment</option>
+                  <option value="is:important">Important</option>
+                </select>
+                <select class="rb-input" id="ib-label-sel" style="flex:1;font-size:11.5px;padding:6px 8px" onchange="ibApplyLabelFilter()">
+                  <option value="">All labels</option>
+                </select>
+              </div>
               <div class="nd-note-list" id="ib-mail-list"></div>
             </div>
             <div class="nd-panel-r">
@@ -1307,8 +1326,20 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
                 <div class="nd-editor-hdr" style="padding-bottom:12px;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start">
                   <div id="ib-mail-avatar"></div>
                   <div style="min-width:0;flex:1">
-                    <div id="ib-mail-subject" style="font-size:17px;font-weight:700;margin-bottom:6px"></div>
+                    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+                      <div id="ib-mail-subject" style="font-size:17px;font-weight:700;margin-bottom:6px"></div>
+                      <div style="display:flex;gap:2px;flex-shrink:0;position:relative">
+                        <button type="button" class="ib-star" id="ib-mail-star-btn" onclick="ibToggleStarCurrent()" title="Star">
+                          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        </button>
+                        <button type="button" class="ib-star" id="ib-mail-label-btn" onclick="ibToggleLabelMenu()" title="Labels">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3H4a1 1 0 0 0-1 1v5.59a2 2 0 0 0 .59 1.41l9.58 9.59a2 2 0 0 0 2.82 0l4.6-4.6a2 2 0 0 0 0-2.82z"/><circle cx="7.5" cy="7.5" r="1.25" fill="currentColor" stroke="none"/></svg>
+                        </button>
+                        <div id="ib-label-menu" class="ib-label-menu hidden" style="top:24px;right:0"></div>
+                      </div>
+                    </div>
                     <div id="ib-mail-meta-text" style="font-size:12px;color:var(--text-muted)"></div>
+                    <div id="ib-mail-labels-row"></div>
                     <div id="ib-mail-markread-warn" class="hidden" style="font-size:11.5px;color:var(--danger);margin-top:4px"></div>
                   </div>
                 </div>
@@ -4787,6 +4818,7 @@ async function intTestWhatsapp(){
 // ── INBOX (Email / Slack / WhatsApp) ──
 let ibMail=[],ibActiveMailId=null,ibCurrentMail=null,ibReplyCtx=null,ibMailLoaded=false,ibSlackLoaded=false,ibNextPageToken=null;
 let ibCurrentFolder='inbox',ibEditingDraftId=null;
+let ibFilterQuery='',ibLabelFilter='',ibCustomLabels=[],ibLabelsLoaded=false;
 let ibMyProfile=null,ibMyProfileLoaded=false;
 
 const IB_AVATAR_COLORS=['#e74c3c','#e67e22','#f39c12','#27ae60','#1abc9c','#3498db','#9b59b6','#e84393','#16a085','#2980b9','#8e44ad','#c0392b'];
@@ -4823,6 +4855,7 @@ async function ibLoadMyProfile(){
 function ibInit(){
   if(!ibMailLoaded){ibLoadCurrentFolder();ibMailLoaded=true;}
   ibLoadMyProfile();
+  ibLoadCustomLabels();
 }
 
 function ibTab(t){
@@ -4835,6 +4868,8 @@ function ibTab(t){
 
 function ibSwitchFolder(folder){
   ibCurrentFolder=folder;
+  ibLabelFilter='';
+  const labelSel=document.getElementById('ib-label-sel');if(labelSel)labelSel.value='';
   document.querySelectorAll('.ib-folder-tab').forEach(b=>b.classList.toggle('on',b.dataset.folder===folder));
   ibActiveMailId=null;ibCurrentMail=null;
   document.getElementById('ib-mail-search').value='';
@@ -4845,13 +4880,52 @@ function ibLoadCurrentFolder(){
   if(ibCurrentFolder==='drafts')ibLoadDrafts();
   else ibLoadMail();
 }
+function ibMailQueryString(extra){
+  let folder=ibCurrentFolder;
+  const params=['folder='+folder];
+  if(ibLabelFilter){params[0]='folder=label';params.push('label='+encodeURIComponent(ibLabelFilter));}
+  if(ibFilterQuery)params.push('q='+encodeURIComponent(ibFilterQuery));
+  if(extra)params.push(extra);
+  return params.join('&');
+}
+function ibApplyFilter(){
+  ibFilterQuery=document.getElementById('ib-filter-sel').value;
+  ibLoadMail();
+}
+function ibApplyLabelFilter(){
+  ibLabelFilter=document.getElementById('ib-label-sel').value;
+  if(ibLabelFilter){
+    document.querySelectorAll('.ib-folder-tab').forEach(b=>b.classList.remove('on'));
+  }else{
+    document.querySelectorAll('.ib-folder-tab').forEach(b=>b.classList.toggle('on',b.dataset.folder===ibCurrentFolder));
+  }
+  ibLoadMail();
+}
+async function ibLoadCustomLabels(){
+  if(ibLabelsLoaded)return;
+  ibLabelsLoaded=true;
+  try{
+    const res=await fetch('/api/gmail/labels');
+    const data=await res.json();
+    if(!res.ok)return;
+    ibCustomLabels=data.labels||[];
+    const sel=document.getElementById('ib-label-sel');
+    if(sel){
+      ibCustomLabels.forEach(l=>{
+        const opt=document.createElement('option');
+        opt.value=l.id;opt.textContent=l.name;
+        sel.appendChild(opt);
+      });
+    }
+  }catch(e){}
+}
 
 async function ibLoadMail(){
   const list=document.getElementById('ib-mail-list');
   list.innerHTML='<div class="nd-empty">Loading…</div>';
   ibNextPageToken=null;
   try{
-    const res=await fetch('/api/gmail/messages?folder='+ibCurrentFolder);
+    const res=await fetch('/api/gmail/messages?'+ibMailQueryString());
     const data=await res.json();
     if(!res.ok)throw new Error(data.error||'Failed to load mail');
     ibMail=data.messages||[];
@@ -4866,7 +4940,7 @@ async function ibLoadMoreMail(){
   const btn=document.getElementById('ib-load-more-btn');
   if(btn)btn.textContent='Loading…';
   try{
-    const res=await fetch('/api/gmail/messages?folder='+ibCurrentFolder+'&pageToken='+encodeURIComponent(ibNextPageToken));
+    const res=await fetch('/api/gmail/messages?'+ibMailQueryString('pageToken='+encodeURIComponent(ibNextPageToken)));
     const data=await res.json();
     if(!res.ok)throw new Error(data.error||'Failed to load more mail');
     ibMail=ibMail.concat(data.messages||[]);
@@ -4889,6 +4963,75 @@ async function ibLoadDrafts(){
     list.innerHTML=`<div class="nd-empty">Couldn't load drafts — ${lsEsc(e.message)}.</div>`;
   }
 }
+function ibLabelChipsHtml(labelIds){
+  if(!labelIds||!labelIds.length||!ibCustomLabels.length)return'';
+  const names=labelIds.map(id=>{const l=ibCustomLabels.find(x=>x.id===id);return l?l.name:null;}).filter(Boolean);
+  if(!names.length)return'';
+  return`<div style="margin-top:3px">${names.map(n=>`<span class="ib-label-chip">${lsEsc(n)}</span>`).join('')}</div>`;
+}
+async function ibToggleStar(id,currentlyStarred,btn){
+  const target=currentlyStarred?{remove:['STARRED']}:{add:['STARRED']};
+  if(btn){
+    btn.classList.toggle('on',!currentlyStarred);
+    const svg=btn.querySelector('svg');if(svg)svg.setAttribute('fill',currentlyStarred?'none':'currentColor');
+  }
+  const m=ibMail.find(x=>x.id===id);if(m)m.starred=!currentlyStarred;
+  if(ibCurrentMail&&ibCurrentMail.id===id)ibCurrentMail.starred=!currentlyStarred;
+  try{
+    const res=await fetch('/api/gmail/messages/'+encodeURIComponent(id)+'/modify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(target)});
+    if(!res.ok){
+      // revert on failure
+      if(btn){btn.classList.toggle('on',currentlyStarred);const svg=btn.querySelector('svg');if(svg)svg.setAttribute('fill',currentlyStarred?'currentColor':'none');}
+      if(m)m.starred=currentlyStarred;
+      if(ibCurrentMail&&ibCurrentMail.id===id)ibCurrentMail.starred=currentlyStarred;
+    }else if(ibCurrentFolder==='starred'&&currentlyStarred){
+      // unstarred while viewing the Starred folder — drop it from the list
+      ibMail=ibMail.filter(x=>x.id!==id);
+      ibRenderMailList(document.getElementById('ib-mail-search')?.value||'');
+    }
+  }catch(e){}
+}
+function ibToggleStarCurrent(){
+  if(!ibCurrentMail)return;
+  ibToggleStar(ibCurrentMail.id,!!ibCurrentMail.starred,document.getElementById('ib-mail-star-btn'));
+}
+function ibToggleLabelMenu(){
+  const menu=document.getElementById('ib-label-menu');
+  if(!menu||!ibCurrentMail)return;
+  const willOpen=menu.classList.contains('hidden');
+  menu.classList.toggle('hidden');
+  if(!willOpen)return;
+  if(!ibCustomLabels.length){
+    menu.innerHTML='<div style="font-size:12px;color:var(--text-muted);padding:6px 4px">No labels yet — create one in Gmail first.</div>';
+    return;
+  }
+  const current=ibCurrentMail.labelIds||[];
+  menu.innerHTML=ibCustomLabels.map(l=>`
+    <label>
+      <input type="checkbox" ${current.includes(l.id)?'checked':''} onchange="ibToggleMessageLabel('${l.id}',this.checked)">
+      ${lsEsc(l.name)}
+    </label>`).join('');
+}
+async function ibToggleMessageLabel(labelId,checked){
+  if(!ibCurrentMail)return;
+  const id=ibCurrentMail.id;
+  const payload=checked?{add:[labelId]}:{remove:[labelId]};
+  const labelIds=ibCurrentMail.labelIds||[];
+  ibCurrentMail.labelIds=checked?[...labelIds,labelId]:labelIds.filter(x=>x!==labelId);
+  document.getElementById('ib-mail-labels-row').innerHTML=ibLabelChipsHtml(ibCurrentMail.labelIds);
+  const m=ibMail.find(x=>x.id===id);if(m)m.labelIds=ibCurrentMail.labelIds;
+  ibRenderMailList(document.getElementById('ib-mail-search')?.value||'');
+  try{
+    await fetch('/api/gmail/messages/'+encodeURIComponent(id)+'/modify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  }catch(e){}
+}
+document.addEventListener('click',function(e){
+  const menu=document.getElementById('ib-label-menu');
+  const btn=document.getElementById('ib-mail-label-btn');
+  if(menu&&!menu.classList.contains('hidden')&&!menu.contains(e.target)&&e.target!==btn&&!btn?.contains(e.target)){
+    menu.classList.add('hidden');
+  }
+});
 function ibFilterMail(){ibRenderMailList(document.getElementById('ib-mail-search').value);}
 function ibRenderMailList(filter=''){
   const list=document.getElementById('ib-mail-list');if(!list)return;
@@ -4900,11 +5043,15 @@ function ibRenderMailList(filter=''){
     const rowId=isDrafts?m.draftId:m.id;
     const person=isDrafts?(m.to||'(no recipient)'):(m.from||'');
     return`
-    <div class="nd-note-item${rowId===ibActiveMailId?' on':''}" onclick="${isDrafts?`ibEditDraft('${m.draftId}')`:`ibSelectMail('${m.id}')`}" style="display:flex;gap:10px;align-items:flex-start">
+    <div class="nd-note-item${rowId===ibActiveMailId?' on':''}" onclick="${isDrafts?`ibEditDraft('${m.draftId}')`:`ibSelectMail('${m.id}')`}" style="display:flex;gap:8px;align-items:flex-start">
+      ${isDrafts?'':`<button type="button" class="ib-star${m.starred?' on':''}" onclick="event.stopPropagation();ibToggleStar('${m.id}',${!!m.starred},this)" title="${m.starred?'Unstar':'Star'}">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="${m.starred?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </button>`}
       ${ibAvatarHtml(person,'ib-avatar-sm')}
       <div style="min-width:0;flex:1">
         <div class="nd-note-title">${(!isDrafts&&m.unread)?'<span class="ib-dot"></span>':''}${lsEsc(m.subject||'(no subject)')}${isDrafts?' <span style="color:var(--danger);font-weight:400">(draft)</span>':''}</div>
         <div style="font-size:11.5px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${lsEsc(person)} · ${lsEsc(m.snippet||'')}</div>
+        ${isDrafts?'':ibLabelChipsHtml(m.labelIds)}
       </div>
     </div>`;
   }).join('')
@@ -4929,6 +5076,14 @@ async function ibSelectMail(id){
     document.getElementById('ib-mail-subject').textContent=data.subject||'(no subject)';
     document.getElementById('ib-mail-avatar').innerHTML=ibAvatarHtml(ibCurrentFolder==='sent'?data.to:data.from);
     document.getElementById('ib-mail-meta-text').textContent=`${ibCurrentFolder==='sent'?'To':'From'}: ${ibCurrentFolder==='sent'?data.to:data.from}  ·  ${data.date}`;
+    const starBtn=document.getElementById('ib-mail-star-btn');
+    if(starBtn){
+      starBtn.classList.toggle('on',!!data.starred);
+      const svg=starBtn.querySelector('svg');if(svg)svg.setAttribute('fill',data.starred?'currentColor':'none');
+      starBtn.title=data.starred?'Unstar':'Star';
+    }
+    document.getElementById('ib-mail-labels-row').innerHTML=ibLabelChipsHtml(data.labelIds);
+    document.getElementById('ib-label-menu').classList.add('hidden');
     const warnEl=document.getElementById('ib-mail-markread-warn');
     if(warnEl){
       if(data.markReadError){warnEl.textContent='⚠ Could not mark as read in Gmail: '+data.markReadError;warnEl.classList.remove('hidden');}
