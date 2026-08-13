@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse, after } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { getGmailAccessToken, extractBody, type GmailHeader } from '@/lib/gmail'
 
 // This must always reflect live mailbox state (unread flips after a
@@ -40,22 +40,28 @@ export async function GET(
       unread: labelIds.includes('UNREAD'),
     }
 
-    // Mark as read in the real Gmail account (not just locally) —
-    // scheduled via after() so it reliably completes even though the
-    // response below returns first; a plain un-awaited fetch() can get
-    // killed mid-flight when Vercel tears down the function context
-    // right after the response is sent.
+    // Mark as read in the real Gmail account (not just locally).
+    // Awaited (not fire-and-forget) so a failure — most likely the
+    // token predating the gmail.modify scope — is caught and reported
+    // back instead of silently doing nothing.
     if (result.unread) {
-      after(() =>
-        fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${id}/modify`, {
+      const modifyRes = await fetch(
+        `https://gmail.googleapis.com/gmail/v1/users/me/messages/${id}/modify`,
+        {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${accessToken}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ removeLabelIds: ['UNREAD'] }),
-        }).catch(() => {}),
+        },
       )
+      if (modifyRes.ok) {
+        result.unread = false
+      } else {
+        const errBody = await modifyRes.text()
+        result.markReadError = `Gmail modify failed (${modifyRes.status}): ${errBody.slice(0, 300)}`
+      }
     }
 
     return NextResponse.json(result)

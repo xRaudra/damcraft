@@ -1309,6 +1309,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
                   <div style="min-width:0;flex:1">
                     <div id="ib-mail-subject" style="font-size:17px;font-weight:700;margin-bottom:6px"></div>
                     <div id="ib-mail-meta-text" style="font-size:12px;color:var(--text-muted)"></div>
+                    <div id="ib-mail-markread-warn" class="hidden" style="font-size:11.5px;color:var(--danger);margin-top:4px"></div>
                   </div>
                 </div>
                 <div id="ib-mail-body" style="flex:1;overflow-y:auto;padding:14px 16px;font-size:13.5px;line-height:1.75;white-space:pre-wrap"></div>
@@ -4888,11 +4889,16 @@ async function ibSelectMail(id){
     const data=await res.json();
     if(!res.ok)throw new Error(data.error||'Failed to load message');
     ibCurrentMail=data;
-    const m=ibMail.find(x=>x.id===id);if(m)m.unread=false;
+    const m=ibMail.find(x=>x.id===id);if(m)m.unread=!!data.unread;
     ibRenderMailList(document.getElementById('ib-mail-search')?.value||'');
     document.getElementById('ib-mail-subject').textContent=data.subject||'(no subject)';
     document.getElementById('ib-mail-avatar').innerHTML=ibAvatarHtml(ibCurrentFolder==='sent'?data.to:data.from);
     document.getElementById('ib-mail-meta-text').textContent=`${ibCurrentFolder==='sent'?'To':'From'}: ${ibCurrentFolder==='sent'?data.to:data.from}  ·  ${data.date}`;
+    const warnEl=document.getElementById('ib-mail-markread-warn');
+    if(warnEl){
+      if(data.markReadError){warnEl.textContent='⚠ Could not mark as read in Gmail: '+data.markReadError;warnEl.classList.remove('hidden');}
+      else{warnEl.textContent='';warnEl.classList.add('hidden');}
+    }
 
     const bodyEl=document.getElementById('ib-mail-body');
     const frame=document.getElementById('ib-mail-body-html');
