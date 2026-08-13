@@ -759,6 +759,13 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
 .nd-note-title{font-size:13px;font-weight:600;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .nd-note-date{font-size:11px;color:var(--text-muted)}
 .nd-empty{text-align:center;padding:32px 16px;color:var(--text-muted);font-size:13px;line-height:1.6}
+.wa-msg{display:flex;flex-direction:column;max-width:75%;margin-bottom:10px}
+.wa-msg.in{align-items:flex-start;align-self:flex-start}
+.wa-msg.out{align-items:flex-end;align-self:flex-end;margin-left:auto}
+.wa-bubble{padding:8px 12px;border-radius:14px;font-size:13px;line-height:1.5;white-space:pre-wrap;word-break:break-word}
+.wa-msg.in .wa-bubble{background:var(--bg-elevated);border:1px solid var(--border);border-bottom-left-radius:4px}
+.wa-msg.out .wa-bubble{background:var(--accent);color:#fff;border-bottom-right-radius:4px}
+.wa-msg-time{font-size:10.5px;color:var(--text-muted);margin-top:3px;padding:0 3px}
 .nd-editor-hdr{padding:14px 16px 0;flex-shrink:0}
 .nd-title-input{width:100%;background:none;border:none;font-size:18px;font-weight:700;font-family:var(--font);color:var(--text-primary);outline:none;padding:0;margin-bottom:8px;box-sizing:border-box}
 .nd-title-input::placeholder{color:var(--text-muted);font-weight:400}
@@ -1409,15 +1416,25 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
 
         <!-- WHATSAPP TAB -->
         <div id="ib-whatsapp-tab" class="hidden">
-          <div class="st-info-card" style="margin-bottom:16px">
-            Sent messages arrive in your WhatsApp app. Incoming messages aren't mirrored here — check WhatsApp directly.
-          </div>
-          <input class="rb-input" id="ib-wa-to" type="text" placeholder="To (e.g. whatsapp:+91XXXXXXXXXX — leave blank to use your default number)" style="margin-bottom:10px">
-          <textarea class="rb-ta" id="ib-wa-body" placeholder="Write a message… or use AI Draft" style="height:90px;margin-bottom:10px"></textarea>
-          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-            <button type="button" class="btn btn-o" onclick="ibAiDraft('whatsapp')">✦ AI Draft</button>
-            <button type="button" class="btn btn-p" onclick="ibSendWhatsapp()">Send</button>
-            <span id="ib-wa-send-status" style="font-size:12px;color:var(--text-muted)"></span>
+          <div class="nd-layout" style="grid-template-columns:1fr">
+            <div class="nd-panel-l" style="height:100%">
+              <div class="nd-panel-hdr">
+                <select class="rb-input" id="ib-wa-conv-sel" style="flex:1" onchange="ibOnWaConvChange()">
+                  <option value="">Loading conversations…</option>
+                </select>
+                <button type="button" class="btn btn-o" id="ib-wa-rename-btn" onclick="ibRenameWaContact()" style="display:none;flex-shrink:0;padding:6px 9px" title="Name this contact">✎</button>
+              </div>
+              <input class="rb-input" id="ib-wa-new-number" type="text" placeholder="whatsapp:+91XXXXXXXXXX" style="margin:10px 16px 0;width:calc(100% - 32px);display:none">
+              <div class="nd-note-list" id="ib-wa-list"></div>
+              <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:8px">
+                <textarea class="rb-ta" id="ib-wa-body" placeholder="Write a message… or use AI Draft" style="height:70px"></textarea>
+                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                  <button type="button" class="btn btn-o" onclick="ibAiDraft('whatsapp')">✦ AI Draft</button>
+                  <button type="button" class="btn btn-p" onclick="ibSendWhatsapp()">Send</button>
+                  <span id="ib-wa-send-status" style="font-size:12px;color:var(--text-muted)"></span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -2562,7 +2579,7 @@ const PAGES = {
 
 // ── FIREBASE SYNC ──
 const FS_CONFIG={apiKey:"AIzaSyBOX-RYV8Z9TV2fr3dHnd0ZDdfKf9IVoVY",authDomain:"careeros-e5dbf.firebaseapp.com",projectId:"careeros-e5dbf",storageBucket:"careeros-e5dbf.firebasestorage.app",messagingSenderId:"578821559145",appId:"1:578821559145:web:177e5f790b745b3046e3f8"};
-const FS_KEYS=['cos-notes-v2','cos-db','cos-tracker','cos-apify-key','cos-av-key','cos-pwd','cos-theme','cos-logins','cos-sb'];
+const FS_KEYS=['cos-notes-v2','cos-db','cos-tracker','cos-apify-key','cos-av-key','cos-pwd','cos-theme','cos-logins','cos-sb','cos-wa-names'];
 let _fsDb=null,_fsSyncing=false,_fsSyncTimer=null;
 
 function fsInit(){
@@ -4901,7 +4918,7 @@ async function intTestWhatsapp(){
 }
 
 // ── INBOX (Email / Slack / WhatsApp) ──
-let ibMail=[],ibActiveMailId=null,ibCurrentMail=null,ibReplyCtx=null,ibMailLoaded=false,ibSlackLoaded=false,ibNextPageToken=null;
+let ibMail=[],ibActiveMailId=null,ibCurrentMail=null,ibReplyCtx=null,ibMailLoaded=false,ibSlackLoaded=false,ibNextPageToken=null,ibWaLoaded=false;
 let ibCurrentFolder='inbox',ibEditingDraftId=null;
 let ibFilterQuery='',ibLabelFilter='',ibCustomLabels=[],ibLabelsLoaded=false;
 let ibMyProfile=null,ibMyProfileLoaded=false;
@@ -4949,6 +4966,7 @@ function ibTab(t){
   document.getElementById('ib-slack-tab').classList.toggle('hidden',t!=='slack');
   document.getElementById('ib-whatsapp-tab').classList.toggle('hidden',t!=='whatsapp');
   if(t==='slack'&&!ibSlackLoaded){ibLoadSlackChannels();ibSlackLoaded=true;}
+  if(t==='whatsapp'&&!ibWaLoaded){ibLoadWaConversations();ibWaLoaded=true;}
 }
 
 function ibSwitchFolder(folder){
@@ -5384,19 +5402,110 @@ async function ibSendSlack(){
   }
 }
 
+let ibWaConversations=[],ibWaCurrentNumber='';
+
+// Friendly names are local-only knowledge (Twilio has no contacts API) —
+// stored as a number->name map in localStorage, synced via the existing
+// cos- Firestore mechanism like other settings.
+function ibWaContactLabel(number){
+  try{
+    const names=JSON.parse(localStorage.getItem('cos-wa-names')||'{}');
+    return names[number]||number.replace(/^whatsapp:/,'');
+  }catch(e){return number.replace(/^whatsapp:/,'');}
+}
+async function ibLoadWaConversations(){
+  const sel=document.getElementById('ib-wa-conv-sel');
+  sel.innerHTML='<option value="">Loading…</option>';
+  try{
+    const res=await fetch('/api/whatsapp/conversations');
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error||'Failed to load conversations');
+    ibWaConversations=data.conversations||[];
+    const optsHtml=ibWaConversations.map(c=>`<option value="${lsEsc(c.number)}">${lsEsc(ibWaContactLabel(c.number))}${c.lastMessage?' — '+lsEsc(c.lastMessage.slice(0,30)):''}</option>`).join('');
+    sel.innerHTML=optsHtml+'<option value="__new__">＋ New chat</option>';
+    sel.value=ibWaConversations.length?ibWaConversations[0].number:'__new__';
+    ibOnWaConvChange();
+  }catch(e){
+    sel.innerHTML='<option value="">Couldn\'t load</option>';
+    document.getElementById('ib-wa-list').innerHTML=`<div class="nd-empty">Couldn't load conversations — ${lsEsc(e.message)}. Check TWILIO_ACCOUNT_SID / TWILIO_AUTH_TOKEN / TWILIO_WHATSAPP_FROM in Vercel.</div>`;
+  }
+}
+function ibOnWaConvChange(){
+  const val=document.getElementById('ib-wa-conv-sel').value;
+  const newInput=document.getElementById('ib-wa-new-number');
+  const renameBtn=document.getElementById('ib-wa-rename-btn');
+  if(val==='__new__'){
+    ibWaCurrentNumber='';
+    newInput.style.display='block';
+    renameBtn.style.display='none';
+    document.getElementById('ib-wa-list').innerHTML='<div class="nd-empty">Enter a number above and send your first message.</div>';
+    return;
+  }
+  newInput.style.display='none';
+  renameBtn.style.display='inline-flex';
+  ibWaCurrentNumber=val;
+  ibLoadWaMessages();
+}
+async function ibLoadWaMessages(){
+  const list=document.getElementById('ib-wa-list');
+  if(!ibWaCurrentNumber)return;
+  list.innerHTML='<div class="nd-empty">Loading…</div>';
+  try{
+    const res=await fetch('/api/whatsapp/messages?number='+encodeURIComponent(ibWaCurrentNumber));
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error||'Failed to load messages');
+    const msgs=data.messages||[];
+    if(!msgs.length){list.innerHTML='<div class="nd-empty">No messages yet.</div>';return;}
+    list.innerHTML=msgs.map(m=>{
+      const out=m.direction!=='inbound';
+      const t=m.at?new Date(m.at).toLocaleString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'';
+      return `<div class="wa-msg ${out?'out':'in'}">
+        <div class="wa-bubble">${lsEsc(m.body||'')}</div>
+        <div class="wa-msg-time">${lsEsc(t)}</div>
+      </div>`;
+    }).join('');
+    list.scrollTop=list.scrollHeight;
+  }catch(e){
+    list.innerHTML=`<div class="nd-empty">Couldn't load messages — ${lsEsc(e.message)}</div>`;
+  }
+}
+function ibRenameWaContact(){
+  if(!ibWaCurrentNumber)return;
+  const current=ibWaContactLabel(ibWaCurrentNumber);
+  const name=prompt('Name for '+ibWaCurrentNumber.replace(/^whatsapp:/,'')+':',current);
+  if(name===null)return;
+  try{
+    const names=JSON.parse(localStorage.getItem('cos-wa-names')||'{}');
+    if(name.trim())names[ibWaCurrentNumber]=name.trim();
+    else delete names[ibWaCurrentNumber];
+    localStorage.setItem('cos-wa-names',JSON.stringify(names));
+  }catch(e){}
+  ibLoadWaConversations();
+}
 async function ibSendWhatsapp(){
-  const to=document.getElementById('ib-wa-to').value.trim();
+  const newInput=document.getElementById('ib-wa-new-number');
+  const usingNew=newInput.style.display!=='none';
+  const to=usingNew?newInput.value.trim():ibWaCurrentNumber;
   const body=document.getElementById('ib-wa-body').value.trim();
   const status=document.getElementById('ib-wa-send-status');
   if(!body){status.innerHTML='<span style="color:var(--danger)">Write a message first.</span>';return;}
+  if(!to){status.innerHTML='<span style="color:var(--danger)">Pick a conversation or enter a number.</span>';return;}
   status.textContent='Sending…';
   try{
-    const payload={body};if(to)payload.to=to;
-    const res=await fetch('/api/whatsapp/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const res=await fetch('/api/whatsapp/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({body,to})});
     const data=await res.json();
     if(!res.ok)throw new Error(data.error||'Send failed');
     status.innerHTML='<span class="st-badge-ok">✓ Sent</span>';
     document.getElementById('ib-wa-body').value='';
+    if(usingNew){
+      newInput.value='';
+      ibWaCurrentNumber=to;
+      await ibLoadWaConversations();
+      document.getElementById('ib-wa-conv-sel').value=to;
+      ibOnWaConvChange();
+    }else{
+      ibLoadWaMessages();
+    }
   }catch(e){status.innerHTML=`<span style="color:var(--danger)">✗ ${lsEsc(e.message)}</span>`;}
 }
 

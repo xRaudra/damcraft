@@ -30,6 +30,8 @@ export const config = {
     '/api/auth/gmail/disconnect',
     '/api/slack/:path*',
     '/api/whatsapp/send',
+    '/api/whatsapp/conversations',
+    '/api/whatsapp/messages',
     // NOT protected: /api/auth/gmail/callback (guarded by Google's
     // single-use OAuth code) and /api/whatsapp/incoming (Twilio
     // webhook, guarded by request-signature validation instead —
