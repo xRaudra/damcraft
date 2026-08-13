@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import iconv from 'iconv-lite'
 import { getGmailAccessToken } from '@/lib/gmail'
 
+// This must always reflect live mailbox state (unread flips after a
+// read, message content never changes) — never let Vercel/Next cache it.
+export const dynamic = 'force-dynamic'
+
 interface GmailHeader {
   name: string
   value: string

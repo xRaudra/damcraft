@@ -4815,7 +4815,7 @@ async function ibSelectMail(id){
   document.getElementById('ib-mail-subject').textContent='Loading…';
   document.getElementById('ib-mail-body').textContent='';
   try{
-    const res=await fetch('/api/gmail/messages/'+encodeURIComponent(id));
+    const res=await fetch('/api/gmail/messages/'+encodeURIComponent(id),{cache:'no-store'});
     const data=await res.json();
     if(!res.ok)throw new Error(data.error||'Failed to load message');
     ibCurrentMail=data;
