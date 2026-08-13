@@ -1304,7 +1304,11 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
         <div class="nd-tabs">
           <button type="button" class="nd-tab on" onclick="ibTab('email')">Email</button>
           <button type="button" class="nd-tab" onclick="ibTab('slack')">Slack</button>
+          <!-- WhatsApp tab paused — Twilio trial account needs funds added before
+               send/receive works. Uncomment to re-enable; nothing else needs to
+               change, the tab content, JS, and backend routes are all intact.
           <button type="button" class="nd-tab" onclick="ibTab('whatsapp')">WhatsApp</button>
+          -->
         </div>
 
         <!-- EMAIL TAB -->
@@ -1414,7 +1418,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
           </div>
         </div>
 
-        <!-- WHATSAPP TAB -->
+        <!-- WHATSAPP TAB — paused, see comment on the tab button above.
         <div id="ib-whatsapp-tab" class="hidden">
           <div class="nd-layout" style="grid-template-columns:1fr">
             <div class="nd-panel-l" style="height:100%">
@@ -1437,6 +1441,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
             </div>
           </div>
         </div>
+        -->
       </section>
 
       <!-- JOB BOARD PAGE -->
@@ -2457,9 +2462,8 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
             <div id="slack-int-status" style="font-size:12.5px;color:var(--text-muted);margin-top:8px"></div>
           </div>
 
+          <!-- WhatsApp — paused, see comment on the Inbox tab button.
           <hr class="st-divider">
-
-          <!-- WhatsApp -->
           <div>
             <div class="st-label">WhatsApp</div>
             <div class="st-sub">Sends via Twilio's WhatsApp API — set TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_FROM, TWILIO_WHATSAPP_TO in Vercel.</div>
@@ -2468,6 +2472,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
             </div>
             <div id="whatsapp-int-status" style="font-size:12.5px;color:var(--text-muted);margin-top:8px"></div>
           </div>
+          -->
         </div>
 
         <!-- SECTION 2: Preferences -->
@@ -4904,6 +4909,7 @@ async function intTestSlack(){
     el.innerHTML=res.ok?`<span class="st-badge-ok">✓ Sent to #${lsEsc(target.name)}</span>`:`<span style="color:var(--danger)">✗ ${lsEsc(data.error||'Failed')}</span>`;
   }catch(e){el.innerHTML=`<span style="color:var(--danger)">✗ ${lsEsc(e.message)}</span>`;}
 }
+/* WhatsApp paused — see comment on the Inbox tab button. Uncomment to re-enable.
 async function intTestWhatsapp(){
   const el=document.getElementById('whatsapp-int-status');
   el.innerHTML='Sending…';
@@ -4916,6 +4922,7 @@ async function intTestWhatsapp(){
     el.innerHTML=res.ok?'<span class="st-badge-ok">✓ Sent</span>':`<span style="color:var(--danger)">✗ ${lsEsc(data.error||'Failed')}</span>`;
   }catch(e){el.innerHTML=`<span style="color:var(--danger)">✗ ${lsEsc(e.message)}</span>`;}
 }
+*/
 
 // ── INBOX (Email / Slack / WhatsApp) ──
 let ibMail=[],ibActiveMailId=null,ibCurrentMail=null,ibReplyCtx=null,ibMailLoaded=false,ibSlackLoaded=false,ibNextPageToken=null,ibWaLoaded=false;
@@ -4964,9 +4971,9 @@ function ibTab(t){
   document.querySelectorAll('#page-inbox .nd-tab').forEach(b=>b.classList.toggle('on',b.textContent.trim().toLowerCase()===t));
   document.getElementById('ib-email-tab').classList.toggle('hidden',t!=='email');
   document.getElementById('ib-slack-tab').classList.toggle('hidden',t!=='slack');
-  document.getElementById('ib-whatsapp-tab').classList.toggle('hidden',t!=='whatsapp');
+  document.getElementById('ib-whatsapp-tab')?.classList.toggle('hidden',t!=='whatsapp'); // ?. — WhatsApp tab is commented out, see above
   if(t==='slack'&&!ibSlackLoaded){ibLoadSlackChannels();ibSlackLoaded=true;}
-  if(t==='whatsapp'&&!ibWaLoaded){ibLoadWaConversations();ibWaLoaded=true;}
+  // WhatsApp paused — if(t==='whatsapp'&&!ibWaLoaded){ibLoadWaConversations();ibWaLoaded=true;}
 }
 
 function ibSwitchFolder(folder){
@@ -5402,6 +5409,12 @@ async function ibSendSlack(){
   }
 }
 
+/* WhatsApp paused — Twilio trial account needs funds added before
+   send/receive works. Everything below (state, conversation list,
+   chat thread, send) is intact and ready — uncomment this block, the
+   tab button (above), the tab content div, and the Settings section
+   to re-enable. Backend routes (/api/whatsapp/*) were left as-is,
+   untouched, since they're already dormant without a UI path to them.
 let ibWaConversations=[],ibWaCurrentNumber='';
 
 // Friendly names are local-only knowledge (Twilio has no contacts API) —
@@ -5508,6 +5521,7 @@ async function ibSendWhatsapp(){
     }
   }catch(e){status.innerHTML=`<span style="color:var(--danger)">✗ ${lsEsc(e.message)}</span>`;}
 }
+*/
 
 async function ibAiDraft(kind){
   const instruction=prompt('What should this message say? (e.g. "politely decline the offer" or "ask to reschedule to next week")');
