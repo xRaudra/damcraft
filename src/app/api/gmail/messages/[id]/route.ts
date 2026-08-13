@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import iconv from 'iconv-lite'
 import { getGmailAccessToken } from '@/lib/gmail'
 
 interface GmailHeader {
@@ -12,52 +13,62 @@ interface GmailPart {
   headers?: GmailHeader[]
 }
 
-// Gmail API always base64url-wraps a part's raw bytes for transport,
-// regardless of the part's own Content-Transfer-Encoding. If the
-// original email itself encoded that part as quoted-printable or
-// base64 (very common for HTML/graphic-heavy marketing mail), the raw
-// bytes we get back ARE that encoded text — a second decode pass is
-// required or it reads as gibberish.
-function decodeBase64Url(data: string): string {
-  return Buffer.from(data.replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf-8')
+// Gmail API always base64url-wraps a part's raw bytes for JSON
+// transport — that's unrelated to the part's own
+// Content-Transfer-Encoding and Content-Type charset. Everything below
+// stays in raw Buffers until the final step, where the part's declared
+// charset (not a hardcoded UTF-8 guess) does the string conversion —
+// guessing UTF-8 on Latin-1/Windows-1252 content is what produces the
+// "�" mojibake.
+function decodeBase64UrlToBuffer(data: string): Buffer {
+  return Buffer.from(data.replace(/-/g, '+').replace(/_/g, '/'), 'base64')
 }
 
-function decodeQuotedPrintable(input: string): string {
-  const joined = input.replace(/=\r?\n/g, '') // soft line breaks
+function decodeQuotedPrintableToBuffer(input: Buffer): Buffer {
+  const ascii = input.toString('latin1').replace(/=\r?\n/g, '') // soft line breaks
   const bytes: number[] = []
-  for (let i = 0; i < joined.length; i++) {
-    if (joined[i] === '=' && /^[0-9A-Fa-f]{2}$/.test(joined.slice(i + 1, i + 3))) {
-      bytes.push(parseInt(joined.slice(i + 1, i + 3), 16))
+  for (let i = 0; i < ascii.length; i++) {
+    if (ascii[i] === '=' && /^[0-9A-Fa-f]{2}$/.test(ascii.slice(i + 1, i + 3))) {
+      bytes.push(parseInt(ascii.slice(i + 1, i + 3), 16))
       i += 2
     } else {
-      bytes.push(joined.charCodeAt(i))
+      bytes.push(ascii.charCodeAt(i))
     }
   }
-  return Buffer.from(bytes).toString('utf-8')
+  return Buffer.from(bytes)
 }
 
-function getPartEncoding(part: GmailPart): string {
-  return (part.headers?.find(h => h.name.toLowerCase() === 'content-transfer-encoding')?.value || '').toLowerCase()
+function getHeader(part: GmailPart, name: string): string {
+  return part.headers?.find(h => h.name.toLowerCase() === name.toLowerCase())?.value || ''
 }
 
+function getPartCharset(part: GmailPart): string {
+  const match = /charset\s*=\s*"?([^;"]+)"?/i.exec(getHeader(part, 'Content-Type'))
+  return (match?.[1] || 'utf-8').trim()
+}
+
+// Resolves a part all the way to a correctly-decoded string: undo the
+// transport wrapper, undo the part's own transfer encoding, then
+// decode the resulting bytes with its declared charset.
 function decodePartText(part: GmailPart): string {
-  const raw = decodeBase64Url(part.body?.data || '')
-  const enc = getPartEncoding(part)
-  if (enc === 'base64') {
+  let bytes = decodeBase64UrlToBuffer(part.body?.data || '')
+  const transferEncoding = getHeader(part, 'Content-Transfer-Encoding').toLowerCase()
+
+  if (transferEncoding === 'base64') {
     try {
-      return Buffer.from(raw, 'base64').toString('utf-8')
+      bytes = Buffer.from(bytes.toString('latin1'), 'base64')
     } catch {
-      return raw
+      // keep bytes as-is
     }
+  } else if (transferEncoding === 'quoted-printable') {
+    bytes = decodeQuotedPrintableToBuffer(bytes)
   }
-  if (enc === 'quoted-printable') {
-    try {
-      return decodeQuotedPrintable(raw)
-    } catch {
-      return raw
-    }
+
+  const charset = getPartCharset(part).toLowerCase()
+  if (iconv.encodingExists(charset)) {
+    return iconv.decode(bytes, charset)
   }
-  return raw
+  return bytes.toString('utf-8')
 }
 
 // Strips style/script blocks entirely (not just their tags — their
