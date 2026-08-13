@@ -729,7 +729,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
 .ib-folder-tabs{display:flex;gap:4px;padding:8px 8px 0}
 .ib-folder-tab{flex:1;padding:7px 4px;border-radius:var(--r-sm);border:none;background:none;font-family:var(--font);font-size:12px;font-weight:600;color:var(--text-muted);cursor:pointer;transition:all .15s}
 .ib-folder-tab.on{background:var(--accent-dim);color:var(--accent)}
-.ib-avatar{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;color:#fff;font-size:12.5px;font-weight:700;flex-shrink:0;text-transform:uppercase}
+.ib-avatar{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;color:#fff;font-size:12.5px;font-weight:700;flex-shrink:0;text-transform:uppercase;object-fit:cover}
 .ib-avatar-sm{width:22px;height:22px;font-size:10.5px}
 .nd-tab:hover:not(.on){color:var(--text-primary)}
 .nd-layout{display:grid;grid-template-columns:260px 1fr;gap:16px;height:calc(100vh - 160px);min-height:420px}
@@ -4787,6 +4787,7 @@ async function intTestWhatsapp(){
 // ── INBOX (Email / Slack / WhatsApp) ──
 let ibMail=[],ibActiveMailId=null,ibCurrentMail=null,ibReplyCtx=null,ibMailLoaded=false,ibSlackLoaded=false;
 let ibCurrentFolder='inbox',ibEditingDraftId=null;
+let ibMyProfile=null,ibMyProfileLoaded=false;
 
 const IB_AVATAR_COLORS=['#e74c3c','#e67e22','#f39c12','#27ae60','#1abc9c','#3498db','#9b59b6','#e84393','#16a085','#2980b9','#8e44ad','#c0392b'];
 function ibParseFrom(raw){
@@ -4797,15 +4798,31 @@ function ibParseFrom(raw){
 }
 function ibAvatarHtml(raw,sizeClass){
   const{name,email}=ibParseFrom(raw);
+  // your own address gets your real Google profile photo — Gmail
+  // only ever exposes a real photo for the account you're signed in
+  // as, everyone else falls back to a colored-initial avatar
+  if(ibMyProfile&&ibMyProfile.picture&&email.toLowerCase()===String(ibMyProfile.email||'').toLowerCase()){
+    return`<img class="ib-avatar${sizeClass?' '+sizeClass:''}" src="${lsEsc(ibMyProfile.picture)}" alt="">`;
+  }
   const letter=(name||email||'?').trim().charAt(0).toUpperCase()||'?';
   let hash=0;
   for(let i=0;i<email.length;i++)hash=(hash*31+email.charCodeAt(i))>>>0;
   const color=IB_AVATAR_COLORS[hash%IB_AVATAR_COLORS.length];
   return`<span class="ib-avatar${sizeClass?' '+sizeClass:''}" style="background:${color}">${lsEsc(letter)}</span>`;
 }
+async function ibLoadMyProfile(){
+  if(ibMyProfileLoaded)return;
+  ibMyProfileLoaded=true;
+  try{
+    const res=await fetch('/api/gmail/profile');
+    const data=await res.json();
+    if(res.ok)ibMyProfile=data;
+  }catch(e){}
+}
 
 function ibInit(){
   if(!ibMailLoaded){ibLoadCurrentFolder();ibMailLoaded=true;}
+  ibLoadMyProfile();
 }
 
 function ibTab(t){
