@@ -726,6 +726,11 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
 .nd-tab{padding:10px 20px;font-size:13.5px;font-weight:600;cursor:pointer;border:none;background:none;font-family:var(--font);color:var(--text-muted);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s}
 .nd-tab.on{color:var(--accent);border-bottom-color:var(--accent)}
 .ib-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:6px;vertical-align:middle}
+.ib-folder-tabs{display:flex;gap:4px;padding:8px 8px 0}
+.ib-folder-tab{flex:1;padding:7px 4px;border-radius:var(--r-sm);border:none;background:none;font-family:var(--font);font-size:12px;font-weight:600;color:var(--text-muted);cursor:pointer;transition:all .15s}
+.ib-folder-tab.on{background:var(--accent-dim);color:var(--accent)}
+.ib-avatar{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;color:#fff;font-size:12.5px;font-weight:700;flex-shrink:0;text-transform:uppercase}
+.ib-avatar-sm{width:22px;height:22px;font-size:10.5px}
 .nd-tab:hover:not(.on){color:var(--text-primary)}
 .nd-layout{display:grid;grid-template-columns:260px 1fr;gap:16px;height:calc(100vh - 160px);min-height:420px}
 @media(max-width:720px){.nd-layout{grid-template-columns:1fr;height:auto}}
@@ -1283,6 +1288,11 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
         <div id="ib-email-tab">
           <div class="nd-layout">
             <div class="nd-panel-l">
+              <div class="ib-folder-tabs">
+                <button type="button" class="ib-folder-tab on" data-folder="inbox" onclick="ibSwitchFolder('inbox')">Inbox</button>
+                <button type="button" class="ib-folder-tab" data-folder="sent" onclick="ibSwitchFolder('sent')">Sent</button>
+                <button type="button" class="ib-folder-tab" data-folder="drafts" onclick="ibSwitchFolder('drafts')">Drafts</button>
+              </div>
               <div class="nd-panel-hdr">
                 <input class="nd-search" id="ib-mail-search" type="text" placeholder="Search mail…" oninput="ibFilterMail()">
                 <button type="button" class="btn btn-p" onclick="ibCompose()" title="Compose" style="flex-shrink:0;padding:7px 10px">
@@ -1294,11 +1304,11 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
             <div class="nd-panel-r">
               <!-- Reading pane -->
               <div id="ib-mail-read" style="display:none;flex-direction:column;height:100%;overflow:hidden">
-                <div class="nd-editor-hdr" style="padding-bottom:12px;border-bottom:1px solid var(--border)">
-                  <div id="ib-mail-subject" style="font-size:17px;font-weight:700;margin-bottom:6px"></div>
-                  <div id="ib-mail-meta" style="font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-                    <span id="ib-mail-meta-text"></span>
-                    <button type="button" id="ib-mail-show-images" class="btn btn-o hidden" onclick="ibShowImages()" style="font-size:11px;padding:3px 9px">Show images</button>
+                <div class="nd-editor-hdr" style="padding-bottom:12px;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start">
+                  <div id="ib-mail-avatar"></div>
+                  <div style="min-width:0;flex:1">
+                    <div id="ib-mail-subject" style="font-size:17px;font-weight:700;margin-bottom:6px"></div>
+                    <div id="ib-mail-meta-text" style="font-size:12px;color:var(--text-muted)"></div>
                   </div>
                 </div>
                 <div id="ib-mail-body" style="flex:1;overflow-y:auto;padding:14px 16px;font-size:13.5px;line-height:1.75;white-space:pre-wrap"></div>
@@ -4775,9 +4785,26 @@ async function intTestWhatsapp(){
 
 // ── INBOX (Email / Slack / WhatsApp) ──
 let ibMail=[],ibActiveMailId=null,ibCurrentMail=null,ibReplyCtx=null,ibMailLoaded=false,ibSlackLoaded=false;
+let ibCurrentFolder='inbox',ibEditingDraftId=null;
+
+const IB_AVATAR_COLORS=['#e74c3c','#e67e22','#f39c12','#27ae60','#1abc9c','#3498db','#9b59b6','#e84393','#16a085','#2980b9','#8e44ad','#c0392b'];
+function ibParseFrom(raw){
+  raw=raw||'';
+  const m=raw.match(/^"?([^"<]*)"?\s*<([^>]+)>$/);
+  if(m)return{name:m[1].trim()||m[2],email:m[2]};
+  return{name:raw,email:raw};
+}
+function ibAvatarHtml(raw,sizeClass){
+  const{name,email}=ibParseFrom(raw);
+  const letter=(name||email||'?').trim().charAt(0).toUpperCase()||'?';
+  let hash=0;
+  for(let i=0;i<email.length;i++)hash=(hash*31+email.charCodeAt(i))>>>0;
+  const color=IB_AVATAR_COLORS[hash%IB_AVATAR_COLORS.length];
+  return`<span class="ib-avatar${sizeClass?' '+sizeClass:''}" style="background:${color}">${lsEsc(letter)}</span>`;
+}
 
 function ibInit(){
-  if(!ibMailLoaded){ibLoadMail();ibMailLoaded=true;}
+  if(!ibMailLoaded){ibLoadCurrentFolder();ibMailLoaded=true;}
 }
 
 function ibTab(t){
@@ -4788,11 +4815,24 @@ function ibTab(t){
   if(t==='slack'&&!ibSlackLoaded){ibLoadSlackChannels();ibSlackLoaded=true;}
 }
 
+function ibSwitchFolder(folder){
+  ibCurrentFolder=folder;
+  document.querySelectorAll('.ib-folder-tab').forEach(b=>b.classList.toggle('on',b.dataset.folder===folder));
+  ibActiveMailId=null;ibCurrentMail=null;
+  document.getElementById('ib-mail-search').value='';
+  ibShowPane('placeholder');
+  ibLoadCurrentFolder();
+}
+function ibLoadCurrentFolder(){
+  if(ibCurrentFolder==='drafts')ibLoadDrafts();
+  else ibLoadMail();
+}
+
 async function ibLoadMail(){
   const list=document.getElementById('ib-mail-list');
   list.innerHTML='<div class="nd-empty">Loading…</div>';
   try{
-    const res=await fetch('/api/gmail/messages');
+    const res=await fetch('/api/gmail/messages?folder='+ibCurrentFolder);
     const data=await res.json();
     if(!res.ok)throw new Error(data.error||'Failed to load mail');
     ibMail=data.messages||[];
@@ -4801,26 +4841,48 @@ async function ibLoadMail(){
     list.innerHTML=`<div class="nd-empty">Couldn't load mail — ${lsEsc(e.message)}.<br>Connect Gmail in Settings first.</div>`;
   }
 }
+async function ibLoadDrafts(){
+  const list=document.getElementById('ib-mail-list');
+  list.innerHTML='<div class="nd-empty">Loading…</div>';
+  try{
+    const res=await fetch('/api/gmail/drafts');
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error||'Failed to load drafts');
+    ibMail=data.drafts||[];
+    ibRenderMailList();
+  }catch(e){
+    list.innerHTML=`<div class="nd-empty">Couldn't load drafts — ${lsEsc(e.message)}.</div>`;
+  }
+}
 function ibFilterMail(){ibRenderMailList(document.getElementById('ib-mail-search').value);}
 function ibRenderMailList(filter=''){
   const list=document.getElementById('ib-mail-list');if(!list)return;
   const f=filter.toLowerCase();
-  const items=ibMail.filter(m=>!f||(m.subject||'').toLowerCase().includes(f)||(m.from||'').toLowerCase().includes(f)||(m.snippet||'').toLowerCase().includes(f));
-  if(!items.length){list.innerHTML='<div class="nd-empty">No mail found.</div>';return;}
-  list.innerHTML=items.map(m=>`
-    <div class="nd-note-item${m.id===ibActiveMailId?' on':''}" onclick="ibSelectMail('${m.id}')">
-      <div class="nd-note-title">${m.unread?'<span class="ib-dot"></span>':''}${lsEsc(m.subject||'(no subject)')}</div>
-      <div style="font-size:11.5px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${lsEsc(m.from||'')} · ${lsEsc(m.snippet||'')}</div>
-    </div>`).join('');
+  const isDrafts=ibCurrentFolder==='drafts';
+  const items=ibMail.filter(m=>!f||(m.subject||'').toLowerCase().includes(f)||(m.from||m.to||'').toLowerCase().includes(f)||(m.snippet||'').toLowerCase().includes(f));
+  if(!items.length){list.innerHTML=`<div class="nd-empty">No ${isDrafts?'drafts':'mail'} found.</div>`;return;}
+  list.innerHTML=items.map(m=>{
+    const rowId=isDrafts?m.draftId:m.id;
+    const person=isDrafts?(m.to||'(no recipient)'):(m.from||'');
+    return`
+    <div class="nd-note-item${rowId===ibActiveMailId?' on':''}" onclick="${isDrafts?`ibEditDraft('${m.draftId}')`:`ibSelectMail('${m.id}')`}" style="display:flex;gap:10px;align-items:flex-start">
+      ${ibAvatarHtml(person,'ib-avatar-sm')}
+      <div style="min-width:0;flex:1">
+        <div class="nd-note-title">${(!isDrafts&&m.unread)?'<span class="ib-dot"></span>':''}${lsEsc(m.subject||'(no subject)')}${isDrafts?' <span style="color:var(--danger);font-weight:400">(draft)</span>':''}</div>
+        <div style="font-size:11.5px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${lsEsc(person)} · ${lsEsc(m.snippet||'')}</div>
+      </div>
+    </div>`;
+  }).join('');
 }
 async function ibSelectMail(id){
+  ibEditingDraftId=null;
   ibActiveMailId=id;ibRenderMailList(document.getElementById('ib-mail-search')?.value||'');
   ibShowPane('read');
   document.getElementById('ib-mail-subject').textContent='Loading…';
+  document.getElementById('ib-mail-avatar').innerHTML='';
   document.getElementById('ib-mail-body').textContent='';
   document.getElementById('ib-mail-body').classList.remove('hidden');
   document.getElementById('ib-mail-body-html').classList.add('hidden');
-  document.getElementById('ib-mail-show-images').classList.add('hidden');
   try{
     const res=await fetch('/api/gmail/messages/'+encodeURIComponent(id),{cache:'no-store'});
     const data=await res.json();
@@ -4829,7 +4891,8 @@ async function ibSelectMail(id){
     const m=ibMail.find(x=>x.id===id);if(m)m.unread=false;
     ibRenderMailList(document.getElementById('ib-mail-search')?.value||'');
     document.getElementById('ib-mail-subject').textContent=data.subject||'(no subject)';
-    document.getElementById('ib-mail-meta-text').textContent=`From: ${data.from}  ·  ${data.date}`;
+    document.getElementById('ib-mail-avatar').innerHTML=ibAvatarHtml(ibCurrentFolder==='sent'?data.to:data.from);
+    document.getElementById('ib-mail-meta-text').textContent=`${ibCurrentFolder==='sent'?'To':'From'}: ${ibCurrentFolder==='sent'?data.to:data.from}  ·  ${data.date}`;
 
     const bodyEl=document.getElementById('ib-mail-body');
     const frame=document.getElementById('ib-mail-body-html');
@@ -4840,9 +4903,6 @@ async function ibSelectMail(id){
         try{
           const doc=frame.contentDocument;
           frame.style.height=Math.min(doc.documentElement.scrollHeight+20,3000)+'px';
-          if(doc.querySelector('img[data-src]')){
-            document.getElementById('ib-mail-show-images').classList.remove('hidden');
-          }
         }catch(e){}
       };
       frame.srcdoc=data.bodyHtml;
@@ -4858,17 +4918,25 @@ async function ibSelectMail(id){
     document.getElementById('ib-mail-body').textContent=e.message;
   }
 }
-function ibShowImages(){
-  const frame=document.getElementById('ib-mail-body-html');
+async function ibEditDraft(draftId){
+  ibActiveMailId=draftId;ibRenderMailList(document.getElementById('ib-mail-search')?.value||'');
+  ibShowPane('compose');
+  ibReplyCtx=null;
+  document.getElementById('ib-c-to').value='';
+  document.getElementById('ib-c-subject').value='Loading…';
+  document.getElementById('ib-c-body').value='';
+  document.getElementById('ib-mail-send-status').textContent='';
   try{
-    const doc=frame.contentDocument;
-    doc.querySelectorAll('img[data-src]').forEach(img=>{
-      img.src=img.getAttribute('data-src');
-      img.removeAttribute('data-src');
-    });
-    document.getElementById('ib-mail-show-images').classList.add('hidden');
-    setTimeout(()=>{ frame.style.height=Math.min(doc.documentElement.scrollHeight+20,3000)+'px'; },300);
-  }catch(e){}
+    const res=await fetch('/api/gmail/drafts/'+encodeURIComponent(draftId),{cache:'no-store'});
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error||'Failed to load draft');
+    ibEditingDraftId=draftId;
+    document.getElementById('ib-c-to').value=data.to||'';
+    document.getElementById('ib-c-subject').value=data.subject||'';
+    document.getElementById('ib-c-body').value=data.body||'';
+  }catch(e){
+    document.getElementById('ib-mail-send-status').innerHTML=`<span style="color:var(--danger)">✗ ${lsEsc(e.message)}</span>`;
+  }
 }
 function ibShowPane(which){
   document.getElementById('ib-mail-placeholder').style.display=which==='placeholder'?'flex':'none';
@@ -4876,7 +4944,7 @@ function ibShowPane(which){
   document.getElementById('ib-mail-compose').style.display=which==='compose'?'flex':'none';
 }
 function ibCompose(){
-  ibReplyCtx=null;
+  ibReplyCtx=null;ibEditingDraftId=null;
   document.getElementById('ib-c-to').value='';
   document.getElementById('ib-c-subject').value='';
   document.getElementById('ib-c-body').value='';
@@ -4885,6 +4953,7 @@ function ibCompose(){
 }
 function ibReply(){
   if(!ibCurrentMail)return;
+  ibEditingDraftId=null;
   const fromAddr=(ibCurrentMail.from.match(/<([^>]+)>/)||[])[1]||ibCurrentMail.from;
   ibReplyCtx={threadId:ibCurrentMail.threadId,inReplyTo:ibCurrentMail.messageIdHeader,references:ibCurrentMail.references};
   document.getElementById('ib-c-to').value=fromAddr;
@@ -4894,7 +4963,7 @@ function ibReply(){
   ibShowPane('compose');
 }
 function ibCancelCompose(){
-  ibShowPane(ibActiveMailId?'read':'placeholder');
+  ibShowPane((ibActiveMailId&&!ibEditingDraftId)?'read':'placeholder');
 }
 async function ibSendEmail(){
   const to=document.getElementById('ib-c-to').value.trim();
@@ -4910,8 +4979,12 @@ async function ibSendEmail(){
     const data=await res.json();
     if(!res.ok)throw new Error(data.error||'Send failed');
     status.innerHTML='<span class="st-badge-ok">✓ Sent</span>';
-    ibLoadMail();
-    setTimeout(()=>ibShowPane(ibActiveMailId?'read':'placeholder'),900);
+    if(ibEditingDraftId){
+      fetch('/api/gmail/drafts/'+encodeURIComponent(ibEditingDraftId),{method:'DELETE'}).catch(()=>{});
+      ibEditingDraftId=null;
+    }
+    ibLoadCurrentFolder();
+    setTimeout(()=>ibShowPane((ibActiveMailId&&ibCurrentFolder!=='drafts')?'read':'placeholder'),900);
   }catch(e){status.innerHTML=`<span style="color:var(--danger)">✗ ${lsEsc(e.message)}</span>`;}
 }
 
@@ -5911,9 +5984,9 @@ async function dashLoadInboxWidget(){
     if(!msgs.length){el.innerHTML='<div style="color:var(--text-muted);font-size:12.5px;padding:10px 0">No recent mail.</div>';return;}
     el.innerHTML=msgs.map(m=>`
       <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="go('inbox')">
-        ${m.unread?'<span class="ib-dot" style="flex-shrink:0"></span>':'<span style="width:7px;flex-shrink:0"></span>'}
+        ${ibAvatarHtml(m.from,'ib-avatar-sm')}
         <div style="min-width:0;flex:1">
-          <div style="font-size:12.5px;font-weight:${m.unread?'600':'400'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${lsEsc(m.subject||'(no subject)')}</div>
+          <div style="font-size:12.5px;font-weight:${m.unread?'600':'400'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.unread?'<span class="ib-dot"></span>':''}${lsEsc(m.subject||'(no subject)')}</div>
           <div style="font-size:11px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${lsEsc(m.from||'')}</div>
         </div>
       </div>`).join('');

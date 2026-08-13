@@ -10,9 +10,11 @@ export async function GET(request: NextRequest) {
   try {
     const accessToken = await getGmailAccessToken()
     const q = request.nextUrl.searchParams.get('q') || 'newer_than:14d'
+    const folder = request.nextUrl.searchParams.get('folder') || 'inbox'
+    const labelId = folder === 'sent' ? 'SENT' : 'INBOX'
 
     const listRes = await fetch(
-      `https://gmail.googleapis.com/gmail/v1/users/me/messages?maxResults=15&q=${encodeURIComponent(q)}`,
+      `https://gmail.googleapis.com/gmail/v1/users/me/messages?maxResults=20&labelIds=${labelId}&q=${encodeURIComponent(q)}`,
       { headers: { Authorization: `Bearer ${accessToken}` } },
     )
     if (!listRes.ok) throw new Error('Gmail list request failed')
