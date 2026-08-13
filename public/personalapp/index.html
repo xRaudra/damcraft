@@ -4785,7 +4785,7 @@ async function intTestWhatsapp(){
 }
 
 // ── INBOX (Email / Slack / WhatsApp) ──
-let ibMail=[],ibActiveMailId=null,ibCurrentMail=null,ibReplyCtx=null,ibMailLoaded=false,ibSlackLoaded=false;
+let ibMail=[],ibActiveMailId=null,ibCurrentMail=null,ibReplyCtx=null,ibMailLoaded=false,ibSlackLoaded=false,ibNextPageToken=null;
 let ibCurrentFolder='inbox',ibEditingDraftId=null;
 let ibMyProfile=null,ibMyProfileLoaded=false;
 
@@ -4849,14 +4849,31 @@ function ibLoadCurrentFolder(){
 async function ibLoadMail(){
   const list=document.getElementById('ib-mail-list');
   list.innerHTML='<div class="nd-empty">Loading…</div>';
+  ibNextPageToken=null;
   try{
     const res=await fetch('/api/gmail/messages?folder='+ibCurrentFolder);
     const data=await res.json();
     if(!res.ok)throw new Error(data.error||'Failed to load mail');
     ibMail=data.messages||[];
+    ibNextPageToken=data.nextPageToken||null;
     ibRenderMailList();
   }catch(e){
     list.innerHTML=`<div class="nd-empty">Couldn't load mail — ${lsEsc(e.message)}.<br>Connect Gmail in Settings first.</div>`;
+  }
+}
+async function ibLoadMoreMail(){
+  if(!ibNextPageToken)return;
+  const btn=document.getElementById('ib-load-more-btn');
+  if(btn)btn.textContent='Loading…';
+  try{
+    const res=await fetch('/api/gmail/messages?folder='+ibCurrentFolder+'&pageToken='+encodeURIComponent(ibNextPageToken));
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error||'Failed to load more mail');
+    ibMail=ibMail.concat(data.messages||[]);
+    ibNextPageToken=data.nextPageToken||null;
+    ibRenderMailList(document.getElementById('ib-mail-search')?.value||'');
+  }catch(e){
+    if(btn)btn.textContent='Failed — tap to retry';
   }
 }
 async function ibLoadDrafts(){
@@ -4890,7 +4907,8 @@ function ibRenderMailList(filter=''){
         <div style="font-size:11.5px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${lsEsc(person)} · ${lsEsc(m.snippet||'')}</div>
       </div>
     </div>`;
-  }).join('');
+  }).join('')
+  +((!isDrafts&&ibNextPageToken&&!f)?`<button type="button" id="ib-load-more-btn" class="btn btn-o" onclick="ibLoadMoreMail()" style="width:100%;margin-top:6px;font-size:12px">Load more</button>`:'');
 }
 async function ibSelectMail(id){
   ibEditingDraftId=null;

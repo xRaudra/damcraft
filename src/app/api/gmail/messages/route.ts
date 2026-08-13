@@ -9,14 +9,20 @@ interface GmailHeader {
 export async function GET(request: NextRequest) {
   try {
     const accessToken = await getGmailAccessToken()
-    const q = request.nextUrl.searchParams.get('q') || 'newer_than:14d'
+    const q = request.nextUrl.searchParams.get('q') || ''
     const folder = request.nextUrl.searchParams.get('folder') || 'inbox'
+    const pageToken = request.nextUrl.searchParams.get('pageToken') || ''
     const labelId = folder === 'sent' ? 'SENT' : 'INBOX'
 
-    const listRes = await fetch(
-      `https://gmail.googleapis.com/gmail/v1/users/me/messages?maxResults=20&labelIds=${labelId}&q=${encodeURIComponent(q)}`,
-      { headers: { Authorization: `Bearer ${accessToken}` } },
-    )
+    const listUrl = new URL('https://gmail.googleapis.com/gmail/v1/users/me/messages')
+    listUrl.searchParams.set('maxResults', '30')
+    listUrl.searchParams.set('labelIds', labelId)
+    if (q) listUrl.searchParams.set('q', q)
+    if (pageToken) listUrl.searchParams.set('pageToken', pageToken)
+
+    const listRes = await fetch(listUrl.toString(), {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    })
     if (!listRes.ok) throw new Error('Gmail list request failed')
     const list = await listRes.json()
     const ids: { id: string }[] = list.messages || []
@@ -42,7 +48,7 @@ export async function GET(request: NextRequest) {
         }
       }),
     )
-    return NextResponse.json({ messages })
+    return NextResponse.json({ messages, nextPageToken: list.nextPageToken || null })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error'
     return NextResponse.json({ error: message }, { status: 500 })
