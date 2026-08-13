@@ -2355,28 +2355,13 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
           <!-- Certifications -->
           <div class="pf-section">
             <div class="pf-sec-title">Certifications</div>
-            <div class="pf-list">
-              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'UX Design for Augmented Reality — IxDF (Jan 2026)')" title="Click to copy">UX Design for Augmented Reality — IxDF (Jan 2026)</span></div>
-              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'AI for Designers — IxDF (Jan 2026)')" title="Click to copy">AI for Designers — IxDF (Jan 2026)</span></div>
-              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'Human-Computer Interaction: Foundations of UX — IxDF (Dec 2025)')" title="Click to copy">Human-Computer Interaction: Foundations of UX — IxDF (Dec 2025)</span></div>
-              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'Conduct UX Research & Test Early Concepts — Coursera / Google (Apr 2023)')" title="Click to copy">Conduct UX Research &amp; Test Early Concepts — Coursera / Google (Apr 2023)</span></div>
-              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'Build Wireframes & Low-Fidelity Prototypes — Coursera / Google (Apr 2023)')" title="Click to copy">Build Wireframes &amp; Low-Fidelity Prototypes — Coursera / Google (Apr 2023)</span></div>
-              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'Start UX Design Process: Empathize, Define, Ideate — Coursera / Google (Apr 2023)')" title="Click to copy">Start UX Design Process: Empathize, Define, Ideate — Coursera / Google (Apr 2023)</span></div>
-              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'Foundations of UX Design — Coursera / Google (Mar 2023)')" title="Click to copy">Foundations of UX Design — Coursera / Google (Mar 2023)</span></div>
-              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'Project Management Tips — LinkedIn Learning (Apr 2023)')" title="Click to copy">Project Management Tips — LinkedIn Learning (Apr 2023)</span></div>
-              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'100 Days of Code: Python Pro Bootcamp — Udemy (Sep 2021)')" title="Click to copy">100 Days of Code: Python Pro Bootcamp — Udemy (Sep 2021)</span></div>
-            </div>
+            <div class="pf-list" id="pf-cert-list"></div>
           </div>
 
           <!-- Projects -->
           <div class="pf-section">
             <div class="pf-sec-title">Projects</div>
-            <div class="pf-list">
-              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'MedGlobal360 — Healthcare Consumer Platform · Product Designer (2026)')" title="Click to copy">MedGlobal360 — Healthcare Consumer Platform · Product Designer (2026)</span></div>
-              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'Geode Fit — AI-Assisted Fitness Platform · 0-to-1 Product Designer · Live: geodefit.in (2026)')" title="Click to copy">Geode Fit — AI-Assisted Fitness Platform · 0-to-1 Product Designer · Live: geodefit.in (2026)</span></div>
-              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'Damcraft — Brand & Web Experience · 0-to-1 · Live: damcraft.com (2026)')" title="Click to copy">Damcraft — Brand &amp; Web Experience · 0-to-1 · Live: damcraft.com (2026)</span></div>
-              <div class="pf-row"><span class="pf-val" onclick="pfCopyText(this,'Amritpex 2023 — Event App for India Post · PM Modi event, Pragati Maidan (Jan 2023)')" title="Click to copy">Amritpex 2023 — Event App for India Post · PM Modi event, Pragati Maidan (Jan 2023)</span></div>
-            </div>
+            <div class="pf-list" id="pf-proj-list"></div>
           </div>
 
         </div>
@@ -3102,14 +3087,38 @@ const PROFILE = {
   exp:'Lead UX Designer @ Seiva Networks (2023–2026) · UI/UX Designer @ Mach1 Digital · Communication Designer @ Hav Strategy · Web Designer @ Neurologix',
   exp_detail:'Lead UI/UX Designer — Seiva Networks Solutions Pvt. Ltd. (May 2023–May 2026, Remote)\nUI/UX Designer — Mach1 Digital Pvt. Ltd. (Aug 2022–May 2023)\nCommunication Designer — Hav Strategy Pvt Ltd. (Jan 2022–Jun 2022)\nWeb Designer — Neurologix Technology Pvt Ltd. (Mar 2020–Dec 2021)',
   edu:'M.Com — DDU Gorakhpur University · B.Com — DDU Gorakhpur University',
-  certs:'UX Design for Augmented Reality — IxDF (Jan 2026)\nAI for Designers — IxDF (Jan 2026)\nHuman-Computer Interaction: Foundations of UX — IxDF (Dec 2025)\nConduct UX Research & Test Early Concepts — Coursera / Google (Apr 2023)\nBuild Wireframes & Low-Fidelity Prototypes — Coursera / Google (Apr 2023)\nStart UX Design Process: Empathize, Define, Ideate — Coursera / Google (Apr 2023)\nFoundations of UX Design — Coursera / Google (Mar 2023)\nProject Management Tips — LinkedIn Learning (Apr 2023)\n100 Days of Code: Python Pro Bootcamp — Udemy (Sep 2021)',
-  projects:'MedGlobal360 — Healthcare Consumer Platform, Product Designer (2026)\nGeode Fit — AI-Assisted Fitness Platform, 0-to-1 Product Designer, live: geodefit.in (2026)\nDamcraft — Brand & Web Experience, 0-to-1 (2026), live: damcraft.com\nAmritpex 2023 — Event App for India Post (PM Modi event, Pragati Maidan, Jan 2023)'
+  certs:'',
+  projects:''
 };
 
-// Renders Work Experience / Education as individually click-to-copy rows
-// (title separate from company, each degree its own row) and computes
-// per-role + total experience from WORK_HISTORY's dates — replaces the
-// old single-block-of-text-per-section layout where clicking anywhere
+// Same single-source-of-truth pattern as WORK_HISTORY/EDUCATION above —
+// these were previously hardcoded in both the HTML (as pfCopyText args)
+// and in PROFILE.certs/projects as separate strings that had already
+// drifted out of sync with each other (different separators, "Live:"
+// moved/re-cased). One list now feeds both the rendered rows and the
+// AI-prompt text.
+const CERTIFICATIONS = [
+  'UX Design for Augmented Reality — IxDF (Jan 2026)',
+  'AI for Designers — IxDF (Jan 2026)',
+  'Human-Computer Interaction: Foundations of UX — IxDF (Dec 2025)',
+  'Conduct UX Research & Test Early Concepts — Coursera / Google (Apr 2023)',
+  'Build Wireframes & Low-Fidelity Prototypes — Coursera / Google (Apr 2023)',
+  'Start UX Design Process: Empathize, Define, Ideate — Coursera / Google (Apr 2023)',
+  'Foundations of UX Design — Coursera / Google (Mar 2023)',
+  'Project Management Tips — LinkedIn Learning (Apr 2023)',
+  '100 Days of Code: Python Pro Bootcamp — Udemy (Sep 2021)',
+];
+const PROJECTS = [
+  'MedGlobal360 — Healthcare Consumer Platform · Product Designer (2026)',
+  'Geode Fit — AI-Assisted Fitness Platform · 0-to-1 Product Designer · Live: geodefit.in (2026)',
+  'Damcraft — Brand & Web Experience · 0-to-1 · Live: damcraft.com (2026)',
+  'Amritpex 2023 — Event App for India Post · PM Modi event, Pragati Maidan (Jan 2023)',
+];
+
+// Renders Work Experience / Education / Certifications / Projects as
+// individually click-to-copy rows and computes per-role + total
+// experience from WORK_HISTORY's dates — replaces the old
+// single-block-of-text-per-section layout where clicking anywhere
 // copied the whole section (all roles, or both degrees) at once.
 function pfInit(){
   const list=document.getElementById('pf-exp-list');
@@ -3133,6 +3142,16 @@ function pfInit(){
   const eduList=document.getElementById('pf-edu-list');
   if(eduList){
     eduList.innerHTML=EDUCATION.map(e=>`<div class="pf-edu-item"><span class="pf-val" onclick="pfCopyEl(this)" title="Click to copy">${lsEsc(e.label)}</span></div>`).join('');
+  }
+  const certList=document.getElementById('pf-cert-list');
+  if(certList){
+    certList.innerHTML=CERTIFICATIONS.map(c=>`<div class="pf-row"><span class="pf-val" onclick="pfCopyEl(this)" title="Click to copy">${lsEsc(c)}</span></div>`).join('');
+    PROFILE.certs=CERTIFICATIONS.join('\n');
+  }
+  const projList=document.getElementById('pf-proj-list');
+  if(projList){
+    projList.innerHTML=PROJECTS.map(p=>`<div class="pf-row"><span class="pf-val" onclick="pfCopyEl(this)" title="Click to copy">${lsEsc(p)}</span></div>`).join('');
+    PROFILE.projects=PROJECTS.join('\n');
   }
 }
 
