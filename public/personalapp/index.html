@@ -4874,32 +4874,64 @@ async function ibSendEmail(){
   }catch(e){status.innerHTML=`<span style="color:var(--danger)">✗ ${lsEsc(e.message)}</span>`;}
 }
 
-let ibSlackChannel='',ibSlackChannels=[];
+let ibSlackChannel='',ibSlackChannels=[],ibSlackUsers=[];
 
 async function ibLoadSlackChannels(){
   const sel=document.getElementById('ib-slack-channel-sel');
-  try{
-    const res=await fetch('/api/slack/channels');
-    const data=await res.json();
-    if(!res.ok)throw new Error(data.error||'Failed to load channels');
-    ibSlackChannels=data.channels||[];
-    if(!ibSlackChannels.length){
-      sel.innerHTML='<option value="">No channels found</option>';
-      document.getElementById('ib-slack-list').innerHTML='<div class="nd-empty">No public channels found in this workspace.</div>';
-      return;
+  sel.innerHTML='<option value="">Loading…</option>';
+  const [chResult,userResult]=await Promise.allSettled([
+    fetch('/api/slack/channels').then(r=>r.json().then(d=>({ok:r.ok,d}))),
+    fetch('/api/slack/users').then(r=>r.json().then(d=>({ok:r.ok,d}))),
+  ]);
+
+  let channelsHtml='',firstValue='';
+  if(chResult.status==='fulfilled'&&chResult.value.ok){
+    ibSlackChannels=chResult.value.d.channels||[];
+    if(ibSlackChannels.length){
+      channelsHtml=`<optgroup label="Channels">${ibSlackChannels.map(c=>`<option value="${c.id}">#${lsEsc(c.name)}${c.isMember?'':' (not joined)'}</option>`).join('')}</optgroup>`;
+      const preferred=ibSlackChannels.find(c=>c.isMember)||ibSlackChannels[0];
+      firstValue=preferred.id;
     }
-    sel.innerHTML=ibSlackChannels.map(c=>`<option value="${c.id}">#${lsEsc(c.name)}${c.isMember?'':' (not joined)'}</option>`).join('');
-    const preferred=ibSlackChannels.find(c=>c.isMember)||ibSlackChannels[0];
-    sel.value=preferred.id;
-    ibSlackChannel=preferred.id;
+  }
+
+  let usersHtml='';
+  if(userResult.status==='fulfilled'&&userResult.value.ok){
+    ibSlackUsers=userResult.value.d.users||[];
+    if(ibSlackUsers.length){
+      usersHtml=`<optgroup label="Direct Messages">${ibSlackUsers.map(u=>`<option value="user:${u.id}">@${lsEsc(u.name)}</option>`).join('')}</optgroup>`;
+    }
+  }
+
+  if(!channelsHtml&&!usersHtml){
+    sel.innerHTML='<option value="">Nothing found</option>';
+    document.getElementById('ib-slack-list').innerHTML='<div class="nd-empty">Couldn\'t load channels or people. Check SLACK_BOT_TOKEN in Vercel.</div>';
+    return;
+  }
+  sel.innerHTML=channelsHtml+usersHtml;
+  if(firstValue){
+    sel.value=firstValue;
+    ibSlackChannel=firstValue;
     ibLoadSlack();
-  }catch(e){
-    sel.innerHTML='<option value="">Could not load channels</option>';
-    document.getElementById('ib-slack-list').innerHTML=`<div class="nd-empty">Couldn't load channels — ${lsEsc(e.message)}.<br>Set SLACK_BOT_TOKEN in Vercel.</div>`;
   }
 }
-function ibOnSlackChannelChange(){
-  ibSlackChannel=document.getElementById('ib-slack-channel-sel').value;
+async function ibOnSlackChannelChange(){
+  const raw=document.getElementById('ib-slack-channel-sel').value;
+  if(raw.startsWith('user:')){
+    const userId=raw.slice(5);
+    const list=document.getElementById('ib-slack-list');
+    list.innerHTML='<div class="nd-empty">Opening conversation…</div>';
+    try{
+      const res=await fetch('/api/slack/dm-open',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId})});
+      const data=await res.json();
+      if(!res.ok)throw new Error(data.error||'Could not open DM');
+      ibSlackChannel=data.channelId;
+      ibLoadSlack();
+    }catch(e){
+      list.innerHTML=`<div class="nd-empty">Couldn't open DM — ${lsEsc(e.message)}</div>`;
+    }
+    return;
+  }
+  ibSlackChannel=raw;
   ibLoadSlack();
 }
 async function ibLoadSlack(){
