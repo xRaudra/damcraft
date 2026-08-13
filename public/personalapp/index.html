@@ -429,8 +429,6 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
 .pf-exp-meta{font-size:12px;color:var(--text-muted);margin-top:3px}
 .pf-exp-dur{color:var(--text-secondary);font-weight:600}
 .pf-exp-total{font-size:12.5px;color:var(--text-primary);font-weight:600;margin-top:8px;padding-top:10px;border-top:1px solid var(--border)}
-.pf-edu-item{padding:7px 0;border-bottom:1px solid var(--border)}
-.pf-edu-item:last-child{border-bottom:none}
 
 /* quick access */
 .qg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -3055,8 +3053,8 @@ const WORK_HISTORY = [
   {title:'Web Designer', company:'Neurologix Technology Pvt Ltd.', start:'2020-03', end:'2021-12'},
 ];
 const EDUCATION = [
-  {label:'M.Com — DDU Gorakhpur University (2018)'},
-  {label:'B.Com — DDU Gorakhpur University (2016)'},
+  {degree:'M.Com', school:'DDU Gorakhpur University', year:'2018'},
+  {degree:'B.Com', school:'DDU Gorakhpur University', year:'2016'},
 ];
 const MONTH_NAMES=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 function pfLabelYM(ym){const p=ym.split('-').map(Number);return MONTH_NAMES[p[1]-1]+' '+p[0];}
@@ -3096,23 +3094,25 @@ const PROFILE = {
 // and in PROFILE.certs/projects as separate strings that had already
 // drifted out of sync with each other (different separators, "Live:"
 // moved/re-cased). One list now feeds both the rendered rows and the
-// AI-prompt text.
+// AI-prompt text. Fields are split apart (name/issuer/date,
+// name/description/role/date) so each piece copies independently,
+// matching the title/company split on Work Experience.
 const CERTIFICATIONS = [
-  'UX Design for Augmented Reality — IxDF (Jan 2026)',
-  'AI for Designers — IxDF (Jan 2026)',
-  'Human-Computer Interaction: Foundations of UX — IxDF (Dec 2025)',
-  'Conduct UX Research & Test Early Concepts — Coursera / Google (Apr 2023)',
-  'Build Wireframes & Low-Fidelity Prototypes — Coursera / Google (Apr 2023)',
-  'Start UX Design Process: Empathize, Define, Ideate — Coursera / Google (Apr 2023)',
-  'Foundations of UX Design — Coursera / Google (Mar 2023)',
-  'Project Management Tips — LinkedIn Learning (Apr 2023)',
-  '100 Days of Code: Python Pro Bootcamp — Udemy (Sep 2021)',
+  {name:'UX Design for Augmented Reality', issuer:'IxDF', date:'Jan 2026'},
+  {name:'AI for Designers', issuer:'IxDF', date:'Jan 2026'},
+  {name:'Human-Computer Interaction: Foundations of UX', issuer:'IxDF', date:'Dec 2025'},
+  {name:'Conduct UX Research & Test Early Concepts', issuer:'Coursera / Google', date:'Apr 2023'},
+  {name:'Build Wireframes & Low-Fidelity Prototypes', issuer:'Coursera / Google', date:'Apr 2023'},
+  {name:'Start UX Design Process: Empathize, Define, Ideate', issuer:'Coursera / Google', date:'Apr 2023'},
+  {name:'Foundations of UX Design', issuer:'Coursera / Google', date:'Mar 2023'},
+  {name:'Project Management Tips', issuer:'LinkedIn Learning', date:'Apr 2023'},
+  {name:'100 Days of Code: Python Pro Bootcamp', issuer:'Udemy', date:'Sep 2021'},
 ];
 const PROJECTS = [
-  'MedGlobal360 — Healthcare Consumer Platform · Product Designer (2026)',
-  'Geode Fit — AI-Assisted Fitness Platform · 0-to-1 Product Designer · Live: geodefit.in (2026)',
-  'Damcraft — Brand & Web Experience · 0-to-1 · Live: damcraft.com (2026)',
-  'Amritpex 2023 — Event App for India Post · PM Modi event, Pragati Maidan (Jan 2023)',
+  {name:'MedGlobal360', desc:'Healthcare Consumer Platform', role:'Product Designer', year:'2026'},
+  {name:'Geode Fit', desc:'AI-Assisted Fitness Platform', role:'0-to-1 Product Designer', live:'geodefit.in', year:'2026'},
+  {name:'Damcraft', desc:'Brand & Web Experience', role:'0-to-1', live:'damcraft.com', year:'2026'},
+  {name:'Amritpex 2023', desc:'Event App for India Post', role:'PM Modi event, Pragati Maidan', year:'Jan 2023'},
 ];
 
 // Renders Work Experience / Education / Certifications / Projects as
@@ -3141,17 +3141,26 @@ function pfInit(){
   }
   const eduList=document.getElementById('pf-edu-list');
   if(eduList){
-    eduList.innerHTML=EDUCATION.map(e=>`<div class="pf-edu-item"><span class="pf-val" onclick="pfCopyEl(this)" title="Click to copy">${lsEsc(e.label)}</span></div>`).join('');
+    eduList.innerHTML=EDUCATION.map(e=>`<div class="pf-exp-item"><div class="pf-exp-row">
+      <span class="pf-val" onclick="pfCopyEl(this)" title="Click to copy degree">${lsEsc(e.degree)}</span><span class="pf-exp-sep">—</span><span class="pf-val" onclick="pfCopyEl(this)" title="Click to copy school">${lsEsc(e.school)}</span> <span class="pf-val" onclick="pfCopyEl(this)" title="Click to copy year">(${lsEsc(e.year)})</span>
+    </div></div>`).join('');
   }
   const certList=document.getElementById('pf-cert-list');
   if(certList){
-    certList.innerHTML=CERTIFICATIONS.map(c=>`<div class="pf-row"><span class="pf-val" onclick="pfCopyEl(this)" title="Click to copy">${lsEsc(c)}</span></div>`).join('');
-    PROFILE.certs=CERTIFICATIONS.join('\n');
+    certList.innerHTML=CERTIFICATIONS.map(c=>`<div class="pf-exp-item"><div class="pf-exp-row">
+      <span class="pf-val" onclick="pfCopyEl(this)" title="Click to copy name">${lsEsc(c.name)}</span><span class="pf-exp-sep">—</span><span class="pf-val" onclick="pfCopyEl(this)" title="Click to copy issuer">${lsEsc(c.issuer)}</span> <span class="pf-val" onclick="pfCopyEl(this)" title="Click to copy date">(${lsEsc(c.date)})</span>
+    </div></div>`).join('');
+    PROFILE.certs=CERTIFICATIONS.map(c=>`${c.name} — ${c.issuer} (${c.date})`).join('\n');
   }
   const projList=document.getElementById('pf-proj-list');
   if(projList){
-    projList.innerHTML=PROJECTS.map(p=>`<div class="pf-row"><span class="pf-val" onclick="pfCopyEl(this)" title="Click to copy">${lsEsc(p)}</span></div>`).join('');
-    PROFILE.projects=PROJECTS.join('\n');
+    projList.innerHTML=PROJECTS.map(p=>{
+      const live=p.live?`<span class="pf-exp-sep">·</span><span class="pf-val" onclick="pfCopyEl(this)" title="Click to copy link">Live: ${lsEsc(p.live)}</span>`:'';
+      return `<div class="pf-exp-item"><div class="pf-exp-row">
+        <span class="pf-val" onclick="pfCopyEl(this)" title="Click to copy name">${lsEsc(p.name)}</span><span class="pf-exp-sep">—</span><span class="pf-val" onclick="pfCopyEl(this)" title="Click to copy description">${lsEsc(p.desc)}</span><span class="pf-exp-sep">·</span><span class="pf-val" onclick="pfCopyEl(this)" title="Click to copy role">${lsEsc(p.role)}</span>${live} <span class="pf-val" onclick="pfCopyEl(this)" title="Click to copy year">(${lsEsc(p.year)})</span>
+      </div></div>`;
+    }).join('');
+    PROFILE.projects=PROJECTS.map(p=>`${p.name} — ${p.desc} · ${p.role}${p.live?' · Live: '+p.live:''} (${p.year})`).join('\n');
   }
 }
 
