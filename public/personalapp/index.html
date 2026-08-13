@@ -1358,6 +1358,10 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
                   <input class="rb-input" id="ib-c-to" type="text" placeholder="To *" style="margin-bottom:8px">
                   <input class="rb-input" id="ib-c-subject" type="text" placeholder="Subject *" style="margin-bottom:8px">
                 </div>
+                <details id="ib-draft-html-debug" class="hidden" style="margin:0 16px 8px">
+                  <summary style="cursor:pointer;font-size:11px;color:var(--text-muted)">View draft HTML source (debug)</summary>
+                  <pre id="ib-draft-html-debug-pre" style="white-space:pre-wrap;word-break:break-all;background:var(--bg-elevated);padding:8px;border-radius:6px;max-height:180px;overflow:auto;font-size:10.5px;margin-top:6px"></pre>
+                </details>
                 <div class="nd-textarea nd-editable" id="ib-c-body" contenteditable="true" data-placeholder="Write your email… or use AI Draft"></div>
                 <div style="display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--border);flex-shrink:0;flex-wrap:wrap;align-items:center">
                   <button type="button" class="btn btn-o" onclick="ibAiDraft('email')">✦ AI Draft</button>
@@ -5137,9 +5141,16 @@ async function ibEditDraft(draftId){
     // exactly as Gmail's own compose window shows it; fall back to plain
     // text turned into <br>-separated HTML for text-only drafts.
     document.getElementById('ib-c-body').innerHTML=data.bodyHtml||ibTextToHtml(data.body||'');
+    ibSetDraftDebugHtml(data.bodyHtml||'');
   }catch(e){
     document.getElementById('ib-mail-send-status').innerHTML=`<span style="color:var(--danger)">✗ ${lsEsc(e.message)}</span>`;
   }
+}
+function ibSetDraftDebugHtml(html){
+  const details=document.getElementById('ib-draft-html-debug');
+  const pre=document.getElementById('ib-draft-html-debug-pre');
+  if(html){details.classList.remove('hidden');pre.textContent=html;}
+  else{details.classList.add('hidden');details.open=false;pre.textContent='';}
 }
 function ibShowPane(which){
   document.getElementById('ib-mail-placeholder').style.display=which==='placeholder'?'flex':'none';
@@ -5152,6 +5163,7 @@ function ibCompose(){
   document.getElementById('ib-c-subject').value='';
   document.getElementById('ib-c-body').innerHTML='';
   document.getElementById('ib-mail-send-status').textContent='';
+  ibSetDraftDebugHtml('');
   ibShowPane('compose');
 }
 function ibReply(){
@@ -5163,6 +5175,7 @@ function ibReply(){
   document.getElementById('ib-c-subject').value=/^re:/i.test(ibCurrentMail.subject||'')?ibCurrentMail.subject:'Re: '+(ibCurrentMail.subject||'');
   document.getElementById('ib-c-body').innerHTML='';
   document.getElementById('ib-mail-send-status').textContent='';
+  ibSetDraftDebugHtml('');
   ibShowPane('compose');
 }
 function ibCancelCompose(){
