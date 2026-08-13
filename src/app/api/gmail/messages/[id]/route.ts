@@ -48,11 +48,16 @@ function decodePartText(part: GmailPart): string {
   return bytes.toString('utf-8')
 }
 
-// Strips style/script blocks entirely (not just their tags — their
-// text content is noise too), converts block-level tags to newlines
-// for readability, then unescapes the common HTML entities.
+// Strips HTML comments (email templates lean on these heavily for
+// Outlook/MSO-only fallback markup — <!--[if !mso]><!--> is a comment
+// under any standards-compliant parser, not something to render) and
+// style/script blocks entirely, converts block-level tags to newlines,
+// unescapes common entities, then collapses to at most one blank line
+// between paragraphs — table-heavy templates otherwise leave a wall
+// of near-empty lines from spacer cells and tracking pixels.
 function htmlToText(html: string): string {
-  return html
+  const withTagsStripped = html
+    .replace(/<!--[\s\S]*?-->/g, '')
     .replace(/<style[\s\S]*?<\/style>/gi, ' ')
     .replace(/<script[\s\S]*?<\/script>/gi, ' ')
     .replace(/<br\s*\/?>/gi, '\n')
@@ -64,9 +69,14 @@ function htmlToText(html: string): string {
     .replace(/&gt;/gi, '>')
     .replace(/&quot;/gi, '"')
     .replace(/&#39;/gi, "'")
-    .replace(/[ \t]+/g, ' ')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim()
+
+  const lines: string[] = []
+  for (const rawLine of withTagsStripped.split('\n')) {
+    const line = rawLine.replace(/[ \t]+/g, ' ').trim()
+    if (line === '' && lines[lines.length - 1] === '') continue
+    lines.push(line)
+  }
+  return lines.join('\n').trim()
 }
 
 // Walks the MIME tree and returns the actual part object chosen for
