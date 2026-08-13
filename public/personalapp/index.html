@@ -2462,7 +2462,7 @@ B.Com — DDU Gorakhpur University (2016)</span>
           <!-- Slack -->
           <div style="margin-bottom:20px">
             <div class="st-label">Slack</div>
-            <div class="st-sub">Posts notifications to a channel via a Bot Token — set SLACK_BOT_TOKEN and SLACK_CHANNEL_ID in Vercel.</div>
+            <div class="st-sub">Posts notifications via a Bot Token — set SLACK_BOT_TOKEN in Vercel, then invite the bot to a channel with /invite @CareerOS in Slack.</div>
             <div class="st-key-row">
               <button type="button" class="btn btn-o" onclick="intTestSlack()">Send Test Message</button>
             </div>
@@ -4800,12 +4800,17 @@ async function intTestSlack(){
   const el=document.getElementById('slack-int-status');
   el.innerHTML='Sending…';
   try{
+    const chRes=await fetch('/api/slack/channels');
+    const chData=await chRes.json();
+    if(!chRes.ok)throw new Error(chData.error||'Could not list Slack channels');
+    const target=(chData.channels||[]).find(c=>c.isMember);
+    if(!target)throw new Error('Bot isn\'t in any channel yet — run /invite @CareerOS in a Slack channel first');
     const res=await fetch('/api/slack/send',{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({text:'👋 CareerOS test message'})
+      body:JSON.stringify({text:'👋 CareerOS test message',channel:target.id})
     });
     const data=await res.json();
-    el.innerHTML=res.ok?'<span class="st-badge-ok">✓ Sent</span>':`<span style="color:var(--danger)">✗ ${lsEsc(data.error||'Failed')}</span>`;
+    el.innerHTML=res.ok?`<span class="st-badge-ok">✓ Sent to #${lsEsc(target.name)}</span>`:`<span style="color:var(--danger)">✗ ${lsEsc(data.error||'Failed')}</span>`;
   }catch(e){el.innerHTML=`<span style="color:var(--danger)">✗ ${lsEsc(e.message)}</span>`;}
 }
 async function intTestWhatsapp(){
