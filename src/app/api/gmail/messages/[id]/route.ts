@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import iconv from 'iconv-lite'
+import sanitizeHtml from 'sanitize-html'
 import { getGmailAccessToken } from '@/lib/gmail'
 
 // This must always reflect live mailbox state (unread flips after a
@@ -79,44 +80,69 @@ function htmlToText(html: string): string {
   return lines.join('\n').trim()
 }
 
-// Walks the MIME tree and returns the actual part object chosen for
-// the body (plain text preferred, HTML as fallback) — split out from
-// decoding so the debug endpoint can report exactly what was picked.
-function findTextPart(payload: GmailPart): GmailPart | null {
-  if (payload.body?.data && payload.mimeType?.startsWith('text/')) return payload
-  const parts = payload.parts || []
-  const plain = parts.find(p => p.mimeType === 'text/plain' && p.body?.data)
-  if (plain) return plain
-  const html = parts.find(p => p.mimeType === 'text/html' && p.body?.data)
-  if (html) return html
-  for (const p of parts) {
-    const nested = findTextPart(p)
-    if (nested) return nested
+// Walks the MIME tree for a part matching the given mimeType exactly.
+function findPart(payload: GmailPart, mimeType: string): GmailPart | null {
+  if (payload.mimeType === mimeType && payload.body?.data) return payload
+  for (const p of payload.parts || []) {
+    const found = findPart(p, mimeType)
+    if (found) return found
   }
   return null
 }
 
-function extractBody(payload: GmailPart): string {
-  const part = findTextPart(payload)
-  if (!part) return ''
-  const text = decodePartText(part)
-  return part.mimeType === 'text/html' ? htmlToText(text) : text
+// Same shape sanitize-html/Gmail render: kills anything that can
+// execute (script, event handlers, forms, iframes, external
+// stylesheets, javascript: URIs) while keeping the tags/inline styles
+// email templates rely on for their actual visual design. Remote
+// images are defanged to data-src (not auto-loaded) — the classic
+// email-tracking-pixel privacy pattern every major mail client uses;
+// the frontend has a "Show images" toggle that restores them.
+function sanitizeEmailHtml(html: string): string {
+  return sanitizeHtml(html, {
+    allowedTags: [
+      'html', 'head', 'body', 'title', 'style',
+      'div', 'span', 'p', 'br', 'hr', 'a', 'img',
+      'b', 'strong', 'i', 'em', 'u', 's', 'small', 'sub', 'sup', 'font', 'center',
+      'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'pre', 'code',
+      'table', 'thead', 'tbody', 'tfoot', 'tr', 'td', 'th', 'caption',
+      'ul', 'ol', 'li', 'dl', 'dt', 'dd',
+    ],
+    allowedAttributes: {
+      '*': ['style', 'class', 'align', 'valign', 'width', 'height', 'bgcolor', 'color', 'border', 'cellpadding', 'cellspacing'],
+      a: ['href', 'name', 'target', 'rel'],
+      img: ['src', 'data-src', 'alt', 'width', 'height'],
+      table: ['width', 'height', 'border', 'cellpadding', 'cellspacing', 'bgcolor'],
+      td: ['colspan', 'rowspan', 'width', 'height', 'bgcolor', 'align', 'valign'],
+      th: ['colspan', 'rowspan', 'width', 'height', 'bgcolor', 'align', 'valign'],
+      font: ['face', 'size', 'color'],
+    },
+    allowedSchemes: ['http', 'https', 'mailto', 'tel'],
+    allowedSchemesByTag: { img: ['http', 'https', 'data'] },
+    transformTags: {
+      a: sanitizeHtml.simpleTransform('a', { target: '_blank', rel: 'noopener noreferrer' }),
+      img: (tagName, attribs) => {
+        if (attribs.src && !attribs.src.startsWith('data:')) {
+          return { tagName: 'img', attribs: { ...attribs, 'data-src': attribs.src, src: '' } }
+        }
+        return { tagName: 'img', attribs }
+      },
+    },
+    disallowedTagsMode: 'discard',
+  })
 }
 
-// TEMPORARY diagnostics — remove once the mojibake issue is confirmed
-// fixed. Reports the real MIME structure and raw bytes Gmail returned
-// so we can see exactly what's happening instead of guessing.
-function debugTree(payload: GmailPart, depth = 0): unknown {
-  if (depth > 6) return { mimeType: payload.mimeType, truncated: true }
-  return {
-    mimeType: payload.mimeType,
-    hasData: !!payload.body?.data,
-    dataLen: payload.body?.data?.length || 0,
-    hasAttachmentId: !!(payload.body as { attachmentId?: string } | undefined)?.attachmentId,
-    transferEncoding: getHeader(payload, 'Content-Transfer-Encoding'),
-    contentType: getHeader(payload, 'Content-Type'),
-    children: (payload.parts || []).map(p => debugTree(p, depth + 1)),
-  }
+function extractBody(payload: GmailPart): { text: string; html: string | null } {
+  const htmlPart = findPart(payload, 'text/html')
+  const plainPart = findPart(payload, 'text/plain')
+
+  const html = htmlPart ? sanitizeEmailHtml(decodePartText(htmlPart)) : null
+  const text = plainPart
+    ? decodePartText(plainPart)
+    : htmlPart
+      ? htmlToText(decodePartText(htmlPart))
+      : ''
+
+  return { text, html }
 }
 
 export async function GET(
@@ -138,6 +164,8 @@ export async function GET(
     const get = (n: string) => headers.find(h => h.name.toLowerCase() === n.toLowerCase())?.value || ''
     const labelIds: string[] = msg.labelIds || []
 
+    const { text, html } = extractBody(msg.payload || {})
+
     const result: Record<string, unknown> = {
       id,
       threadId: msg.threadId as string,
@@ -147,19 +175,9 @@ export async function GET(
       date: get('Date'),
       messageIdHeader: get('Message-ID'),
       references: get('References'),
-      body: extractBody(msg.payload || {}).trim(),
+      body: text.trim(),
+      bodyHtml: html,
       unread: labelIds.includes('UNREAD'),
-    }
-
-    if (request.nextUrl.searchParams.get('debug') === '1') {
-      const part = findTextPart(msg.payload || {})
-      const rawBytes = part ? decodeBase64UrlToBuffer(part.body?.data || '') : Buffer.alloc(0)
-      result.debugTree = debugTree(msg.payload || {})
-      result.debugChosenMimeType = part?.mimeType || null
-      result.debugTransferEncoding = part ? getHeader(part, 'Content-Transfer-Encoding') : ''
-      result.debugCharset = part ? getPartCharset(part) : ''
-      result.debugRawHexPreview = rawBytes.subarray(0, 150).toString('hex')
-      result.debugRawAsciiPreview = rawBytes.subarray(0, 300).toString('latin1')
     }
 
     // Mark as read — best effort, viewing shouldn't fail if this does.
