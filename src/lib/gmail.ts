@@ -8,7 +8,10 @@ export async function getGmailAccessToken(): Promise<string> {
   const clientSecret = process.env.GMAIL_CLIENT_SECRET
   const refreshToken = process.env.GMAIL_REFRESH_TOKEN
   if (!clientId || !clientSecret || !refreshToken) {
-    throw new Error('Gmail not connected — missing GMAIL_CLIENT_ID/SECRET/REFRESH_TOKEN')
+    // User-facing message (this error surfaces verbatim in the Inbox UI,
+    // some call sites append their own "connect in Settings" follow-up) —
+    // no raw env var names.
+    throw new Error("Gmail isn't connected yet")
   }
 
   const res = await fetch('https://oauth2.googleapis.com/token', {

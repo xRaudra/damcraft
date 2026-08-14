@@ -11,13 +11,13 @@
   /* ── Dark Mode ── deep indigo-black with layered surfaces */
   --bg-base:#07070f;
   --bg-surface:#0d0d18;
-  --bg-elevated:#141422;
+  --bg-elevated:#303052;
   --bg-hover:rgba(120,110,255,0.06);
-  --border:#1a1a2e;
-  --border-light:#242438;
+  --border:#2e2e52;
+  --border-light:#3a3a68;
   --text-primary:#eaeaf8;
   --text-secondary:#6e6e98;
-  --text-muted:#393958;
+  --text-muted:#7878a5;
   --accent:#7c6fff;
   --accent-hover:#9d93ff;
   --accent-dim:rgba(124,111,255,0.12);
@@ -45,7 +45,7 @@
   --border-light:#c2c2dc;
   --text-primary:#09091c;
   --text-secondary:#46466e;
-  --text-muted:#8585aa;
+  --text-muted:#6f6f96;
   --accent:#6354f8;
   --accent-hover:#5244e8;
   --accent-dim:rgba(99,84,248,0.08);
@@ -1037,8 +1037,8 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
     </div>
 
     <div class="mode-toggle" id="mode-toggle">
-      <button type="button" class="mode-opt" id="mode-opt-work" onclick="setMode('work')">✦ Work</button>
-      <button type="button" class="mode-opt" id="mode-opt-jobs" onclick="setMode('jobs')">💼 Job Search</button>
+      <button type="button" class="mode-opt" id="mode-opt-work" onclick="setMode('work')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:3px"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>Work</button>
+      <button type="button" class="mode-opt" id="mode-opt-jobs" onclick="setMode('jobs')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:3px"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Job Search</button>
     </div>
 
     <nav class="sb-nav">
@@ -1317,7 +1317,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
             <div class="nd-panel-l">
               <div class="ib-folder-tabs">
                 <button type="button" class="ib-folder-tab on" data-folder="inbox" onclick="ibSwitchFolder('inbox')">Inbox</button>
-                <button type="button" class="ib-folder-tab" data-folder="starred" onclick="ibSwitchFolder('starred')">★ Starred</button>
+                <button type="button" class="ib-folder-tab" data-folder="starred" onclick="ibSwitchFolder('starred')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:2px"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Starred</button>
                 <button type="button" class="ib-folder-tab" data-folder="sent" onclick="ibSwitchFolder('sent')">Sent</button>
                 <button type="button" class="ib-folder-tab" data-folder="drafts" onclick="ibSwitchFolder('drafts')">Drafts</button>
               </div>
@@ -1388,9 +1388,9 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
                 </div>
               </div>
               <div id="ib-mail-placeholder" class="nd-ph-inner">
-                <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
-                <div style="font-size:14px;font-weight:600">No message selected</div>
-                <div style="font-size:12.5px" id="ib-mail-ph-sub">Click an email or press + to compose</div>
+                <div class="jbs-ico" style="margin-bottom:4px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></div>
+                <div style="font-size:16px;font-weight:700;color:var(--text-primary)">No message selected</div>
+                <div style="font-size:13px" id="ib-mail-ph-sub">Click an email or press + to compose</div>
               </div>
             </div>
           </div>
@@ -1488,6 +1488,15 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
               <span class="jba-st">Idle</span>
             </div>
           </div>
+        </div>
+
+        <!-- Default state: before the first fetch -->
+        <div id="jb-initial" class="jb-state">
+          <div class="jbs-ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <div class="jbs-title">Ready to find your next role</div>
+          <div class="jbs-desc">Click <strong>Fetch Jobs</strong> above to pull live UX/Product Design listings from LinkedIn, Indeed, and Naukri — takes about a minute.</div>
         </div>
 
         <!-- Empty state: no Apify key -->
@@ -1844,8 +1853,8 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
       <section id="page-linkedin" class="page">
         <div class="ls-title">LinkedIn Studio</div>
         <div class="ls-modes">
-          <button type="button" class="ls-mode on" data-lsm="trend">🔥 Trending Topics</button>
-          <button type="button" class="ls-mode" data-lsm="own">✍️ Write Your Own</button>
+          <button type="button" class="ls-mode on" data-lsm="trend"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:3px"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Trending Topics</button>
+          <button type="button" class="ls-mode" data-lsm="own"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:3px"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Write Your Own</button>
           <button type="button" class="ls-mode" data-lsm="profile">✦ Profile Optimizer</button>
         </div>
 
@@ -2053,7 +2062,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
             <div class="db-card">
               <div class="db-card-hdr">
                 <div>
-                  <div class="db-card-title">☀ Morning Briefing</div>
+                  <div class="db-card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>Morning Briefing</div>
                   <div class="db-card-sub">AI-curated highlights across 4 domains</div>
                 </div>
                 <button type="button" class="btn btn-o" onclick="dbFetchBriefing()">Refresh</button>
@@ -2067,7 +2076,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
             <div class="db-card">
               <div class="db-card-hdr">
                 <div>
-                  <div class="db-card-title">📰 Tech &amp; Startup News</div>
+                  <div class="db-card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><path d="M4 4h16v16H4z"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="12" y2="17"/></svg>Tech &amp; Startup News</div>
                   <div class="db-card-sub" id="db-news-count"></div>
                 </div>
                 <button type="button" class="btn btn-o" onclick="dbShuffleNews()">Shuffle</button>
@@ -2085,7 +2094,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
 
             <!-- No AV key prompt -->
             <div id="db-av-nokey" class="db-card hidden">
-              <div class="db-card-title" style="margin-bottom:10px">📊 Market Data</div>
+              <div class="db-card-title" style="margin-bottom:10px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Market Data</div>
               <div class="db-nokey">Add your <strong>Alpha Vantage key</strong> in Settings to see live market data — Nifty, Sensex, Gold, USD/INR and more.</div>
             </div>
 
@@ -2102,7 +2111,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
 
             <!-- Indices -->
             <div class="db-card">
-              <div class="db-card-title" style="margin-bottom:14px">📈 Indices</div>
+              <div class="db-card-title" style="margin-bottom:14px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Indices</div>
               <div class="db-fin-row"><div><div class="db-fin-name">Nifty 50</div><div class="db-fin-sub">NSE · India</div></div><div class="db-fin-right"><div class="db-fin-val db-neutral" id="db-nifty-val">--</div><div class="db-fin-chg db-neutral" id="db-nifty-chg"></div></div></div>
               <div class="db-fin-row"><div><div class="db-fin-name">Sensex</div><div class="db-fin-sub">BSE · India</div></div><div class="db-fin-right"><div class="db-fin-val db-neutral" id="db-sensex-val">--</div><div class="db-fin-chg db-neutral" id="db-sensex-chg"></div></div></div>
               <div class="db-fin-row"><div><div class="db-fin-name">Nasdaq</div><div class="db-fin-sub">QQQ · US</div></div><div class="db-fin-right"><div class="db-fin-val db-neutral" id="db-nasdaq-val">--</div><div class="db-fin-chg db-neutral" id="db-nasdaq-chg"></div></div></div>
@@ -2112,7 +2121,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
             <!-- IPO Watchlist -->
             <div class="db-card">
               <div class="db-card-hdr">
-                <div class="db-card-title">🔔 IPO Watchlist</div>
+                <div class="db-card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>IPO Watchlist</div>
                 <button type="button" class="btn btn-o" style="padding:4px 10px;font-size:12px" onclick="dbShowAddIPO()">+ Add</button>
               </div>
               <div id="db-add-ipo-form" class="db-add-form hidden">
@@ -2137,7 +2146,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
             <!-- Stocks Watchlist -->
             <div class="db-card">
               <div class="db-card-hdr">
-                <div class="db-card-title">💹 Stocks Watchlist</div>
+                <div class="db-card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 13v4"/><path d="M12 9v8"/><path d="M16 6v11"/></svg>Stocks Watchlist</div>
                 <button type="button" class="btn btn-o" style="padding:4px 10px;font-size:12px" id="db-add-stock-btn" onclick="dbShowAddStock()">+ Add</button>
               </div>
               <div id="db-add-stock-form" class="db-add-form hidden">
@@ -2161,10 +2170,10 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
         <div class="db-card" style="margin-top:16px">
           <div class="db-card-hdr" style="margin-bottom:14px">
             <div>
-              <div class="db-card-title">🧠 Market Pulse</div>
+              <div class="db-card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Market Pulse</div>
               <div class="db-card-sub">AI picks from CNBC, Economic Times, MoneyControl & top analysts</div>
             </div>
-            <button type="button" id="db-pulse-btn" class="btn btn-p" style="padding:6px 16px;font-size:12.5px" onclick="dbFetchMarketPulse()">⚡ Fetch Trending</button>
+            <button type="button" id="db-pulse-btn" class="btn btn-p" style="padding:6px 16px;font-size:12.5px" onclick="dbFetchMarketPulse()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:3px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Fetch Trending</button>
           </div>
           <div id="db-market-pulse"><div class="db-empty" style="padding:20px 0">Click "Fetch Trending" to get AI-curated buy/sell/hold picks on trending Indian stocks &amp; IPOs from top financial news sources.</div></div>
         </div>
@@ -2276,9 +2285,9 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
                 </div>
               </div>
               <div id="nd-placeholder" class="nd-ph-inner">
-                <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-                <div style="font-size:14px;font-weight:600">No note selected</div>
-                <div style="font-size:12.5px">Click a note or press + to create one</div>
+                <div class="jbs-ico" style="margin-bottom:4px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+                <div style="font-size:16px;font-weight:700;color:var(--text-primary)">No note selected</div>
+                <div style="font-size:13px">Click a note or press + to create one</div>
               </div>
             </div>
           </div>
@@ -2742,6 +2751,14 @@ document.getElementById('bd').addEventListener('click',closeMobSb);
 
 // ── NAVIGATION ──
 function go(id){
+  // Buttons outside the sidebar (Dashboard Quick Access, etc.) call go()
+  // directly and can cross the Work/Job Search mode boundary — keep the
+  // mode pill and nav-item visibility in sync so the sidebar never shows
+  // the wrong mode's list with nothing highlighted.
+  const targetNi=document.querySelector('.ni[data-p="'+id+'"]');
+  const targetMode=targetNi&&targetNi.dataset.mode;
+  const currentMode=document.getElementById('mode-opt-jobs').classList.contains('on')?'jobs':'work';
+  if(targetMode&&targetMode!==currentMode) setMode(targetMode,true);
   // nav highlight
   document.querySelectorAll('.ni').forEach(n=>n.classList.toggle('on', n.dataset.p===id));
   // page show
@@ -2771,13 +2788,18 @@ function go(id){
 }
 
 // ── MODE TOGGLE (Work / Job Search) ──
-function setMode(mode){
+// skipFallback: go() passes true when IT is the one driving the mode switch
+// (navigating straight to a page in the other mode) — the fallback redirect
+// below exists for the manual mode-pill click, where the previously-active
+// page can become invalid; it would just race go()'s own navigation here.
+function setMode(mode,skipFallback){
   localStorage.setItem('cos-mode',mode);
   document.getElementById('mode-opt-work').classList.toggle('on',mode==='work');
   document.getElementById('mode-opt-jobs').classList.toggle('on',mode==='jobs');
   document.querySelectorAll('.ni[data-mode]').forEach(ni=>{
     ni.classList.toggle('mode-hidden', ni.dataset.mode!==mode);
   });
+  if(skipFallback)return;
   // if the currently open page just got hidden by the mode switch, fall back to Dashboard
   const activeNi=document.querySelector('.ni.on');
   if(activeNi&&activeNi.classList.contains('mode-hidden')) go('dash');
@@ -2865,7 +2887,7 @@ let fetchedJobs = [];
 let jbFilter = 'all';
 
 function jbShow(which){
-  ['agents','empty','error','grid','filters'].forEach(id=>{
+  ['initial','agents','empty','error','grid','filters'].forEach(id=>{
     document.getElementById('jb-'+id).classList.add('hidden');
   });
   if(which==='grid'){
@@ -4695,7 +4717,7 @@ async function dbFetchMarketPulse(){
 
   if(!articles.length){
     el.innerHTML=`<div class="db-error"><div class="db-error-txt">Could not fetch market data. Please retry.</div><button type="button" class="btn btn-o" onclick="dbFetchMarketPulse()">Retry</button></div>`;
-    if(btn){btn.disabled=false;btn.textContent='⚡ Fetch Trending';}
+    if(btn){btn.disabled=false;btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:3px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Fetch Trending';}
     return;
   }
 
@@ -4728,7 +4750,7 @@ async function dbFetchMarketPulse(){
   }catch(e){
     el.innerHTML=`<div class="db-error"><div class="db-error-txt">Could not generate analysis — Claude AI credits needed for this feature.</div></div>`;
   }
-  if(btn){btn.disabled=false;btn.textContent='⚡ Fetch Trending';}
+  if(btn){btn.disabled=false;btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:3px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Fetch Trending';}
 }
 
 // IPO Watchlist
@@ -6300,12 +6322,13 @@ function lhQuizEnd(){
 }
 
 // AI Teaching Modes
+const LH_ICO='width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:3px"';
 const LH_MODES=[
-  {id:'teach',label:'🎓 Teach Me'},
-  {id:'phd',label:'📚 PhD Breakdown'},
-  {id:'frameworks',label:'🧩 Mental Frameworks'},
-  {id:'block',label:'🧠 Fix a Mental Block'},
-  {id:'clarity',label:'💡 Turn Confusion to Clarity'},
+  {id:'teach',label:`<svg ${LH_ICO}><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.5 2.5 3 6 3s6-1.5 6-3v-5"/></svg>Teach Me`},
+  {id:'phd',label:`<svg ${LH_ICO}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>PhD Breakdown`},
+  {id:'frameworks',label:`<svg ${LH_ICO}><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="12" cy="18" r="3"/><line x1="8.3" y1="7.5" x2="15" y2="16"/><line x1="15.7" y1="7.5" x2="9" y2="16"/></svg>Mental Frameworks`},
+  {id:'block',label:`<svg ${LH_ICO}><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0"/></svg>Fix a Mental Block`},
+  {id:'clarity',label:`<svg ${LH_ICO}><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.75V17h8v-2.25A7 7 0 0 0 12 2z"/></svg>Turn Confusion to Clarity`},
 ];
 let lhActiveMode=null;
 
