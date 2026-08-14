@@ -1150,20 +1150,6 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
               </div>
             </div>
 
-            <!-- Job Leads -->
-            <div class="c">
-              <div class="ch">
-                <div class="ct">Recent Job Leads</div>
-                <a class="cl" onclick="go('jobs')">View All →</a>
-              </div>
-              <table class="jt">
-                <thead><tr>
-                  <th>Role</th><th>Company</th><th>Location</th><th>Salary</th><th>Action</th>
-                </tr></thead>
-                <tbody id="dash-jobs-tbody"></tbody>
-              </table>
-            </div>
-
             <!-- Inbox -->
             <div class="c">
               <div class="ch">
@@ -1186,36 +1172,24 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
               </div>
             </div>
 
+            <!-- Job Leads — moved to the end of this column since it's empty until jobs are fetched -->
+            <div class="c">
+              <div class="ch">
+                <div class="ct">Recent Job Leads</div>
+                <a class="cl" onclick="go('jobs')">View All →</a>
+              </div>
+              <table class="jt">
+                <thead><tr>
+                  <th>Role</th><th>Company</th><th>Location</th><th>Salary</th><th>Action</th>
+                </tr></thead>
+                <tbody id="dash-jobs-tbody"></tbody>
+              </table>
+            </div>
+
           </div>
 
           <!-- Right -->
           <div class="dr">
-
-            <!-- Weekly Hunt Summary -->
-            <div class="c">
-              <div class="ch">
-                <div class="ct">This Week's Hunt</div>
-                <a class="cl" onclick="go('resume')">View Tracker →</a>
-              </div>
-              <div class="wh-grid">
-                <div class="wh-stat">
-                  <div class="wh-val" id="wh-applied">0</div>
-                  <div class="wh-key">Applications</div>
-                </div>
-                <div class="wh-stat">
-                  <div class="wh-val" id="wh-followup">0</div>
-                  <div class="wh-key">Follow-Ups Due</div>
-                </div>
-                <div class="wh-stat">
-                  <div class="wh-val" id="wh-interviews">0</div>
-                  <div class="wh-key">Interviews</div>
-                </div>
-                <div class="wh-stat">
-                  <div class="wh-val" id="wh-responses">0</div>
-                  <div class="wh-key">Responses</div>
-                </div>
-              </div>
-            </div>
 
             <!-- Daily Concept -->
             <div class="c">
@@ -1291,6 +1265,32 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-primary)
                 <div style="display:flex;align-items:center;gap:6px;margin-top:10px;font-size:11px;color:var(--text-muted)">
                   <span style="width:7px;height:7px;border-radius:50%;background:var(--success);display:inline-block;flex-shrink:0"></span>
                   Logged in
+                </div>
+              </div>
+            </div>
+
+            <!-- Weekly Hunt Summary — moved to the end of this column since it's empty until the Job Tracker has entries -->
+            <div class="c">
+              <div class="ch">
+                <div class="ct">This Week's Hunt</div>
+                <a class="cl" onclick="go('resume')">View Tracker →</a>
+              </div>
+              <div class="wh-grid">
+                <div class="wh-stat">
+                  <div class="wh-val" id="wh-applied">0</div>
+                  <div class="wh-key">Applications</div>
+                </div>
+                <div class="wh-stat">
+                  <div class="wh-val" id="wh-followup">0</div>
+                  <div class="wh-key">Follow-Ups Due</div>
+                </div>
+                <div class="wh-stat">
+                  <div class="wh-val" id="wh-interviews">0</div>
+                  <div class="wh-key">Interviews</div>
+                </div>
+                <div class="wh-stat">
+                  <div class="wh-val" id="wh-responses">0</div>
+                  <div class="wh-key">Responses</div>
                 </div>
               </div>
             </div>
