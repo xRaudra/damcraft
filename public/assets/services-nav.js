@@ -19,17 +19,10 @@
   row.className = 'primary-nav-row';
   const servicesItem = document.createElement('div');
   servicesItem.className = 'services-nav-item';
+  servicesLink.textContent = 'Service';
   servicesLink.setAttribute('aria-controls', 'services-dropdown');
   servicesLink.setAttribute('aria-expanded', 'false');
   servicesItem.append(servicesLink);
-  const toggle = document.createElement('button');
-  toggle.className = 'services-nav-toggle';
-  toggle.type = 'button';
-  toggle.setAttribute('aria-label', 'Toggle services');
-  toggle.setAttribute('aria-expanded', 'false');
-  toggle.setAttribute('aria-controls', 'services-dropdown');
-  toggle.innerHTML = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.25"/></svg>';
-  servicesItem.append(toggle);
   row.append(servicesItem);
   [...nav.querySelectorAll(':scope > a')].forEach(link => row.append(link));
   const panel = document.createElement('div');
@@ -50,7 +43,6 @@
     panel.hidden = !value;
     nav.classList.toggle('services-open', value);
     servicesLink.setAttribute('aria-expanded', String(value));
-    toggle.setAttribute('aria-expanded', String(value));
     if (restoreFocus) servicesLink.focus({ preventScroll: true });
   };
   const focusFirst = () => requestAnimationFrame(() => panel.querySelector('a')?.focus({ preventScroll: true }));
@@ -64,10 +56,6 @@
   row.querySelectorAll(':scope > a').forEach(link => {
     link.addEventListener('pointerenter', () => setOpen(false));
     link.addEventListener('focus', () => setOpen(false));
-  });
-  toggle.addEventListener('click', event => {
-    setOpen(!open);
-    if (open && event.detail === 0) focusFirst();
   });
   servicesItem.addEventListener('keydown', event => {
     if (event.key === 'ArrowDown' || (event.key === ' ' && event.target === servicesLink)) {
