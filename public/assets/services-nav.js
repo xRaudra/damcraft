@@ -19,7 +19,7 @@
   row.className = 'primary-nav-row';
   const servicesItem = document.createElement('div');
   servicesItem.className = 'services-nav-item';
-  servicesLink.textContent = 'Service';
+  servicesLink.textContent = 'Services';
   servicesLink.setAttribute('aria-controls', 'services-dropdown');
   servicesLink.setAttribute('aria-expanded', 'false');
   servicesItem.append(servicesLink);
