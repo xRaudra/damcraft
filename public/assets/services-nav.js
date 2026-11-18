@@ -22,6 +22,8 @@
   servicesLink.textContent = 'Services';
   servicesLink.setAttribute('aria-controls', 'services-dropdown');
   servicesLink.setAttribute('aria-expanded', 'false');
+  servicesLink.setAttribute('aria-describedby', 'services-keyboard-hint');
+  const hint=document.createElement('span');hint.id='services-keyboard-hint';hint.className='sr-only';hint.textContent='Press Down Arrow or Space to explore services. Enter opens the services page.';servicesItem.append(hint);
   servicesItem.append(servicesLink);
   row.append(servicesItem);
   [...nav.querySelectorAll(':scope > a')].forEach(link => row.append(link));

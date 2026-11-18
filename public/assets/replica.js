@@ -1,9 +1,27 @@
 const menu=document.querySelector('.replica-menu');
 const toggle=document.querySelector('.menu-toggle');
-function closeMenu(){menu.hidden=true;document.body.classList.remove('menu-open');toggle.setAttribute('aria-expanded','false');toggle.focus();}
-toggle?.addEventListener('click',()=>{menu.hidden=false;document.body.classList.add('menu-open');toggle.setAttribute('aria-expanded','true');menu.querySelector('button').focus();});
+let inertBackground=[];
+function closeMenu(){
+ if(!menu||menu.hidden)return;
+ menu.hidden=true;document.body.classList.remove('menu-open');toggle.setAttribute('aria-expanded','false');
+ inertBackground.forEach(([element,wasInert])=>{element.inert=wasInert});inertBackground=[];toggle.focus({preventScroll:true});
+}
+toggle?.addEventListener('click',()=>{
+ menu.hidden=false;document.body.classList.add('menu-open');toggle.setAttribute('aria-expanded','true');
+ inertBackground=[...document.body.children].filter(element=>element!==menu&&!['SCRIPT','STYLE','LINK'].includes(element.tagName)).map(element=>[element,element.inert]);
+ inertBackground.forEach(([element])=>{element.inert=true});menu.querySelector('button').focus();
+});
 menu?.querySelector('button').addEventListener('click',closeMenu);
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!menu.hidden)closeMenu();if(e.key==='Tab'&&!menu.hidden){const controls=[...menu.querySelectorAll('a,button')];const first=controls[0],last=controls.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
+document.addEventListener('keydown',event=>{
+ if(!menu||menu.hidden)return;
+ if(event.key==='Escape'){event.preventDefault();closeMenu();return;}
+ if(event.key==='Tab'){
+  const controls=[...menu.querySelectorAll('a[href],button:not([disabled]),[tabindex="0"]')].filter(element=>element.getClientRects().length&&!element.closest('[hidden]'));
+  const first=controls[0],last=controls.at(-1);
+  if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+  else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+ }
+});
 
 // Visible local images replace the original hydration-dependent loading masks.
 document.querySelectorAll('img').forEach(img=>{img.addEventListener('load',()=>img.style.opacity='1',{once:true});if(img.complete)img.style.opacity='1';});
@@ -45,6 +63,7 @@ for(const form of contactForms)form.addEventListener('submit',async event=>{
 // Extrude the custom D outline with the reconstructed emblem's original material and motion.
 async function startHero(){
  const host=document.querySelector('.hero-visual');if(!host)return;
+ if(matchMedia('(prefers-reduced-motion: reduce)').matches){document.querySelector('.hero-motion-control')?.setAttribute('hidden','');return;}
  let renderer;
  try{
   const THREE=await import('three');
@@ -66,9 +85,9 @@ async function startHero(){
   const fit=()=>{const w=host.clientWidth,h=host.clientHeight;camera.aspect=w/h;const angle=camera.fov*Math.PI/180;camera.position.z=Math.max(size.y/(Math.tan(angle/2)),size.x/(Math.tan(angle/2)*camera.aspect));camera.updateProjectionMatrix();renderer.setSize(w,h);};
   fit();new ResizeObserver(fit).observe(host);
   const pointer={x:0,y:0},smooth={x:0,y:0};host.parentElement.addEventListener('pointermove',e=>{const r=host.getBoundingClientRect();pointer.x=((e.clientX-r.left)/r.width-.5)*2;pointer.y=((e.clientY-r.top)/r.height-.5)*2;});host.parentElement.addEventListener('pointerleave',()=>{pointer.x=pointer.y=0;});
-  host.classList.add('rendered');const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;let frame=0;const clock=new THREE.Clock();
-  function render(){const t=clock.getElapsedTime();smooth.x+=(pointer.x-smooth.x)*.055;smooth.y+=(pointer.y-smooth.y)*.055;group.rotation.y=smooth.x*.65+(reduced?0:Math.sin(t*.35)*.05);group.rotation.x=smooth.y*.5+(reduced?0:Math.sin(t*.28)*.04);group.position.y=5+(reduced?0:Math.sin(t*2)*1.4);warm.intensity=5+(reduced?0:Math.sin(t*1.8)*2.5);renderer.render(scene,camera);frame=requestAnimationFrame(render);}
+  host.classList.add('rendered');const reduced=matchMedia('(prefers-reduced-motion: reduce)');const motionControl=document.querySelector('.hero-motion-control');let userPaused=false;motionControl.hidden=reduced.matches;motionControl.addEventListener('click',()=>{userPaused=!userPaused;motionControl.textContent=userPaused?'Play animation':'Pause animation';});reduced.addEventListener('change',()=>{motionControl.hidden=reduced.matches;});let frame=0;const clock=new THREE.Clock();
+  function render(){const paused=reduced.matches||userPaused;const t=clock.getElapsedTime();smooth.x+=((paused?0:pointer.x)-smooth.x)*.055;smooth.y+=((paused?0:pointer.y)-smooth.y)*.055;group.rotation.y=smooth.x*.65+(paused?0:Math.sin(t*.35)*.05);group.rotation.x=smooth.y*.5+(paused?0:Math.sin(t*.28)*.04);group.position.y=5+(paused?0:Math.sin(t*2)*1.4);warm.intensity=5+(paused?0:Math.sin(t*1.8)*2.5);renderer.render(scene,camera);frame=requestAnimationFrame(render);}
   render();window.addEventListener('pagehide',()=>{cancelAnimationFrame(frame);renderer.dispose();},{once:true});
- }catch(error){renderer?.dispose();host.classList.remove('rendered');host.classList.add('fallback');console.info('Using the SVG emblem fallback because WebGL is unavailable.');}
+ }catch(error){renderer?.dispose();host.classList.remove('rendered');host.classList.add('fallback');document.querySelector('.hero-motion-control')?.setAttribute('hidden','');console.info('Using the SVG emblem fallback because WebGL is unavailable.');}
 }
 startHero();

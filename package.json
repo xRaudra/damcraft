@@ -6,11 +6,17 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test:a11y": "node scripts/audit-accessibility.mjs",
+    "test:a11y:flows": "node scripts/test-accessibility-flows.mjs"
   },
   "dependencies": {
     "next": "16.2.10",
     "react": "19.2.7",
     "react-dom": "19.2.7"
+  },
+  "devDependencies": {
+    "axe-core": "4.11.0",
+    "playwright-core": "1.58.2"
   }
 }
