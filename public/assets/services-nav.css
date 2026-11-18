@@ -32,3 +32,8 @@
 .replica-menu nav .mobile-services-panel .mobile-services-all>span{margin-left:auto}
 @media(max-width:767px){.replica-nav>nav.primary-nav{display:none}.mobile-services-trigger{padding:18px 0}.replica-menu nav .mobile-services-panel a{padding:13px;font-size:15px}.mobile-services-panel .service-icon{width:14px;height:14px}}
 @media(prefers-reduced-motion:reduce){.replica-nav>nav.primary-nav,.services-card,.services-card::before,.services-card::after{transition:none}}
+
+/* Contrast-only colours; dropdown dimensions and hover expansion remain unchanged. */
+.services-card-count,.services-card:hover .services-card-count,.services-card:focus-visible .services-card-count{color:#ddd}
+.services-card-title{color:#fff}
+.services-card::after{background:#000d}
