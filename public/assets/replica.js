@@ -15,9 +15,6 @@ if(location.pathname==='/'){
  if(first){const parent=first.parentNode;const group=document.createElement('div');group.className='replica-dark-zone';parent.insertBefore(group,first);let node=first;while(node){let next=node.nextSibling;group.appendChild(node);node=next;}}
 }
 
-const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('replica-reveal');observer.unobserve(e.target);}}),{threshold:.06});
-document.querySelectorAll('section h2,section>a').forEach(el=>observer.observe(el));
-
 // Contact requests use the server when configured, with a direct email fallback.
 const contactForms=[...document.querySelectorAll('.contact-form')];
 document.querySelectorAll('.service-options button').forEach(button=>button.addEventListener('click',()=>button.setAttribute('aria-pressed',button.getAttribute('aria-pressed')!=='true'?'true':'false')));
